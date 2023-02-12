@@ -1,0 +1,6 @@
+CREATE DATABASE Abiball;
+
+CREATE TABLE benutzer (
+ email VARCHAR(50) PRIMARY_KEY,
+ passwort VARCHAR(255) NOT NULL UNIQUE 
+);
