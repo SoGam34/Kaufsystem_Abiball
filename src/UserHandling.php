@@ -1,28 +1,13 @@
 <?php
 
 class UserHandling
-{
-    public function __construct(private Database $database)
+{private Database $database;
+    public function __construct()//)
     {
+        echo "drinnen";
     }
-    
-    public function processRequest(string $method, ?string $id): void
-    {
-        switch($id)
-        {
-            case "loggingin":
-                $this->checkLogin();
-            break;
-
-            case "register":
-                $this->createAcc();
-            break;
-            case "reseting":
-                $this->resetAcc();
-        }
-    }
-    
-    private function resetAcc()
+      
+    public function resetAcc()
     {
         $data = json_decode(file_get_contents("php://input"));
         
@@ -36,7 +21,7 @@ class UserHandling
         $this->database->ResetPasswort($data["email"], password_hash($data["passwort"], PASSWORD_DEFAULT));
     }
     
-    private function checkLogin()
+    public function checkLogin()
     {
         $data = json_decode(file_get_contents("php://input"));
         
@@ -71,7 +56,7 @@ class UserHandling
         }
     }
 
-    private function createAcc()
+    public function createAcc()
     {
         $data = json_decode(file_get_contents("php://input"));
 
@@ -106,3 +91,4 @@ class UserHandling
         }
     }
 }
+?>

@@ -9,7 +9,11 @@ class Database
                                 private string $user,
                                 private string $password)
     {
-        $this->conn= $this->getConnection();
+        try{
+            $this->conn= $this->getConnection();
+        } catch(PDOException $e) {
+            echo "Connection failed: " . $e->getMessage();
+      }
     }
         
     public function getConnection(): PDO
@@ -24,7 +28,7 @@ class Database
 
     public function insertUser(string $Email, string $UserPassword ): void
     {
-        $sql = "INSERT INTO benutzer (email, passwort)
+        $sql = "INSERT INTO teilnehemer (email, passwort)
         VALUES (:email, :passwort)";
 
         $stmt = $this->conn->prepare($sql);
@@ -38,7 +42,7 @@ class Database
     public function getUser(string $email): array | false
     {
         $sql = "SELECT *
-                FROM benutzer
+                FROM teilnehemer
                 WHERE email = :email";
                 
         $stmt = $this->conn->prepare($sql);
@@ -57,7 +61,7 @@ class Database
     
     public function ResetPasswort($email, string $newPasswort): void
     {
-        $sql = "UPDATE benutzer
+        $sql = "UPDATE teilnehemer
                 SET passwort = :passwort
                 WHERE email = :email";
                 
@@ -71,7 +75,7 @@ class Database
     
     public function delete($email): void
     {
-        $sql = "DELETE FROM benutzer
+        $sql = "DELETE FROM teilnehemer
                 WHERE email = :email";
                 
         $stmt = $this->conn->prepare($sql);
@@ -82,5 +86,4 @@ class Database
     }
 
 }
-
 ?>
