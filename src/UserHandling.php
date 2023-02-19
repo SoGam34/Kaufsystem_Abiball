@@ -1,21 +1,21 @@
-<?php
+<?php 
 
 class UserHandling
-{private Database $database;
-    public function __construct()//)
+{
+    public function __construct(private Database $database)
     {
-        echo "drinnen";
+         echo "open UserHandling succesfully";
     }
       
     public function resetAcc()
     {
-        $data = json_decode(file_get_contents("php://input"));
+        $data = (array) json_decode(file_get_contents("php://input"), true);
         
         $errors = $this->getValidationErrors($data);
         if(!empty($errors))
         {
             echo json_encode(["errors" => $errors]);
-            break;
+            exit;
         }
 
         $this->database->ResetPasswort($data["email"], password_hash($data["passwort"], PASSWORD_DEFAULT));
@@ -23,16 +23,16 @@ class UserHandling
     
     public function checkLogin()
     {
-        $data = json_decode(file_get_contents("php://input"));
+        $data = (array) json_decode(file_get_contents("php://input"), true);
         
         $errors = $this->getValidationErrors($data);
         if(!empty($errors))
         {
             echo json_encode(["errors" => $errors]);
-            break;
+            exit;
         }
 
-        $user = $this->database->getUser($data["email"]);
+       $user = $this->database->getUser($data["email"]);
         
         $entry = empty($user);        
         
@@ -58,7 +58,7 @@ class UserHandling
 
     public function createAcc()
     {
-        $data = json_decode(file_get_contents("php://input"));
+        $data = (array) json_decode(file_get_contents("php://input"), true);
 
         $errors = $this->getValidationErrors($data);
         
@@ -71,10 +71,10 @@ class UserHandling
         {
             echo json_encode(["errors" => $errors]);
             break;
-        } 
+        }
     }
 
-    private function getValidationErrors($data)
+    public function getValidationErrors($data)
     {
         $errors = [];
         if (array_key_exists("email", $data)) {

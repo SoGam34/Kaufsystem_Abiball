@@ -15,6 +15,10 @@ class Database
             echo "Connection failed: " . $e->getMessage();
       }
     }
+
+    public function __destruct()
+    {
+    }
         
     public function getConnection(): PDO
     {

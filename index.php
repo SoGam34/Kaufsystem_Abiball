@@ -12,12 +12,21 @@ set_exception_handler("ErrorHandler::handleException");
 header("Content-type: application/json; charset=UTF-8");
 
 $parts = explode("/", $_SERVER["REQUEST_URI"]);
-echo "Vorbereitung erfolgreich";
 /*-------------------Erstellen aller Klassenobjeckte-------------*/
 $database = new Database("localhost", "abiball", "root", "root");
-echo "database erfolgreich";
-$UserHandling=new UserHandling();
-echo $UserHandling;/*= new UserHandling($database);
+
+
+$data = (array) json_decode(file_get_contents("php://input"), true);
+
+echo json_encode($data);
+
+//echo file_get_contents("php://input");
+//$UserHandling=new UserHandling($database);
+
+//$test = new test();
+/*
+
+echo $UserHandling;= new UserHandling($database);
 echo "\nUser handling erfolgreich";exit;*/
 https://github.com/SoGam34/Kaufsystem_Abiball
 /*-------------------Bearbeiten der Anfrage-------------*/
