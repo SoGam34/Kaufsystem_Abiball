@@ -1,0 +1,11 @@
+#button
+{
+   
+   margin: 50 px;
+   float: right;
+}
+#div
+{
+   flex: 1;
+   border-color: aquamarine;
+}

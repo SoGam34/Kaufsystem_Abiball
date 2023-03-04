@@ -9,36 +9,23 @@ spl_autoload_register(function ($class) {
 set_error_handler("ErrorHandler::handleError");
 set_exception_handler("ErrorHandler::handleException");
 
-header("Content-type: application/json; charset=UTF-8");
-
 $parts = explode("/", $_SERVER["REQUEST_URI"]);
 /*-------------------Erstellen aller Klassenobjeckte-------------*/
 $database = new Database("localhost", "abiball", "root", "root");
 
+$UserHandling=new Test($database);
 
-$data = (array) json_decode(file_get_contents("php://input"), true);
-
-echo json_encode($data);
-
-//echo file_get_contents("php://input");
-//$UserHandling=new UserHandling($database);
-
-//$test = new test();
-/*
-
-echo $UserHandling;= new UserHandling($database);
-echo "\nUser handling erfolgreich";exit;*/
-https://github.com/SoGam34/Kaufsystem_Abiball
 /*-------------------Bearbeiten der Anfrage-------------*/
-/*switch($parts[5])
-{git remote set-url origin {https://github.com/SoGam34/Kaufsystem_Abiball}
-    case "loggingin":
+
+switch($parts[1])
+{
+    case "LogIn":
         $UserHandling->checkLogin(); 
     break;
-    case "register":
+    case "Register":
         $UserHandling->createAcc();
     break;
-    case "reseting":
+    case "Reseting":
         $UserHandling->resetAcc();
     break;
     default:
@@ -46,5 +33,5 @@ https://github.com/SoGam34/Kaufsystem_Abiball
     exit;
     break;
 }
-*/
+
 ?>
