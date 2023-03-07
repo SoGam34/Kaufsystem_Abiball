@@ -1,3 +1,13 @@
 body {
-    background-color: rgb(119, 182, 107);
+    background-color: rgba(125, 224, 133, 0.774);
+  }
+  section{
+    transform: translateX(50%) translateY(200%);
+    padding: 1%;
+    border: 5px solid rgb(211, 233, 11);
+    border-radius: 10px;
+    border-style: outset;
+    width: 50%;
+    line-height: 30px;
+    background-color: rgb(68, 188, 218);
   }
