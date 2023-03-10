@@ -5,3 +5,4 @@ RewriteRule ^$ Browser/Startseite.html
 RewriteRule ^LogIn$ Server/index.php
 RewriteRule ^Register$ Server/index.php
 RewriteRule ^Reseting$ Server/index.php
+RewriteRule ^create$ Server/index.php

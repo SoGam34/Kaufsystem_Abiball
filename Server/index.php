@@ -11,7 +11,7 @@ set_exception_handler("ErrorHandler::handleException");
 
 $parts = explode("/", $_SERVER["REQUEST_URI"]);
 /*-------------------Erstellen aller Klassenobjeckte-------------*/
-$database = new Database("localhost", "abiball", "root", "root");
+$database = new Database();
 
 $UserHandling=new Test($database);
 
