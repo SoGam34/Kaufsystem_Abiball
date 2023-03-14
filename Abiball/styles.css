@@ -1,5 +1,6 @@
 body {
   background-color: rgba(125, 224, 133, 0.774);
+  margin: 0%;
 }
 .loginregisterstyle{
   transform: translateX(-50%) translateY(-50%);
