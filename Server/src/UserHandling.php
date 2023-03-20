@@ -7,7 +7,7 @@ class UserHandling
 
     public function createAcc()
     {
-        $data["email"]= $_POST["email"];
+        $data["email"]= (array)json_decode(file_get_contents("php://input"));
         $data["passwort"]= $_POST["passwort"];
         $id=$this->database->insertRegistrierer($data["email"], password_hash($data["passwort"], PASSWORD_DEFAULT));
         $headers = "From: johannes@abi24bws.de";
