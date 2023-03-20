@@ -13,25 +13,29 @@ $parts = explode("/", $_SERVER["REQUEST_URI"]);
 /*-------------------Erstellen aller Klassenobjeckte-------------*/
 $database = new Database();
 
-$UserHandling=new Test($database);
+$UserHandling = new UserHandling($database);
 
 /*-------------------Bearbeiten der Anfrage-------------*/
 
-switch($parts[1])
-{
+switch ($parts[1]) {
     case "LogIn":
-        $UserHandling->checkLogin(); 
-    break;
+        $UserHandling->checkLogin();
+        break;
     case "Register":
+        $UserHandling->deleteRegistrirung();
         $UserHandling->createAcc();
-    break;
+        break;
     case "Reseting":
-        $UserHandling->resetAcc();
-    break;
+        $UserHandling->resetPSW();
+        break;
+    case "bestaetigung":
+        echo json_encode(["message: "=> "bestaetigung succesfull"]);
+        break;
+    case "create":
+        $database->createRegistrierung();
+        break;
     default:
-    http_response_code(404);
-    exit;
-    break;
+        http_response_code(404);
+        exit;
+        break;
 }
-
-?>

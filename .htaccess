@@ -1,7 +1,7 @@
 RewriteEngine On
 
-RewriteRule ^homepage.html$ Browser/homepage.html
 RewriteRule ^$ Browser/homepage.html
+RewriteRule ^homepage.html$ Browser/homepage.html
 RewriteRule ^login.html$ Browser/login.html
 RewriteRule ^registrieren.html$ Browser/registrieren.html
 RewriteRule ^styles.css$ Browser/styles.css
@@ -10,7 +10,10 @@ RewriteRule ^support.html$ Browser/support.html
 RewriteRule ^tickets.html$ Browser/tickets.html
 RewriteRule ^bilder.html$ Browser/bilder.html 
 RewriteRule ^program.html$ Browser/program.html
+RewriteRule ^Bestaetigung.html$ Browser/Bestaetigung.html
 
 RewriteRule ^LogIn$ Server/index.php
 RewriteRule ^Register$ Server/index.php
 RewriteRule ^Reseting$ Server/index.php
+RewriteRule ^create$ Server/index.php
+RewriteRule ^bestaetigung$ Server/index.php
