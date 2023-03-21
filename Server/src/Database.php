@@ -42,10 +42,29 @@ class Database
 
     public function createRegistrierung()
     {
-        $sql = "CREATE TABLE registrierung(
-            id int AUTO_INCREMENT PRIMARY KEY,
+        $sql = /*DROP TABLE registrierung; DROP TABLE teilnehmer;*/
+        /*"CREATE TABLE registrierung(
+            registrirungs_id int AUTO_INCREMENT PRIMARY KEY,
+            Vorname varchar(40), 
+            Nachname varchar(40), 
+            Klasse varchar(5), 
+            bearbeitungsstatus varchar(20), 
             email varchar(40) UNIQUE, 
-            passwort varchar(40) UNIQUE);";
+            passwort varchar(40) UNIQUE,
+            Datum current_timestamp);";*/
+
+            /*"CREATE TABLE teilnehmer(
+            teilnehmer_id int AUTO_INCREMENT PRIMARY KEY,
+            Vorname varchar(40), 
+            Nachname varchar(40), 
+            Klasse varchar(5), 
+            email varchar(40) UNIQUE, 
+            passwort varchar(40) UNIQUE);*/
+
+            /*"CREATE TABLE sitzplatze(
+            Sitzplatz_id int PRIMARY KEY,
+            PersonID int,
+            FOREIGN KEY (PersonID) REFERENCES teilnehmer(teilnehmer_id));*/
 
         $this->conn->exec($sql);
     }
