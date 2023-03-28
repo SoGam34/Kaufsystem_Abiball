@@ -31,6 +31,11 @@ switch ($parts[1]) {
     case "bestaetigung":
         $database->bestaetigen();
         break;
+    case "Freischalten":
+        $UserHandling->FreischaltungsUebersicht();
+        break;
+    case "Freigeschaltet":
+        $UserHandling->Freischalten();
     case "create":
         $database->createRegistrierung();
         break;

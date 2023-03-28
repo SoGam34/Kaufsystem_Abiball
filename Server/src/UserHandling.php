@@ -16,7 +16,7 @@ class UserHandling
         }
 
         $id=$this->database->insert("registrierung", $data["email"], password_hash("AcFgP"+$data["passwort"]+$salt, PASSWORD_DEFAULT));
-        $this->database->insert($id, $salt);
+        $this->database->insertSalt($id, $salt);
 
         mail($data["email"], "Verifizierung ihrer Email-Adresse bei Abi24bws.de",
         
@@ -28,6 +28,43 @@ class UserHandling
         Ihr Abi24bws Team",
         
         "From: johannes@abi24bws.de");
+    }
+
+    public function FreischaltungsUebersicht()
+    {
+        $sql = "SELECT vorname, nachname, klasse, email 
+                FROM registrierung
+                WHERE bearbeitungsstatus = 1;";
+        
+        $result = $conn->query($sql);
+
+        if ($result->num_rows > 0) {
+          echo "<script type=""text/javascript"" src=""Browser/Johannes.js"">""
+          <table><tr><th>Vorname</th><th>Nachname</th><th>Klasse</th><th>email</th><th>Bestätigen</th></tr>";
+          // output data of each row
+          while($row = $result->fetch_assoc()) {
+            echo "<tr><td>".$row["vorname"]."</td><td>".$row["nachname"]."</td><td>".$row["klasse"]."</td><td>".$row["email"]. "</td><td>" "<input type=""button"" value=""Identität Bestätigen" "onclick=""Identität_bestaetigt()"">""</td></tr>";
+          }
+          echo "</table>";
+        }
+    }
+
+    public function Freischalten()
+    {
+        $data = (array)json_decode(file_get_contents("php://input"),true);
+
+        $sql = "SELECT vorname, nachname, klasse, email, passwort, registrierungs_id
+                FROM registrierung
+                WHERE email = {$data["email"]};";
+
+        $result = $conn->query($sql);
+
+        if ($result->num_rows == 1) 
+        {
+            while($row = $result->fetch_assoc()) {
+                $database->insert($row["vorname"], $row["nachname"], $row["klasse"], $row["email"], $row["passwort"], $row["registrierungs_id"]);
+            }
+        }
     }
 
     public function resetPSW()

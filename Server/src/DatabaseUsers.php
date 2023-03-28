@@ -27,10 +27,10 @@ class Database
         ]);
     }
 
-    public function insert(string $tabelle, string $Email, string $UserPassword)
+    public function insertSalt(string $id, string $salt)
     {
-        $sql = "INSERT INTO {$tabelle} (email, passwort)
-        VALUES ({$Email}, {$UserPassword});";
+        $sql = "INSERT INTO salt (salt_id, salt)
+        VALUES ({$id}, {$salt});";
 
         $this->conn->exec($sql);
         //$stmt = $this->conn->prepare($sql);
@@ -44,19 +44,12 @@ class Database
         return $this->conn->lastInsertId();
     }
 
-    public function insertSalt(int $id, string $salt)
+    public function insert(string $vorname, string $nachname, string $klasse, string $email, string $passwort, int $salt_id)
     {
-        $sql = "INSERT INTO salt (email, passwort)
-        VALUES ({$id}, {$salt});";
+        $sql = "INSERT INTO salt (vorname, nachname, klasse, email, passwort, salt_id)
+        VALUES ( {$vorname},  {$nachname},  {$klasse},  {$email},  {$passwort},  {$salt_id});";
 
         $this->conn->exec($sql);
-        //$stmt = $this->conn->prepare($sql);
-
-        //$stmt->bindValue(":email", $Email, PDO::PARAM_STR);
-        //$stmt->bindValue(":passwort", $UserPassword, PDO::PARAM_STR);
-        //$stmt->bindParam(":tabelle", $tabelle, PDO::PARAM_STR);
-
-        //$stmt->execute();
 
         return $this->conn->lastInsertId();
     }
@@ -91,9 +84,9 @@ class Database
             datum DEFAULT DATE);
 
             CREATE TABELE salt(
-            teilnehmer_id int PRIMARY KEY NOT NULL, 
+            salt_id int PRIMARY KEY, 
             salt varchar(5) UNIQUE
-            )
+            );
 
             CREATE TABLE teilnehmer(
             teilnehmer_id int AUTO_INCREMENT PRIMARY KEY,
@@ -101,7 +94,9 @@ class Database
             passwort varchar(40) UNIQUE
             vorname varchar(40) NOT NULL, 
             nachname varchar(40) NOT NULL, 
-            klasse varchar(5));
+            klasse varchar(5),
+            salt_id int NOT NULL,
+            FOREIGN KEY (salt_id) REFERENCES salt(salt_id));
 
             CREATE TABLE sitzplatze(
             sitzplatz_id int PRIMARY KEY,
