@@ -43,7 +43,7 @@ class UserHandling
           <table><tr><th>Vorname</th><th>Nachname</th><th>Klasse</th><th>email</th><th>Bestätigen</th></tr>";
           // output data of each row
           while($row = $result->fetch_assoc()) {
-            echo "<tr><td>".$row["vorname"]."</td><td>".$row["nachname"]."</td><td>".$row["klasse"]."</td><td>".$row["email"]. "</td><td>" "<input type=""button"" value=""Identität Bestätigen" "onclick=""Identität_bestaetigt()"">""</td></tr>";
+            echo "<tr><td>".$row["vorname"]."</td><td>".$row["nachname"]."</td><td>".$row["klasse"]."</td><td>".$row["email"]. "</td><td>" "<input type=""button"" value=""Identität Bestätigen" "onclick=""Identität_bestaetigt({$row["email"]})"">""</td></tr>";
           }
           echo "</table>";
         }
