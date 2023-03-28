@@ -12,7 +12,7 @@ async function jstest() {
         })
 }
 
-async function Identität_bestaetigt(email)
+async function Identitaet_bestaetigt(email)
 {
     const response = await fetch("https://abi24bws.de/Freigeschaltet", {
         method: "POST",

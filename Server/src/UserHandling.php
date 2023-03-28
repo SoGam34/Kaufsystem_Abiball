@@ -79,7 +79,7 @@ class UserHandling
 
         $user = $this->database->getUser($data["email"]);
         
-        $passVerfy = password_verify($data["passwort"], $user["passwort"]);
+        $passVerfy = password_verify("AcFgP"+$data["passwort"]+, $user["passwort"]);
 
         if (!$passVerfy) {
             echo json_encode(["passwort" => "invalid"]);

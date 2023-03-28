@@ -111,6 +111,10 @@ class Database
         
     }
 
+    public function getSalt($id)
+    {
+        
+    }
     public function getUser(string $email): array | false
     {
         $sql = "SELECT *
