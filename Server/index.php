@@ -29,8 +29,7 @@ switch ($parts[1]) {
         $UserHandling->resetPSW();
         break;
     case "bestaetigung":
-        $data= (array)json_decode(file_get_contents("php://input"),true);
-        echo json_encode(["id:"=>$data["id"]]);
+        $database->bestaetigen();
         break;
     case "create":
         $database->createRegistrierung();

@@ -7,10 +7,17 @@ class UserHandling
 
     public function createAcc()
     {
-        $data["email"]= (array)json_decode(file_get_contents("php://input"));
-        $data["passwort"]= $_POST["passwort"];
-        $id=$this->database->insertRegistrierer($data["email"], password_hash($data["passwort"], PASSWORD_DEFAULT));
-        
+        $data = (array)json_decode(file_get_contents("php://input"),true);
+        $salt = "";
+        $abc = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+        for(int i=0;i<5;i++)
+        {
+            $salt += $abc[rand(0, 52)];
+        }
+
+        $id=$this->database->insert("registrierung", $data["email"], password_hash("AcFgP"+$data["passwort"]+$salt, PASSWORD_DEFAULT));
+        $this->database->insert($id, $salt);
+
         mail($data["email"], "Verifizierung ihrer Email-Adresse bei Abi24bws.de",
         
         "Sehr geehrte Abiturientinnen und Abiturienten, \n\n
@@ -25,15 +32,13 @@ class UserHandling
 
     public function resetPSW()
     {
-        $data["email"]= $_POST["email"];
-        $data["passwort"]= $_POST["passwort"];
+        $data = (array)json_decode(file_get_contents("php://input"),true);
         $this->database->ResetPasswort($data["email"], password_hash($data["passwort"], PASSWORD_DEFAULT));
     }
 
     public function checkLogin()
     {
-        $data["email"]= $_POST["email"];
-        $data["passwort"]= $_POST["passwort"];
+        $data = (array)json_decode(file_get_contents("php://input"),true);
 
         $user = $this->database->getUser($data["email"]);
         
