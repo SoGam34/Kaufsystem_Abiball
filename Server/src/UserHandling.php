@@ -13,9 +13,9 @@ class UserHandling
         for(int i=0;i<5;i++)
         {
             $salt += $abc[rand(0, 52)];
-        }
+        }//string $vorname, string $nachname, string $klasse, string $email, string $passwort, int $salt_id
 
-        $id=$this->database->insert("registrierung", $data["email"], password_hash("AcFgP"+$data["passwort"]+$salt, PASSWORD_DEFAULT));
+        $id=$this->database->insert("registrierung", $data["vorname"], $data["nachname"],$data["klasse"],$data["email"],password_hash("AcFgP"+$data["passwort"]+$salt, PASSWORD_DEFAULT), );
         $this->database->insertSalt($id, $salt);
 
         mail($data["email"], "Verifizierung ihrer Email-Adresse bei Abi24bws.de",

@@ -44,9 +44,9 @@ class Database
         return $this->conn->lastInsertId();
     }
 
-    public function insert(string $vorname, string $nachname, string $klasse, string $email, string $passwort, int $salt_id)
+    public function insert(string $tabelle, string $vorname, string $nachname, string $klasse, string $email, string $passwort)
     {
-        $sql = "INSERT INTO salt (vorname, nachname, klasse, email, passwort, salt_id)
+        $sql = "INSERT INTO {$tabelle} (vorname, nachname, klasse, email, passwort, salt_id)
         VALUES ( {$vorname},  {$nachname},  {$klasse},  {$email},  {$passwort},  {$salt_id});";
 
         $this->conn->exec($sql);
@@ -76,12 +76,13 @@ class Database
             CREATE TABLE registrierung(
             registrierungs_id int AUTO_INCREMENT PRIMARY KEY,
             email varchar(40) UNIQUE, 
-            passwort varchar(40) UNIQUE,
+            passwort varchar(40) NOT NULL,
             vorname varchar(40) NOT NULL, 
             nachname varchar(40) NOT NULL, 
             klasse varchar(5) NOT NULL, 
             bearbeitungsstatus BOOL DEFAULT 0, 
-            datum DEFAULT DATE);
+            datum DEFAULT DATE,
+            salt_id int);
 
             CREATE TABELE salt(
             salt_id int PRIMARY KEY, 
@@ -91,7 +92,7 @@ class Database
             CREATE TABLE teilnehmer(
             teilnehmer_id int AUTO_INCREMENT PRIMARY KEY,
             email varchar(40) UNIQUE, 
-            passwort varchar(40) UNIQUE
+            passwort varchar(40) NOT NULL,
             vorname varchar(40) NOT NULL, 
             nachname varchar(40) NOT NULL, 
             klasse varchar(5),
