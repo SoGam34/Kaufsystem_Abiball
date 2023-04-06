@@ -26,3 +26,5 @@ class Database
             PDO::ATTR_STRINGIFY_FETCHES => false
         ]);
     }
+}
+?>

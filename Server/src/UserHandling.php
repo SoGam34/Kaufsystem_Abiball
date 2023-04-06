@@ -1,23 +1,25 @@
 <?php
 class UserHandling
 {
-    public function __construct(private Database $database)
+    public function __construct(private DatabaseUsers $database)
     {
     }
 
     public function createAcc()
     {
+        //Ziehn aller benötigten daten 
         $data = (array)json_decode(file_get_contents("php://input"),true);
+        //Erstellen aller benötigten Variablen für das generieren des Salts
         $salt = "";
         $abc = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-        for(int i=0;i<5;i++)
+        //Salt generieren
+        for($i=0;$i<5;$i++)
         {
-            $salt += $abc[rand(0, 52)];
+            $salt .= $abc[rand(0, 52)];
         }
-
-        $id=$this->database->insert("registrierung", $data["email"], password_hash("AcFgP"+$data["passwort"]+$salt, PASSWORD_DEFAULT));
-        $this->database->insertSalt($id, $salt);
-
+        //Anlegen eines neuen Eintrags und damit eines neuen accaunts
+        $id=$this->database->insertRegister($data["vorname"], $data["nachname"], $data["klasse"], $data["email"], password_hash("AcFgP" . $data["passwort"] . $salt, PASSWORD_DEFAULT), $salt);
+        //Generieren und senden der Bestätigungs email
         mail($data["email"], "Verifizierung ihrer Email-Adresse bei Abi24bws.de",
         
         "Sehr geehrte Abiturientinnen und Abiturienten, \n\n
@@ -28,69 +30,39 @@ class UserHandling
         Ihr Abi24bws Team",
         
         "From: johannes@abi24bws.de");
-    }
-
-    public function FreischaltungsUebersicht()
-    {
-        $sql = "SELECT vorname, nachname, klasse, email 
-                FROM registrierung
-                WHERE bearbeitungsstatus = 1;";
-        
-        $result = $conn->query($sql);
-
-        if ($result->num_rows > 0) {
-          echo "<script type=""text/javascript"" src=""Browser/Johannes.js"">""
-          <table><tr><th>Vorname</th><th>Nachname</th><th>Klasse</th><th>email</th><th>Bestätigen</th></tr>";
-          // output data of each row
-          while($row = $result->fetch_assoc()) {
-            echo "<tr><td>".$row["vorname"]."</td><td>".$row["nachname"]."</td><td>".$row["klasse"]."</td><td>".$row["email"]. "</td><td>" "<input type=""button"" value=""Identität Bestätigen" "onclick=""Identität_bestaetigt({$row["email"]})"">""</td></tr>";
-          }
-          echo "</table>";
-        }
-    }
-
-    public function Freischalten()
-    {
-        $data = (array)json_decode(file_get_contents("php://input"),true);
-
-        $sql = "SELECT vorname, nachname, klasse, email, passwort, registrierungs_id
-                FROM registrierung
-                WHERE email = {$data["email"]};";
-
-        $result = $conn->query($sql);
-
-        if ($result->num_rows == 1) 
-        {
-            while($row = $result->fetch_assoc()) {
-                $database->insert($row["vorname"], $row["nachname"], $row["klasse"], $row["email"], $row["passwort"], $row["registrierungs_id"]);
-            }
-        }
+        //Bestätigen das alles erfolgreich war 
+        echo json_encode(["Status" => "OK"]);
     }
 
     public function resetPSW()
-    {
+    {   
+        //Ziehn aller benötigten daten 
         $data = (array)json_decode(file_get_contents("php://input"),true);
-        $this->database->ResetPasswort($data["email"], password_hash($data["passwort"], PASSWORD_DEFAULT));
+        $user = $this->database->getUser($data["email"]);
+        $salt = $this->database->getSalt($user["salt_id"]);
+        
+        //Das eigentliche zurücksetzen
+        $this->database->ResetPasswort($data["email"], password_hash("AcFgP" . $data["passwort"] . $salt["salt"], PASSWORD_DEFAULT));
+        
+        //Bestätigen das alles erfolgreich war 
+        echo json_encode(["Status" => "OK"]);
     }
 
     public function checkLogin()
     {
+        //Ziehn aller benötigten daten 
         $data = (array)json_decode(file_get_contents("php://input"),true);
-
         $user = $this->database->getUser($data["email"]);
+        $salt=$this->database->getSalt($user["salt_id"]);
         
-        $passVerfy = password_verify("AcFgP"+$data["passwort"]+, $user["passwort"]);
-
+        //Überprüfen des passwords 
+        $passVerfy = password_verify("AcFgP" . $data["passwort"] . $salt["salt"],  $user["passwort"]);
+        
+        //Ausgeben des Überprüfungsergebnisses
         if (!$passVerfy) {
-            echo json_encode(["passwort" => "invalid"]);
+            echo json_encode([["Status" => "OK"].["Erfolgreich"=>false]]);
         } else {
-            echo json_encode(["passwort" => "valid"]);
+            echo json_encode([["Status" => "OK"].["Erfolgreich"=>true]]);
         }
     }
-
-    public function deleteRegistrirung()
-    {
-        $this->database->delete("JohannesEMH@web.de");
-    }
 }
-?>

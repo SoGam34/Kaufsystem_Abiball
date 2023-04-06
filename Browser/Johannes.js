@@ -9,16 +9,16 @@ async function jstest() {
     }).then((response) => response.json())
         .then((data) => {
             console.log(data);
-        })
+        });
 }
 
-async function Identitaet_bestaetigt(email)
-{
+async function Identitaet_bestaetigt(registrierungs_id) {
     const response = await fetch("https://abi24bws.de/Freigeschaltet", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
         },
-        body: JSON.stringify({ "email": email })
-    })
+        body: JSON.stringify({ "registrierungs_id": registrierungs_id })
+    });
+    window.location.reload();
 }
