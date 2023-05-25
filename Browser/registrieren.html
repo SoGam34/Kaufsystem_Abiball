@@ -21,12 +21,35 @@
     </div>
     <h1 style="text-align:center;margin-top: 55px;position: relative;">Registrieren</h1>
     <section class="loginregisterstyle">
+        <label for="userVorname">Vorname:</label>
+        <input type="text" id="UserVorname" name="vorname"> <br>
+
+        <label for="userNachname">Nachname:</label>
+        <input type="text" id="UserNachname" name="nachname"> <br>
+
+        <label for="klasse">Klasse auswählen:</label>
+        <select name="klasse" id="klasse">
+            <option value="12BGa">12BGa</option>
+            <option value="12BGb">12BGb</option>
+            <option value="12BGc">12BGc</option>
+            <option value="12BGd">12BGd</option>
+            <option value="12BGe">12BGe</option>
+            <option value="12BGf">12BGf</option>
+            <option value="12BGg">12BGg</option>
+        </select> <br>
+
         <label for="e-mail">E-Mail:</label>
         <input type="email" id="e-mail" name="email"> <br>
+
+        <label for="e-mailpruefen">E-Mail bestätigen:</label>
+        <input type="email" id="e-mailpruefen" name="email"> <br>
+
         <label for="passwort">Password:</label>
         <input type="password" id="passwort" name="pwd"> <br>
+
         <label for="passwortpruefen">Password bestätigen:</label>
         <input type="password" id="passwortpruefen" name="pwd"><br>
+        
         <button type="button">Registrieren</button><br>
         <a href="login.html">Bereits schon Registriert? Hier zum Login</a>
     </section>
