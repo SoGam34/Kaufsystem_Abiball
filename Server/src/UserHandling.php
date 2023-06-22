@@ -22,14 +22,14 @@ class UserHandling
         //Generieren und senden der Bestätigungs email
         mail($data["email"], "Verifizierung ihrer Email-Adresse bei Abi24bws.de",
         
-        "Sehr geehrte Abiturientinnen und Abiturienten, \n\n
+        "Sehr geehrte Abiturientinne und Abituriente, \n\n
         bitte bestaetigen Sie ihre Email-Adresse indem Sie auf den folgenden Link klicken: \n\nhttps://abi24bws.de/Bestaetigung.html?id={$id}\n
         Nachdem sie ihre Email bestaetigt haben, bitten wir Sie, um ein wenig Geduld bis Sie von unserem Admin-Team freigeschaltet sind. Sobald dies erfolgt ist, erhalten Sie Zugriff auf alle Dienste.
         \n\nWenn Sie sich nicht bei Abi24bws registriert haben, koennen Sie diese Email ignorieren und wir entschuldigen uns fuer die Stoerung\n\n\n
         Mit freundlichen Grueßen\n 
         Ihr Abi24bws Team",
         
-        "From: johannes@abi24bws.de");
+        "From: noreplay@abi24bws.de");
         //Bestätigen das alles erfolgreich war 
         echo json_encode(["Status" => "OK"]);
     }
@@ -61,8 +61,11 @@ class UserHandling
         //Ausgeben des Überprüfungsergebnisses
         if (!$passVerfy) {
             echo json_encode([["Status" => "OK"].["Erfolgreich"=>false]]);
-        } else {
+        } else if(passVerfy){
             echo json_encode([["Status" => "OK"].["Erfolgreich"=>true]]);
+        }
+        else{
+            echo json_encode([["Status" => "ERROR"].["Code" => "004"]]);
         }
     }
 }

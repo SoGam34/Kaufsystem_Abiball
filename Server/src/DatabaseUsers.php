@@ -145,7 +145,7 @@ class DatabaseUsers
         $stmt->execute();
 
         if ($stmt->rowCount() > 0) {
-            echo '
+            $tabelle = '
           <table>
             <tr>
                 <th>Vorname</th>
@@ -156,7 +156,7 @@ class DatabaseUsers
             </tr>';
                 // output data of each row
                 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                    echo
+                    $tabelle +=
                     "<tr>
                         <td>" . $row["vorname"] . "</td>
                         <td>" . $row["nachname"] . "</td>
@@ -165,9 +165,10 @@ class DatabaseUsers
                         <td>" . '<input type="button" value="Identitaet Bestaetigen" onclick="Identitaet_bestaetigt(' . $row["registrierungs_id"] . ')"></td>
                     </tr>';
                 }
-                echo "</table>";
+                $tabelle += "</table>";
+                return $tabelle;
             } else {
-                echo " 0 rows affected";
+                return " 0 rows affected";
             }
     }
 
@@ -184,23 +185,32 @@ class DatabaseUsers
 
         $stmt->execute();
 
-        if($stmt->rowCount() == 1) {
+        if($stmt->rowCount() == 1) 
+        {
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 $this->insertTeilnehmer($row["vorname"], $row["nachname"], $row["klasse"], $row["email"], $row["passwort"], $data["registrierungs_id"]);
                 $this->deleteRegistrierung($row["email"]);
 
+                mail($data["email"], "Sie wurden von ihrem abi24bws.de Team freigeschaltet!",
+        
+                "Sehr geehrte Abiturientinne und Abituriente, \n\n
+                Es freut uns ihnen mitteilen zu können das Sie nun vollen Zugriff auf unsere Abiseite haben.
+                Das bedeutet für Sie, das Sie bis zu vier Tickets an einem frei wählbaren Ort kaufen können und Sie Bilder und Viedeos vom Abiball hoch und Runterladen können. 
+                Falls Sie Ideen, Verbesserungsvorschlage oder Probleme haben sagen Sie uns bitte Bescheid, wir versuchen diese so schnell wie möglich umzusetzen.\n\n\n
+                Mit freundlichen Grueßen\n 
+                Ihr Abi24bws Team",
+
+                "From: noreplay@abi24bws.de");
+
                 echo json_encode(["Status" => "OK"]);
             }
-        } else if($stmt->rowCount() > 1){
+        } 
+        else if($stmt->rowCount() > 1){
             echo json_encode([["Status" => "ERROR"].["CODE"=>"001"]]);
         }
 
         else if($stmt->rowCount() == 0){
             echo json_encode([["Status" => "ERROR"].["CODE"=>"002"]]);
-        }
-
-        else if($stmt->rowCount() == 0){
-            echo json_encode([["Status" => "ERROR"].["CODE"=>"003"]]);
         }
     }
 

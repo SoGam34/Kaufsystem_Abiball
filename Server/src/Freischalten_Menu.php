@@ -35,9 +35,9 @@
     include "DatabaseUsers.php";
     $dbUSER= new DatabaseUsers;
 
-    $dbUSER->FreischaltungsUebersicht();
+    div.innerH $dbUSER->FreischaltungsUebersicht();
     ?>
-</div>
+    </div>
 </BODY>
 
 </HTML>
