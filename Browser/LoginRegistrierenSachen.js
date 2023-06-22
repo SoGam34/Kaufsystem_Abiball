@@ -9,3 +9,7 @@ asynch function dieFuenfPersoenlicheDatenAnRegister(vorname,nachname,klasse,emai
     });
   const result = await response.json();
 }
+asynch function UeberpruefenPasswortUndEmailBestaetigen(email,emailu,password,passwordu)
+{
+  
+}
