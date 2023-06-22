@@ -1,4 +1,4 @@
-asynch function dieVierPersoenlicheDatenAnRegister(vorname,nachname,klasse,email)
+asynch function dieFuenfPersoenlicheDatenAnRegister(vorname,nachname,klasse,email)
 {
   const response = await fetch("https://abi24bws.de/Register", {
       method: "POST", // or 'PUT'
