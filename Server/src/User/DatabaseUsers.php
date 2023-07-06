@@ -131,6 +131,8 @@ class DatabaseUsers
         } catch (PDOException $e) {
             echo "Connection failed in createRegistrierung(): \n" . $e->getMessage();
         }*/
+
+
     }
 
     public function FreischaltungsUebersicht()
@@ -188,7 +190,7 @@ class DatabaseUsers
         if($stmt->rowCount() == 1) 
         {
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                $this->insertTeilnehmer($row["vorname"], $row["nachname"], $row["klasse"], $row["email"], $row["passwort"], $data["registrierungs_id"]);
+                $this->insertTeilnehmer(password_hash($row["vorname"]), password_hash($row["nachname"]), password_hash($row["klasse"]), password_hash($row["email"]), $row["passwort"], password_hash($data["registrierungs_id"]));
                 $this->deleteRegistrierung($row["email"]);
 
                 mail($data["email"], "Sie wurden von ihrem abi24bws.de Team freigeschaltet!",
@@ -236,7 +238,7 @@ class DatabaseUsers
              FROM teilnehmer
              WHERE email = :email;");
 
-        $stmt->bindValue(":email",  $email, PDO::PARAM_STR);
+        $stmt->bindValue(":email",  password_hash($email), PDO::PARAM_STR);
        
         $stmt->execute();
 

@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-//Laden der Klassen
-spl_autoload_register(function ($class) {
-    require __DIR__ . "/src/$class.php";
-});
+include "ErrorHandler"
+include "DatabaseUsers"
+include "UserHandling"
+include "DatabaseTickets"
+include "Tickets"
 
 //Setzen der Selbsterstellten Fehlerhandhabungstools
 set_error_handler("ErrorHandler::handleError");
@@ -20,13 +21,13 @@ $UserHandling = new UserHandling($dbUsers);
 
 $dbT = new DatabaseTickets();
 
-$SitzHandling = new Tickets
+$SitzHandling = new Tickets();
 
 /*-------------------Bearbeiten der Anfrage-------------*/
 
 switch ($parts[1]) {
     case "LogIn":
-        $UserHandling->checkLogin();        //   int temp = (einkommen > 10000)?1:0.5;
+        $UserHandling->checkLogin();       
         break;
     case "Register":
         $UserHandling->createAcc();

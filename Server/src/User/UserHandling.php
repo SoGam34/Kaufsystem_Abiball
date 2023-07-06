@@ -9,9 +9,11 @@ class UserHandling
     {
         //Ziehn aller benötigten daten 
         $data = (array)json_decode(file_get_contents("php://input"),true);
+        
         //Erstellen aller benötigten Variablen für das generieren des Salts
         $salt = "";
         $abc = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+        
         //Salt generieren
         for($i=0;$i<5;$i++)
         {
@@ -19,6 +21,7 @@ class UserHandling
         }
         //Anlegen eines neuen Eintrags und damit eines neuen accaunts
         $id=$this->database->insertRegister($data["vorname"], $data["nachname"], $data["klasse"], $data["email"], password_hash("AcFgP" . $data["passwort"] . $salt, PASSWORD_DEFAULT), $salt);
+        
         //Generieren und senden der Bestätigungs email
         mail($data["email"], "Verifizierung ihrer Email-Adresse bei Abi24bws.de",
         
@@ -28,6 +31,7 @@ class UserHandling
         \n\nWenn Sie sich nicht bei Abi24bws registriert haben, koennen Sie diese Email ignorieren und wir entschuldigen uns fuer die Stoerung\n\n\n
         Mit freundlichen Grueßen\n 
         Ihr Abi24bws Team",
+
         
         "From: noreplay@abi24bws.de");
         //Bestätigen das alles erfolgreich war 
@@ -52,6 +56,7 @@ class UserHandling
     {
         //Ziehn aller benötigten daten 
         $data = (array)json_decode(file_get_contents("php://input"),true);
+        
         $user = $this->database->getUser($data["email"]);
         $salt=$this->database->getSalt($user["salt_id"]);
         
