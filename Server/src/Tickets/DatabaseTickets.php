@@ -1,6 +1,6 @@
 <?php
 
-class Database
+class DatabaseTickets
 {
     private PDO $conn;
 

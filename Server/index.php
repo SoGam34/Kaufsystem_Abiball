@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-include "ErrorHandler"
-include "DatabaseUsers"
-include "UserHandling"
-include "DatabaseTickets"
-include "Tickets"
+include "ErrorHandler";
+include "DatabaseUsers";
+include "UserHandling";
+include "DatabaseTickets";
+include "Tickets";
 
 //Setzen der Selbsterstellten Fehlerhandhabungstools
 set_error_handler("ErrorHandler::handleError");
@@ -34,6 +34,9 @@ switch ($parts[1]) {
         break;
     case "Reseting":
         $UserHandling->resetPSW();
+        break;
+    case "RequestEmail":
+        $UserHandling->resetingEmail();
         break;
     case "bestaetigung":
         $dbUsers->bestaetigen();

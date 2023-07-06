@@ -38,6 +38,23 @@ class UserHandling
         echo json_encode(["Status" => "OK"]);
     }
 
+    public function resetingEmail(): void 
+    {
+        //Ziehn aller benötigten daten 
+        $data = (array)json_decode(file_get_contents("php://input"),true);
+
+        mail($data["email"], "Zurücksetzen ihres Passwords bei Abi24bws.de",
+        
+        "Sehr geehrte Abiturientinne und Abituriente, \n\n
+        indem Sie auf den folgenden Link klicken können Sie ihr Passwort zurück setzen: \n\nhttps://abi24bws.de/Bestaetigung.html?id={ ". password_hash($data["email"], PASSWORD_DEFAULT). "}\n
+        Nachdem sie ihr neues Passwort eingegeben haben können Sie sich wie gewont anmelden. 
+        \n\nWenn Sie nicht bei Abi24bws ihr Passwort zurücksetzen wollen, koennen Sie diese Email ignorieren und wir entschuldigen uns fuer die Stoerung\n\n\n
+        Mit freundlichen Grueßen\n 
+        Ihr Abi24bws Team",
+
+        "From: noreplay@abi24bws.de");
+    }
+
     public function resetPSW()
     {   
         //Ziehn aller benötigten daten 
@@ -62,7 +79,7 @@ class UserHandling
         //Ziehn aller benötigten daten 
         $data = (array)json_decode(file_get_contents("php://input"),true);
         
-        $user = $this->database->getUser(password_hash($data["email"]));
+        $user = $this->database->getUser(password_hash($data["email"], PASSWORD_DEFAULT));
         
         if($user!="")
         {
@@ -76,7 +93,7 @@ class UserHandling
             {
                 echo json_encode([["Status" => "OK"].["Erfolgreich"=>false]]);
             } 
-            else if(passVerfy)
+            else if($passVerfy)
             {
                echo json_encode([["Status" => "OK"].["Erfolgreich"=>true]]);
             }
