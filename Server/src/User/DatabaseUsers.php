@@ -231,10 +231,26 @@ class DatabaseUsers
 
         return $data;
     }
-    public function getUser(string $email): array | false
+    public function getUser(string $email)
     {
         $stmt = $this->conn->prepare(
             "SELECT passwort, salt_id
+             FROM teilnehmer
+             WHERE email = :email;");
+
+        $stmt->bindValue(":email",  $email, PDO::PARAM_STR);
+       
+        $stmt->execute();
+
+        $data = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $data;
+    }
+
+    public function emailverify($email): bool
+    {
+        $stmt = $this->conn->prepare(
+            "SELECT
              FROM teilnehmer
              WHERE email = :email;");
 
@@ -243,8 +259,7 @@ class DatabaseUsers
         $stmt->execute();
 
         $data = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        return $data;
+        password_verify($email, )
     }
 
     public function ResetPasswort($email, string $newPasswort): void
@@ -254,7 +269,7 @@ class DatabaseUsers
              SET passwort = :passwort
              WHERE email = :email;");
 
-        $stmt->bindValue(":email", $email, PDO::PARAM_STR);
+        $stmt->bindValue(":email", password_hash($email), PDO::PARAM_STR);
         $stmt->bindValue(":passwort", $newPasswort, PDO::PARAM_STR);
 
         $stmt->execute();

@@ -42,14 +42,19 @@ class UserHandling
     {   
         //Ziehn aller benötigten daten 
         $data = (array)json_decode(file_get_contents("php://input"),true);
+        
         $user = $this->database->getUser($data["email"]);
-        $salt = $this->database->getSalt($user["salt_id"]);
+
+        if($user!="")
+        {
+            $salt = $this->database->getSalt($user["salt_id"]);
         
-        //Das eigentliche zurücksetzen
-        $this->database->ResetPasswort($data["email"], password_hash("AcFgP" . $data["passwort"] . $salt["salt"], PASSWORD_DEFAULT));
+            //Das eigentliche zurücksetzen
+            $this->database->ResetPasswort($data["email"], password_hash("AcFgP" . $data["passwort"] . $salt["salt"], PASSWORD_DEFAULT));
         
-        //Bestätigen das alles erfolgreich war 
-        echo json_encode(["Status" => "OK"]);
+            //Bestätigen das alles erfolgreich war 
+            echo json_encode(["Status" => "OK"]);
+        }
     }
 
     public function checkLogin()
@@ -57,20 +62,32 @@ class UserHandling
         //Ziehn aller benötigten daten 
         $data = (array)json_decode(file_get_contents("php://input"),true);
         
-        $user = $this->database->getUser($data["email"]);
-        $salt=$this->database->getSalt($user["salt_id"]);
+        $user = $this->database->getUser(password_hash($data["email"]));
         
-        //Überprüfen des passwords 
-        $passVerfy = password_verify("AcFgP" . $data["passwort"] . $salt["salt"],  $user["passwort"]);
-        
-        //Ausgeben des Überprüfungsergebnisses
-        if (!$passVerfy) {
-            echo json_encode([["Status" => "OK"].["Erfolgreich"=>false]]);
-        } else if(passVerfy){
-            echo json_encode([["Status" => "OK"].["Erfolgreich"=>true]]);
+        if($user!="")
+        {
+            $salt=$this->database->getSalt($user["salt_id"]);
+           
+            //Überprüfen des passwords 
+            $passVerfy = password_verify("AcFgP" . $data["passwort"] . $salt["salt"],  $user["passwort"]);
+               
+            //Ausgeben des Überprüfungsergebnisses
+            if (!$passVerfy)
+            {
+                echo json_encode([["Status" => "OK"].["Erfolgreich"=>false]]);
+            } 
+            else if(passVerfy)
+            {
+               echo json_encode([["Status" => "OK"].["Erfolgreich"=>true]]);
+            }
+            else
+            {
+                echo json_encode([["Status" => "ERROR"].["Code" => "004"]]);
+            }
         }
-        else{
-            echo json_encode([["Status" => "ERROR"].["Code" => "004"]]);
+        else 
+        {
+           echo json_encode([["Status" => "OK"].["Erfolgreich"=>false]]);
         }
     }
 }
