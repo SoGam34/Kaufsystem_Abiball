@@ -12,7 +12,7 @@ include "Tickets";
 set_error_handler("ErrorHandler::handleError");
 set_exception_handler("ErrorHandler::handleException");
 
-//Auseinandernehemen der URI damit mit bestimmten Teilen gleich weitergearbeitet werden kann
+//Auseinandernehemen der URI damit mit bestimmten Teilen gleich weitergearbeitet werden kann   jkjgh
 $parts = explode("/", $_SERVER["REQUEST_URI"]);
 /*-------------------Erstellen aller Klassenobjeckte-------------*/
 $dbUsers = new DatabaseUsers();
