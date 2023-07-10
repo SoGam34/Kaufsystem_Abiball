@@ -1,10 +1,11 @@
 <?php
-include "config.ini"
+include "config";
+
 class Security
 {
      public function encrypt(string $data) : string {
-        $crypt_key = FIRSTKEY;
-        $hash_key = SECONDKEY;    
+        $crypt_key = $GLOBALS["Firstkey"];
+        $hash_key = $GLOBALS["Secondkey"];    
     
         $method = "aes-256-cbc";    
         $iv_length = openssl_cipher_iv_length($method);
@@ -18,8 +19,8 @@ class Security
      }
 
      public function decrypt(string $data) {
-        $crypt_key = FIRSTKEY;
-        $hash_key = SECONDKEY;            
+        $crypt_key = $GLOBALS["Firstkey"];
+        $hash_key = $GLOBALS["Secondkey"];            
         $mix = $data;
 
         $method = "aes-256-cbc";    

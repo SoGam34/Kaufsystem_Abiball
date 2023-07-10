@@ -22,9 +22,9 @@ $dbUsers = new DatabaseUsers();
 
 $UserHandling = new UserHandling($dbUsers, $Security);
 
-$dbT = new DatabaseTickets();
+$dbTickets = new DatabaseTickets();
 
-$SitzHandling = new Tickets($Security);
+$SitzHandling = new Tickets($dbTickets, $Security);
 
 /*-------------------Bearbeiten der Anfrage-------------*/
 
@@ -43,9 +43,6 @@ switch ($parts[1]) {
         break;
     case "bestaetigung":
         $dbUsers->bestaetigen();
-        break;
-    case "Freischalten":
-        $dbUsers->FreischaltungsUebersicht();
         break;
     case "Freigeschaltet":
         $UserHandling->UserFreischalten();

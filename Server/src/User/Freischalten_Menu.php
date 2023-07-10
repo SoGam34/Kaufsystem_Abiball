@@ -32,10 +32,17 @@
 
     <div  class="loginregisterstyle" style="border: 5px; border-color:blue">
     <?php 
-    include "DatabaseUsers.php";
-    $dbUSER= new DatabaseUsers;
+    include "UserHandling.php";
+    include "DatabaseUsers";
+    include "Security";
 
-    $dbUSER->FreischaltungsUebersicht();
+    $Security = new Security();
+
+    $dbUsers = new DatabaseUsers();
+
+    $User = new UserHandling($dbUSER, $Security);
+
+    $User->FreischaltenTabelle();
     ?>
     </div>
 </BODY>

@@ -142,7 +142,7 @@ class DatabaseUsers
 
     }
 
-    public function FreischaltungsUebersicht()
+    public function getFreischaltungsUebersicht()
     {
         $stmt = $this->conn->prepare(
             "SELECT vorname, nachname, klasse, email, registrierungs_id
@@ -154,31 +154,15 @@ class DatabaseUsers
         $stmt->execute();
 
         if ($stmt->rowCount() > 0) {
-            $tabelle = '
-          <table>
-            <tr>
-                <th>Vorname</th>
-                <th>Nachname</th>
-                <th>Klasse</th>
-                <th>email</th>
-                <th>Bestätigen</th>
-            </tr>';
-                // output data of each row
-                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                    $tabelle +=
-                    "<tr>
-                        <td>" . $this->sicher->decrypt($row["vorname"] ). "</td>
-                        <td>" . $this->sicher->decrypt($row["nachname"] ). "</td>
-                        <td>" . $this->sicher->decrypt($row["klasse"] ). "</td>
-                        <td>" . $this->sicher->decrypt($row["email"] ). "</td>
-                        <td>" . '<input type="button" value="Identitaet Bestaetigen" onclick="Identitaet_bestaetigt(' . $row["registrierungs_id"] . ')"></td>
-                    </tr>';
-                }
-                $tabelle += "</table>";
-                return $tabelle;
-            } else {
-                return " 0 rows affected";
+
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             }
+
+            return $row;
+        } 
+        else {
+            return false;
+        }
     }
 
     public function getFreischalten($data)
