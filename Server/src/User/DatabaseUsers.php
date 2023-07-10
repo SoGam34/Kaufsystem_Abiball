@@ -6,7 +6,8 @@ class DatabaseUsers
 
     public function __construct()
     {
-        $this->conn = $this->getConnection();
+        echo "Try to connent";
+        $this->conn = $this->getConnection();        
     }
 
     public function __destruct()
@@ -121,8 +122,8 @@ class DatabaseUsers
 
             */
             $sql=
-            "DROP TABEL teilnehmer;
-             CREATE TABEL teilnehmer(
+            "DELETE TABLE teilnehmer;
+             CREATE TABLE teilnehmer(
              teilnehmer_id int AUTO_INCREMENT PRIMARY KEY,
              email varchar(255) UNIQUE, 
              passwort varchar(255) NOT NULL,
@@ -136,6 +137,7 @@ class DatabaseUsers
         } catch (PDOException $e) {
             echo "Connection failed in createRegistrierung(): \n" . $e->getMessage();
         }//*/
+        echo "success";
 
 
 
