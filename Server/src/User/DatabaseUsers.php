@@ -167,10 +167,10 @@ class DatabaseUsers
                 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     $tabelle +=
                     "<tr>
-                        <td>" . $row["vorname"] . "</td>
-                        <td>" . $row["nachname"] . "</td>
-                        <td>" . $row["klasse"] . "</td>
-                        <td>" . $row["email"] . "</td>
+                        <td>" . $this->sicher->decrypt($row["vorname"] ). "</td>
+                        <td>" . $this->sicher->decrypt($row["nachname"] ). "</td>
+                        <td>" . $this->sicher->decrypt($row["klasse"] ). "</td>
+                        <td>" . $this->sicher->decrypt($row["email"] ). "</td>
                         <td>" . '<input type="button" value="Identitaet Bestaetigen" onclick="Identitaet_bestaetigt(' . $row["registrierungs_id"] . ')"></td>
                     </tr>';
                 }
@@ -181,10 +181,8 @@ class DatabaseUsers
             }
     }
 
-    public function Freischalten()
+    public function getFreischalten($data)
     {
-        $data = (array)json_decode(file_get_contents("php://input"), true);
-
         $stmt = $this->conn->prepare(
             "SELECT vorname, nachname, email, passwort
              FROM registrierung
@@ -197,22 +195,9 @@ class DatabaseUsers
         if($stmt->rowCount() == 1) 
         {
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                $this->insertTeilnehmer(password_hash($row["vorname"], PASSWORD_DEFAULT), password_hash($row["nachname"], PASSWORD_DEFAULT), password_hash($row["email"], PASSWORD_DEFAULT), $row["passwort"], password_hash($data["registrierungs_id"], PASSWORD_DEFAULT));
-                $this->deleteRegistrierung($row["email"]);
-
-                mail($data["email"], "Sie wurden von ihrem abi24bws.de Team freigeschaltet!",
-        
-                "Sehr geehrte Abiturientinne und Abituriente, \n\n
-                Es freut uns ihnen mitteilen zu können das Sie nun vollen Zugriff auf unsere Abiseite haben.
-                Das bedeutet für Sie, das Sie bis zu vier Tickets an einem frei wählbaren Ort kaufen können und Sie Bilder und Viedeos vom Abiball hoch und Runterladen können. 
-                Falls Sie Ideen, Verbesserungsvorschlage oder Probleme haben sagen Sie uns bitte Bescheid, wir versuchen diese so schnell wie möglich umzusetzen.\n\n\n
-                Mit freundlichen Grueßen\n 
-                Ihr Abi24bws Team",
-
-                "From: noreplay@abi24bws.de");
-
-                echo json_encode(["Status" => "OK"]);
             }
+
+            return $row;
         } 
         else if($stmt->rowCount() > 1){
             echo json_encode([["Status" => "ERROR"].["CODE"=>"001"]]);
@@ -221,6 +206,8 @@ class DatabaseUsers
         else if($stmt->rowCount() == 0){
             echo json_encode([["Status" => "ERROR"].["CODE"=>"002"]]);
         }
+
+        return false;
     }
 
     public function getSalt($id)
@@ -261,7 +248,7 @@ class DatabaseUsers
              SET passwort = :passwort
              WHERE email = :email;");
 
-        $stmt->bindValue(":email", password_hash($email, PASSWORD_DEFAULT), PDO::PARAM_STR);
+        $stmt->bindValue(":email", $email, PDO::PARAM_STR);
         $stmt->bindValue(":passwort", $newPasswort, PDO::PARAM_STR);
 
         $stmt->execute();

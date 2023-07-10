@@ -7,6 +7,7 @@ include "DatabaseUsers";
 include "UserHandling";
 include "DatabaseTickets";
 include "Tickets";
+include "Security";
 
 //Setzen der Selbsterstellten Fehlerhandhabungstools
 set_error_handler("ErrorHandler::handleError");
@@ -15,13 +16,15 @@ set_exception_handler("ErrorHandler::handleException");
 //Auseinandernehemen der URI damit mit bestimmten Teilen gleich weitergearbeitet werden kann   jkjgh
 $parts = explode("/", $_SERVER["REQUEST_URI"]);
 /*-------------------Erstellen aller Klassenobjeckte-------------*/
+$Security = new Security();
+
 $dbUsers = new DatabaseUsers();
 
-$UserHandling = new UserHandling($dbUsers);
+$UserHandling = new UserHandling($dbUsers, $Security);
 
 $dbT = new DatabaseTickets();
 
-$SitzHandling = new Tickets();
+$SitzHandling = new Tickets($Security);
 
 /*-------------------Bearbeiten der Anfrage-------------*/
 
@@ -45,7 +48,7 @@ switch ($parts[1]) {
         $dbUsers->FreischaltungsUebersicht();
         break;
     case "Freigeschaltet":
-        $dbUsers->Freischalten();
+        $UserHandling->UserFreischalten();
         break;
     case "create":
         $dbUsers->createRegistrierung();

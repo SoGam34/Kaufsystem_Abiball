@@ -1,7 +1,7 @@
 <?php
 class UserHandling
 {
-    public function __construct(private DatabaseUsers $database)
+    public function __construct(private DatabaseUsers $database, private Security $sicher)
     {
     }
 
@@ -20,7 +20,7 @@ class UserHandling
             $salt .= $abc[rand(0, 52)];
         }
         //Anlegen eines neuen Eintrags und damit eines neuen accaunts
-        $id=$this->database->insertRegister($data["vorname"], $data["nachname"], $data["klasse"], $data["email"], password_hash("AcFgP" . $data["passwort"] . $salt, PASSWORD_DEFAULT), $salt);
+        $id=$this->database->insertRegister($this->sicher->encrypt($data["vorname"]), $this->sicher->encrypt($data["nachname"]), $this->sicher->encrypt($data["klasse"]), $this->sicher->encrypt($data["email"]), password_hash("AcFgP" . $data["passwort"] . $salt, PASSWORD_DEFAULT), $salt);
         
         //Generieren und senden der Bestätigungs email
         mail($data["email"], "Verifizierung ihrer Email-Adresse bei Abi24bws.de",
@@ -38,6 +38,31 @@ class UserHandling
         echo json_encode(["Status" => "OK"]);
     }
 
+
+    public function UserFreischalten() 
+    {
+        $data = (array)json_decode(file_get_contents("php://input"), true);
+        $users = $this->database->getFreischalten($data["registrierungs_id"]);
+
+        if($users!=false)
+        {
+            $this->insertTeilnehmer($users["vorname"], $users["nachname"], $users["email"], $users["passwort"], $data["registrierungs_id"]);
+            $this->deleteRegistrierung($users["email"]);
+
+            mail($this->sicher->decrypt($users["email"]), "Sie wurden von ihrem abi24bws.de Team freigeschaltet!",
+            "Sehr geehrte Abiturientinne und Abituriente, \n\n
+            Es freut uns ihnen mitteilen zu können das Sie nun vollen Zugriff auf unsere Abiseite haben.
+            Das bedeutet für Sie, das Sie bis zu vier Tickets an einem frei wählbaren Ort kaufen können und Sie Bilder und Viedeos vom Abiball hoch und Runterladen können. 
+            Falls Sie Ideen, Verbesserungsvorschlage oder Probleme haben sagen Sie uns bitte Bescheid, wir versuchen diese so schnell wie möglich umzusetzen.\n\n\n
+            Mit freundlichen Grueßen\n 
+            Ihr Abi24bws Team",
+
+            "From: noreplay@abi24bws.de");
+
+            echo json_encode(["Status" => "OK"]);
+        }
+    }
+
     public function resetingEmail(): void 
     {
         //Ziehn aller benötigten daten 
@@ -46,7 +71,7 @@ class UserHandling
         mail($data["email"], "Zurücksetzen ihres Passwords bei Abi24bws.de",
         
         "Sehr geehrte Abiturientinne und Abituriente, \n\n
-        indem Sie auf den folgenden Link klicken können Sie ihr Passwort zurück setzen: \n\nhttps://abi24bws.de/Bestaetigung.html?id={ ". password_hash($data["email"], PASSWORD_DEFAULT). "}\n
+        indem Sie auf den folgenden Link klicken können Sie ihr Passwort zurück setzen: \n\nhttps://abi24bws.de/Bestaetigung.html?id={ $this->sicher->encrypt($data["email"])}\n
         Nachdem sie ihr neues Passwort eingegeben haben können Sie sich wie gewont anmelden. 
         \n\nWenn Sie nicht bei Abi24bws ihr Passwort zurücksetzen wollen, koennen Sie diese Email ignorieren und wir entschuldigen uns fuer die Stoerung\n\n\n
         Mit freundlichen Grueßen\n 
@@ -79,7 +104,7 @@ class UserHandling
         //Ziehn aller benötigten daten 
         $data = (array)json_decode(file_get_contents("php://input"),true);
         
-        $user = $this->database->getUser(password_hash($data["email"], PASSWORD_DEFAULT));
+        $user = $this->database->getUser($data["email"]);
         
         if($user!="")
         {
