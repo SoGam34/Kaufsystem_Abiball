@@ -4,6 +4,7 @@
     <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
     <META NAME="Author" CONTENT="Norbert Wild">
     <META NAME="GENERATOR" CONTENT="Mozilla/4.05 [de] (WinNT; I) [Netscape]">
+   <META charset="UTF-8">
     <TITLE>Registrieren</TITLE>
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" type="image/x-icon" href="bws.png">
@@ -12,49 +13,72 @@
 
 <BODY>
     <div class="navbar">
-        <a href="login.html">Login</a>
-        <a href="registrieren.html" ; style="margin-left: 17%;">Registrieren</a>
-        <a href="bilder.html" ; style="margin-left: 10%;">Bilder</a>
-        <a href="tickets.html" ; style="margin-left: 10%;">Tickets</a>
-        <a href="program.html" ; style="margin-left: 10%;">Program</a>
-        <a href="homepage.html" ; style="margin-left: 10%;">Homepage</a>
+        <div class="navbarunterLoginRegister">
+           <a href="login.html">Login</a>
+           <a href="registrieren.html">Registrieren</a>
+        </div>
+        <div class="navbarunterHomepage">
+           <a href="bilder.html">Bilder</a>
+           <a href="homepage.html">Homepage</a>
+           <a href="tickets.html">Tickets</a>
+           <a href="program.html">Program</a>
+           </div>
         <a href="support.html">Support</a>
-    </div>
+     </div>
     <h1 style="text-align:center;margin-top: 55px;position: relative;">Registrieren</h1>
     <section class="loginregisterstyle">
-        <label for="userVorname">Vorname:</label>
-        <input type="text" id="UserVorname" name="vorname"> <br>
-
-        <label for="userNachname">Nachname:</label>
-        <input type="text" id="UserNachname" name="nachname"> <br>
-
-        <label for="klasse">Klasse auswählen:</label>
-        <select name="klasse" id="klasse">
-            <option value="12BGa">12BGa</option>
-            <option value="12BGb">12BGb</option>
-            <option value="12BGc">12BGc</option>
-            <option value="12BGd">12BGd</option>
-            <option value="12BGe">12BGe</option>
-            <option value="12BGf">12BGf</option>
-            <option value="12BGg">12BGg</option>
-        </select> <br>
-
-        <label for="e-mail">E-Mail:</label>
-        <input type="email" id="e-mail" name="email"> <br>
-
-        <label for="e-mailpruefen">E-Mail bestätigen:</label>
-        <input type="email" id="e-mailpruefen" name="email"> <br>
-
-        <label for="passwort">Password:</label>
-        <input type="password" id="passwort" name="pwd"> <br>
-
-        <label for="passwortpruefen">Password bestätigen:</label>
-        <input type="password" id="passwortpruefen" name="pwd"><br>
+		<form action="/Browser/LoginRegistrierenSachen.js" method="post">
+		<table class="mittig">
+			<tr>
+				<th></th>
+				<th></th>
+			</th>
+			<tr>
+				<td><label for="userVorname">Vorname:</label></td>
+				<td><input type="text" id="UserVorname" name="vorname"></td>
+			</tr>
+			<tr>
+				<td><label for="userNachname">Nachname:</label></td>
+				<td><input type="text" id="UserNachname" name="nachname"></td>
+			</tr>
+			<tr>
+				<td><label for="klasse">Klasse ausw&aumlhlen:</label></td>
+				<td><select name="Klasse" id="klasse">
+						<option value="12BGa">12BGa</option>
+						<option value="12BGb">12BGb</option>
+						<option value="12BGc">12BGc</option>
+						<option value="12BGd">12BGd</option>
+						<option value="12BGe">12BGe</option>
+						<option value="12BGf">12BGf</option>
+						<option value="12BGg">12BGg</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td><label for="e-mail">E-Mail:</label></td>
+				<td><input type="email" id="e-mail" name="email"></td>
+			</tr>
+			<tr>
+				<td><label for="e-mailpruefen">E-Mail best&aumltigen:</label></td>
+				<td><input type="email" id="e-mailpruefen" name="email"></td>
+			</tr>
+			<tr>
+				<td><label for="passwort">Password (mindestens 10 Zeichen Lang):</label></td>
+				<td><input type="password" minlength="10" id="passwort" name="pwd"></td>
+			</tr>
+			<tr>
+				<td><label for="passwortpruefen">Password best&aumltigen:</label></td>
+				<td><input type="password" minlength="10" id="passwortpruefen" name="pwd"></td>
+			</tr>
+			<tr>
+				<td><button  type="button" class="registrierenButton" onclick="UeberpruefenPasswortUndEmailBestaetigen()">Registrieren</button><br></td>
+				<td><a href="login.html">Bereits schon Registriert? Hier zum Login</a></td>
+			</tr>
+			<tr><td><input type="submit" value="submit"></td></tr>
+		</table>
+        </form>
         
-        <button type="button" onclick="dieFuenfPersoenlicheDatenAnRegister(document.getElementbyID("UserVorname"),document.getElementbyID("UserNachname"),document.getElemntbyID("klasse"),document.getElementbyID("e-mail"))">Registrieren</button><br>
-        <a href="login.html">Bereits schon Registriert? Hier zum Login</a>
     </section>
-
 </BODY>
 
 </HTML>

@@ -20,8 +20,9 @@ class UserHandling
             $salt .= $abc[rand(0, 52)];
         }
         //Anlegen eines neuen Eintrags und damit eines neuen accaunts
-        $id=$this->database->insertRegister($this->sicher->encrypt($data["vorname"]), $this->sicher->encrypt($data["nachname"]), $this->sicher->encrypt($data["klasse"]), $this->sicher->encrypt($data["email"]), password_hash("AcFgP" . $data["passwort"] . $salt, PASSWORD_DEFAULT), $salt);
-        
+        // $id=$this->database->insertRegister($this->sicher->encrypt($data["vorname"]), $this->sicher->encrypt($data["nachname"]), $this->sicher->encrypt($data["klasse"]), $this->sicher->encrypt($data["email"]), password_hash("AcFgP" . $data["passwort"] . $salt, PASSWORD_DEFAULT), $salt);
+        $id = 0;
+        echo "versende Email";
         //Generieren und senden der Bestätigungs email
         mail($data["email"], "Verifizierung ihrer Email-Adresse bei Abi24bws.de",
         

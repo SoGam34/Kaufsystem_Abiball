@@ -1,8 +1,13 @@
 <?php
-include "config";
+include "config.php";
 
 class Security
 {
+   public function __construct()
+    {
+        echo "Construct Security"; 
+    }
+
      public function encrypt(string $data) : string {
         $crypt_key = $GLOBALS["Firstkey"];
         $hash_key = $GLOBALS["Secondkey"];    

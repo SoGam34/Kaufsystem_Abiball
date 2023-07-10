@@ -4,6 +4,7 @@
     <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
     <META NAME="Author" CONTENT="Norbert Wild">
     <META NAME="GENERATOR" CONTENT="Mozilla/4.05 [de] (WinNT; I) [Netscape]">
+   <META charset="UTF-8">
     <TITLE>Login</TITLE>
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" type="image/x-icon" href="bws.png">
@@ -11,22 +12,38 @@
 
 <BODY>
     <div class="navbar">
-        <a href="login.html">Login</a>
-        <a href="registrieren.html" ; style="margin-left: 17%;">Registrieren</a>
-        <a href="bilder.html" ; style="margin-left: 10%;">Bilder</a>
-        <a href="tickets.html" ; style="margin-left: 10%;">Tickets</a>
-        <a href="program.html" ; style="margin-left: 10%;">Program</a>
-        <a href="homepage.html" ; style="margin-left: 10%;">Homepage</a>
+        <div class="navbarunterLoginRegister">
+           <a href="login.html">Login</a>
+           <a href="registrieren.html">Registrieren</a>
+        </div>
+        <div class="navbarunterHomepage">
+           <a href="bilder.html">Bilder</a>
+           <a href="homepage.html">Homepage</a>
+           <a href="tickets.html">Tickets</a>
+           <a href="program.html">Program</a>
+           </div>
         <a href="support.html">Support</a>
-    </div>
+     </div>
     <h1 style="text-align:center;margin-top: 55px;position: relative">Login</h1>
     <section class="loginregisterstyle">
-        <label for="e-mail">E-Mail:</label>
-        <input type="email" id="e-mail" name="email"> <br>
-        <label for="passwort">Password:</label>
-        <input type="password" id="passwort" name="pwd"><br>
-        <button type="button">Login</button><br>
-        <a href="registrieren.html">Haben Sie sich noch nicht Registriert?</a>
+		<table class="mittig">
+			<tr>
+				<td><label for="e-mail">E-Mail:</label></td>
+				<td><input type="email" id="e-mail" name="email"></td>
+			</tr>
+			<tr>
+				<td><label for="passwort">Password:</label></td>
+				<td><input type="password" id="passwort" name="pwd"></td>
+			</tr>
+			<tr>
+				<td><button type="button" class="registrierenButton">Login</button></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td><a href="passwortzuruckemail.html">Passwort vergessen?</td>
+				<td><a href="registrieren.html">Haben Sie sich noch nicht Registriert?</a></td>
+			</tr>
+		</table>
     </section>
 
 </BODY>
