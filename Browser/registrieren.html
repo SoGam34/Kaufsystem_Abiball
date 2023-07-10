@@ -27,6 +27,7 @@
      </div>
     <h1 style="text-align:center;margin-top: 55px;position: relative;">Registrieren</h1>
     <section class="loginregisterstyle">
+		<form action="/Browser/LoginRegistrierenSachen.js" method="post">
 		<table class="mittig">
 			<tr>
 				<th></th>
@@ -63,18 +64,19 @@
 			</tr>
 			<tr>
 				<td><label for="passwort">Password (mindestens 10 Zeichen Lang):</label></td>
-				<td><input type="password" id="passwort" name="pwd"></td>
+				<td><input type="password" minlength="10" id="passwort" name="pwd"></td>
 			</tr>
 			<tr>
 				<td><label for="passwortpruefen">Password best&aumltigen:</label></td>
-				<td><input type="password" id="passwortpruefen" name="pwd"></td>
+				<td><input type="password" minlength="10" id="passwortpruefen" name="pwd"></td>
 			</tr>
 			<tr>
 				<td><button  type="button" class="registrierenButton" onclick="UeberpruefenPasswortUndEmailBestaetigen()">Registrieren</button><br></td>
 				<td><a href="login.html">Bereits schon Registriert? Hier zum Login</a></td>
 			</tr>
+			<tr><td><input type="submit" value="submit"></td></tr>
 		</table>
-        
+        </form>
         
     </section>
 </BODY>
