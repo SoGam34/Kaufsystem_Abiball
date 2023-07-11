@@ -6,7 +6,8 @@ class DatabaseUsers
 
     public function __construct()
     {
-        $this->conn = $this->getConnection();
+        echo "Try to connent";
+        $this->conn = $this->getConnection();        
     }
 
     public function __destruct()
@@ -15,12 +16,19 @@ class DatabaseUsers
 
     public function getConnection(): PDO
     {
-        $dsn = "mysql:host=rdbms.strato.de;dbname=dbs10190475;charset=utf8";
+        $dsn = "";
 
-        return new PDO($dsn, 'dbu2898798', '&%wz65DQ_Ht/D!g', [
+                try {
+                    $connection= new PDO($dsn, '', '', [
             PDO::ATTR_EMULATE_PREPARES => false,
             PDO::ATTR_STRINGIFY_FETCHES => false
         ]);
+                } catch (PDOException $e) {
+                    echo "Connection failed in createRegistrierung(): \n" . $e->getMessage();
+                }
+        
+
+        return $connection;
     }
 
     public function insertRegister(string $vorname, string $nachname, string $klasse, string $email, string $passwort, string $salt)
@@ -53,16 +61,15 @@ class DatabaseUsers
         return $id;
     }
 
-    public function insertTeilnehmer(string $vorname, string $nachname, string $klasse, string $email, string $passwort, string $salt_id)
+    public function insertTeilnehmer(string $vorname, string $nachname, string $email, string $passwort, string $salt_id)
     {
         $stmt = $this->conn->prepare(
-            "INSERT INTO teilnehmer (vorname, nachname, klasse, email, passwort, salt_id)
-             VALUES ( :vorname,  :nachname,  :klasse,  :email,  :passwort, :salt_id);"
+            "INSERT INTO teilnehmer (vorname, nachname, email, passwort, salt_id)
+             VALUES ( :vorname,  :nachname,  :email,  :passwort, :salt_id);"
         );
 
         $stmt->bindValue(":vorname",  $vorname, PDO::PARAM_STR);
         $stmt->bindValue(":nachname",  $nachname, PDO::PARAM_STR);
-        $stmt->bindValue(":klasse",  $klasse, PDO::PARAM_STR);
         $stmt->bindValue(":email",  $email, PDO::PARAM_STR);
         $stmt->bindValue(":passwort",  $passwort, PDO::PARAM_STR);
         $stmt->bindValue(":salt_id",  $salt_id, PDO::PARAM_INT);
@@ -120,22 +127,31 @@ class DatabaseUsers
             PersonID int DEFAULT 0,
             FOREIGN KEY (PersonID) REFERENCES teilnehmer(teilnehmer_id));";
 
-            
+            */
             $sql=
-            "ALTER TABLE registrierung
-            MODIFY COLUMN  passwort varchar(255);
-            ALTER TABLE teilnehmer
-            MODIFY COLUMN  passwort varchar(255); ";
+            "DELETE TABLE teilnehmer;
+             CREATE TABLE teilnehmer(
+             teilnehmer_id int AUTO_INCREMENT PRIMARY KEY,
+             email varchar(255) UNIQUE, 
+             passwort varchar(255) NOT NULL,
+             vorname varchar(255) NOT NULL, 
+             nachname varchar(255) NOT NULL, 
+             salt_id int NOT NULL,
+             FOREIGN KEY (salt_id) REFERENCES salt(salt_id));
+              ";
         try {
             $this->conn->exec($sql);
         } catch (PDOException $e) {
             echo "Connection failed in createRegistrierung(): \n" . $e->getMessage();
-        }*/
+        }//*/
+        echo "success";
+
+
 
 
     }
 
-    public function FreischaltungsUebersicht()
+    public function getFreischaltungsUebersicht()
     {
         $stmt = $this->conn->prepare(
             "SELECT vorname, nachname, klasse, email, registrierungs_id
@@ -147,39 +163,21 @@ class DatabaseUsers
         $stmt->execute();
 
         if ($stmt->rowCount() > 0) {
-            $tabelle = '
-          <table>
-            <tr>
-                <th>Vorname</th>
-                <th>Nachname</th>
-                <th>Klasse</th>
-                <th>email</th>
-                <th>Bestätigen</th>
-            </tr>';
-                // output data of each row
-                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                    $tabelle +=
-                    "<tr>
-                        <td>" . $row["vorname"] . "</td>
-                        <td>" . $row["nachname"] . "</td>
-                        <td>" . $row["klasse"] . "</td>
-                        <td>" . $row["email"] . "</td>
-                        <td>" . '<input type="button" value="Identitaet Bestaetigen" onclick="Identitaet_bestaetigt(' . $row["registrierungs_id"] . ')"></td>
-                    </tr>';
-                }
-                $tabelle += "</table>";
-                return $tabelle;
-            } else {
-                return " 0 rows affected";
+
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             }
+
+            return $row;
+        } 
+        else {
+            return false;
+        }
     }
 
-    public function Freischalten()
+    public function getFreischalten($data)
     {
-        $data = (array)json_decode(file_get_contents("php://input"), true);
-
         $stmt = $this->conn->prepare(
-            "SELECT vorname, nachname, klasse, email, passwort
+            "SELECT vorname, nachname, email, passwort
              FROM registrierung
              WHERE registrierungs_id = :registrierungs_id;");
 
@@ -190,22 +188,9 @@ class DatabaseUsers
         if($stmt->rowCount() == 1) 
         {
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                $this->insertTeilnehmer(password_hash($row["vorname"]), password_hash($row["nachname"]), password_hash($row["klasse"]), password_hash($row["email"]), $row["passwort"], password_hash($data["registrierungs_id"]));
-                $this->deleteRegistrierung($row["email"]);
-
-                mail($data["email"], "Sie wurden von ihrem abi24bws.de Team freigeschaltet!",
-        
-                "Sehr geehrte Abiturientinne und Abituriente, \n\n
-                Es freut uns ihnen mitteilen zu können das Sie nun vollen Zugriff auf unsere Abiseite haben.
-                Das bedeutet für Sie, das Sie bis zu vier Tickets an einem frei wählbaren Ort kaufen können und Sie Bilder und Viedeos vom Abiball hoch und Runterladen können. 
-                Falls Sie Ideen, Verbesserungsvorschlage oder Probleme haben sagen Sie uns bitte Bescheid, wir versuchen diese so schnell wie möglich umzusetzen.\n\n\n
-                Mit freundlichen Grueßen\n 
-                Ihr Abi24bws Team",
-
-                "From: noreplay@abi24bws.de");
-
-                echo json_encode(["Status" => "OK"]);
             }
+
+            return $row;
         } 
         else if($stmt->rowCount() > 1){
             echo json_encode([["Status" => "ERROR"].["CODE"=>"001"]]);
@@ -214,6 +199,8 @@ class DatabaseUsers
         else if($stmt->rowCount() == 0){
             echo json_encode([["Status" => "ERROR"].["CODE"=>"002"]]);
         }
+
+        return false;
     }
 
     public function getSalt($id)
@@ -247,21 +234,6 @@ class DatabaseUsers
         return $data;
     }
 
-    public function emailverify($email): bool
-    {
-        $stmt = $this->conn->prepare(
-            "SELECT
-             FROM teilnehmer
-             WHERE email = :email;");
-
-        $stmt->bindValue(":email",  password_hash($email), PDO::PARAM_STR);
-       
-        $stmt->execute();
-
-        $data = $stmt->fetch(PDO::FETCH_ASSOC);
-        password_verify($email, )
-    }
-
     public function ResetPasswort($email, string $newPasswort): void
     {
         $stmt = $this->conn->prepare(
@@ -269,7 +241,7 @@ class DatabaseUsers
              SET passwort = :passwort
              WHERE email = :email;");
 
-        $stmt->bindValue(":email", password_hash($email), PDO::PARAM_STR);
+        $stmt->bindValue(":email", $email, PDO::PARAM_STR);
         $stmt->bindValue(":passwort", $newPasswort, PDO::PARAM_STR);
 
         $stmt->execute();
@@ -281,7 +253,7 @@ class DatabaseUsers
             "DELETE FROM teilnehmer
              WHERE email = :email;");
 
-        $stmt->bindValue(":email", $email, PDO::PARAM_STR);
+        $stmt->bindValue(":email", password_hash($email, PASSWORD_DEFAULT), PDO::PARAM_STR);
 
         $stmt->execute();
     }
