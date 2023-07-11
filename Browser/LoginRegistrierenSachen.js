@@ -1,5 +1,5 @@
 
-async function dieFuenfPersoenlicheDatenAnRegister(vorname,nachname,klasse,email)
+async function dieFuenfPersoenlicheDatenAnRegister(vorname,nachname,klasse,email,passwort)
 {
   console.log("Werte weiterleitenfunktion erfolgt");
   const response = await fetch("https://abi24bws.de/Register", {
@@ -7,7 +7,7 @@ async function dieFuenfPersoenlicheDatenAnRegister(vorname,nachname,klasse,email
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({"vorname":vorname,"nachname":nachname,"klasse":klasse,"email":email}),
+      body: JSON.stringify({"vorname":vorname,"nachname":nachname,"klasse":klasse,"email":email,"passwort":passwort}),
     });
   const result = await response.json();
 }
@@ -25,7 +25,7 @@ async function UeberpruefenPasswortUndEmailBestaetigen()
     console.log("Emailpruefen erfolgt");
     if(passwortvar==passwortpruefenvar){
       console.log("Passwort pruefen erfolgt")
-      dieFuenfPersoenlicheDatenAnRegister(vornamevar,nachnamevar,klassevar,emailvar);
+      dieFuenfPersoenlicheDatenAnRegister(vornamevar,nachnamevar,klassevar,emailvar,passwortvar);
     }
     else{
 
