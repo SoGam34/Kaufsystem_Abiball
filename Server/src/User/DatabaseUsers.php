@@ -6,36 +6,19 @@ class DatabaseUsers
 
     public function __construct()
     {
-        echo "Try to connent";
-        $this->conn = $this->getConnection();        
-    }
+        $dsn = "mysql:host=" . SQL_SERVER_NAME . ";dbname=" . SQL_DB_NAME . ";charset=utf8";
 
-    public function __destruct()
-    {
-    }
-
-    public function getConnection(): PDO
-    {
-        $dsn = "";
-
-                try {
-                    $connection= new PDO($dsn, '', '', [
+        $this->conn = new PDO($dsn, SQL_DB_USER, SQL_DB_PSW, [
             PDO::ATTR_EMULATE_PREPARES => false,
             PDO::ATTR_STRINGIFY_FETCHES => false
-        ]);
-                } catch (PDOException $e) {
-                    echo "Connection failed in createRegistrierung(): \n" . $e->getMessage();
-                }
-        
-
-        return $connection;
+        ]);   
     }
 
     public function insertRegister(string $vorname, string $nachname, string $klasse, string $email, string $passwort, string $salt)
     {
         $stmt = $this->conn->prepare(
-            "INSERT INTO registrierung (vorname, nachname, klasse, email, passwort)
-             VALUES ( :vorname,  :nachname,  :klasse,  :email,  :passwort);"
+            "INSERT INTO registrierung (email, passwort, vorname, nachname, klasse)
+             VALUES (:email,  :passwort, :vorname,  :nachname,  :klasse);"
         );
 
         $stmt->bindValue(":vorname",  $vorname, PDO::PARAM_STR);
@@ -85,9 +68,10 @@ class DatabaseUsers
 
         $stmt = $this->conn->prepare(
             "UPDATE registrierung
-             SET bearbeitungsstatus = true
+             SET bearbeitungsstatus = :zustand
              WHERE registrierungs_id = :id;");
 
+        $stmt->bindValue(":zustand",  true, PDO::PARAM_BOOL);
         $stmt->bindValue(":id",  $data["id"], PDO::PARAM_INT);
 
         $stmt->execute();
@@ -96,59 +80,44 @@ class DatabaseUsers
     }
     public function createRegistrierung()
     {
-        /*
-        $sql = "CREATE TABLE registrierung(
+
+        $sql = "DROP TABLE registrierung;
+            CREATE TABLE registrierung(
             registrierungs_id int AUTO_INCREMENT PRIMARY KEY,
-            email varchar (40) UNIQUE, 
+            email varchar (255) UNIQUE, 
             passwort varchar(255) NOT NULL,
-            vorname varchar (40) NOT NULL, 
-            nachname varchar (40) NOT NULL, 
+            vorname varchar (255) NOT NULL, 
+            nachname varchar (255) NOT NULL, 
             klasse varchar (5) NOT NULL, 
             bearbeitungsstatus boolean default false, 
-            datum timestamp default  CURRENT_TIMESTAMP);"
+            datum timestamp default CURRENT_TIMESTAMP());
 
-            "CREATE TABLE salt(
+            ";/*CREATE TABLE salt(
             salt_id int PRIMARY KEY, 
             salt varchar(5) UNIQUE
             );
-
+        
             CREATE TABLE teilnehmer(
             teilnehmer_id int AUTO_INCREMENT PRIMARY KEY,
-            email varchar(40) UNIQUE, 
+            email varchar(255) UNIQUE, 
             passwort varchar(255) NOT NULL,
-            vorname varchar(40) NOT NULL, 
-            nachname varchar(40) NOT NULL, 
-            klasse varchar(5),
+            vorname varchar(255) NOT NULL, 
+            nachname varchar(255) NOT NULL,
             salt_id int NOT NULL,
             FOREIGN KEY (salt_id) REFERENCES salt(salt_id));
 
             CREATE TABLE sitzplatze(
             sitzplatz_id int PRIMARY KEY,
-            PersonID int DEFAULT 0,
+            PersonID int DEFAULT NULL,
             FOREIGN KEY (PersonID) REFERENCES teilnehmer(teilnehmer_id));";
-
             */
-            $sql=
-            "DELETE TABLE teilnehmer;
-             CREATE TABLE teilnehmer(
-             teilnehmer_id int AUTO_INCREMENT PRIMARY KEY,
-             email varchar(255) UNIQUE, 
-             passwort varchar(255) NOT NULL,
-             vorname varchar(255) NOT NULL, 
-             nachname varchar(255) NOT NULL, 
-             salt_id int NOT NULL,
-             FOREIGN KEY (salt_id) REFERENCES salt(salt_id));
-              ";
+
         try {
             $this->conn->exec($sql);
         } catch (PDOException $e) {
             echo "Connection failed in createRegistrierung(): \n" . $e->getMessage();
         }//*/
         echo "success";
-
-
-
-
     }
 
     public function getFreischaltungsUebersicht()
@@ -253,7 +222,7 @@ class DatabaseUsers
             "DELETE FROM teilnehmer
              WHERE email = :email;");
 
-        $stmt->bindValue(":email", password_hash($email, PASSWORD_DEFAULT), PDO::PARAM_STR);
+        $stmt->bindValue(":email", $email, PDO::PARAM_STR);
 
         $stmt->execute();
     }

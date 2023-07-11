@@ -1,16 +1,10 @@
 <?php
-include "config.php";
 
 class Security
 {
-   public function __construct()
-    {
-        echo "Construct Security"; 
-    }
-
      public function encrypt(string $data) : string {
-        $crypt_key = $GLOBALS["Firstkey"];
-        $hash_key = $GLOBALS["Secondkey"];    
+        $crypt_key = Firstkey;
+        $hash_key = Secondkey;    
     
         $method = "aes-256-cbc";    
         $iv_length = openssl_cipher_iv_length($method);
@@ -24,8 +18,8 @@ class Security
      }
 
      public function decrypt(string $data) {
-        $crypt_key = $GLOBALS["Firstkey"];
-        $hash_key = $GLOBALS["Secondkey"];            
+        $crypt_key = Firstkey;
+        $hash_key = Secondkey;            
         $mix = $data;
 
         $method = "aes-256-cbc";    
@@ -42,5 +36,7 @@ class Security
         return $data;
 
         return false;
-     }
-}
+      }
+};
+
+new Security();
