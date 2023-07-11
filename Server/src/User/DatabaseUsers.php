@@ -2,26 +2,15 @@
 
 class DatabaseUsers
 {
-    private PDO $conn;
+    private mysqli $conn;
 
     public function __construct()
     {
-        echo "Try to connent";
-        $this->conn = $this->getConnection();        
-    }
 
-    public function __destruct()
-    {
-    }
-
-    public function getConnection(): PDO
-    {
-        $dsn = "mysql:host=rdbms.strato.de;dbname=dbs10190475;charset=utf8";
-
-        return new PDO($dsn, 'dbu2898798', '&%wz65DQ_Ht/D!g', [
-            PDO::ATTR_EMULATE_PREPARES => false,
-            PDO::ATTR_STRINGIFY_FETCHES => false
-        ]);
+        $this->conn = mysqli_connect(   SQL_SERVER_NAME, 
+                                    SQL_DB_USER, 
+                                    SQL_DB_PSW, 
+                                    SQL_DB_NAME);      
     }
 
     public function insertRegister(string $vorname, string $nachname, string $klasse, string $email, string $passwort, string $salt)
@@ -121,6 +110,7 @@ class DatabaseUsers
             FOREIGN KEY (PersonID) REFERENCES teilnehmer(teilnehmer_id));";
 
             */
+            echo "start sql";
             $sql=
             "DELETE TABLE teilnehmer;
              CREATE TABLE teilnehmer(
@@ -246,7 +236,7 @@ class DatabaseUsers
             "DELETE FROM teilnehmer
              WHERE email = :email;");
 
-        $stmt->bindValue(":email", password_hash($email, PASSWORD_DEFAULT), PDO::PARAM_STR);
+        $stmt->bindValue(":email", $email, PDO::PARAM_STR);
 
         $stmt->execute();
     }

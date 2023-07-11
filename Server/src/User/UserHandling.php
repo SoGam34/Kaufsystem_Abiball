@@ -20,8 +20,7 @@ class UserHandling
             $salt .= $abc[rand(0, 52)];
         }
         //Anlegen eines neuen Eintrags und damit eines neuen accaunts
-        // $id=$this->database->insertRegister($this->sicher->encrypt($data["vorname"]), $this->sicher->encrypt($data["nachname"]), $this->sicher->encrypt($data["klasse"]), $this->sicher->encrypt($data["email"]), password_hash("AcFgP" . $data["passwort"] . $salt, PASSWORD_DEFAULT), $salt);
-        $id = 0;
+        $id=$this->database->insertRegister($this->sicher->encrypt($data["vorname"]), $this->sicher->encrypt($data["nachname"]), $this->sicher->encrypt($data["klasse"]), $data["email"], password_hash("AcFgP" . $data["passwort"] . $salt, PASSWORD_DEFAULT), $salt);
         echo "versende Email";
         //Generieren und senden der Bestätigungs email
         mail($data["email"], "Verifizierung ihrer Email-Adresse bei Abi24bws.de",
@@ -71,7 +70,7 @@ class UserHandling
         if($data!=false)
         {
 
-            $tabelle = '
+            $tabelle = "
             <table>
               <tr>
                   <th>Vorname</th>
@@ -79,16 +78,16 @@ class UserHandling
                   <th>Klasse</th>
                   <th>email</th>
                   <th>Bestätigen</th>
-              </tr>';
+              </tr>";
             
             foreach ($data as &$value) 
             {
-                $tabelle +=
+                $tabelle .=
                     "<tr>
                         <td>" . $this->sicher->decrypt($data["vorname"] ). "</td>
                         <td>" . $this->sicher->decrypt($data["nachname"] ). "</td>
                         <td>" . $this->sicher->decrypt($data["klasse"] ). "</td>
-                        <td>" . $this->sicher->decrypt($data["email"] ). "</td>
+                        <td>" . $data["email"] . "</td>
                         <td>" . '<input type="button" value="Identitaet Bestaetigen" onclick="Identitaet_bestaetigt(' . $data["registrierungs_id"] . ')"></td>
                     </tr>';
             }
@@ -158,20 +157,20 @@ class UserHandling
             //Ausgeben des Überprüfungsergebnisses
             if (!$passVerfy)
             {
-                echo json_encode([["Status" => "OK"].["Erfolgreich"=>false]]);
+                echo json_encode(["Erfolgreich"=>false]);
             } 
             else if($passVerfy)
             {
-               echo json_encode([["Status" => "OK"].["Erfolgreich"=>true]]);
+               echo json_encode(["Erfolgreich"=>true]);
             }
             else
             {
-                echo json_encode([["Status" => "ERROR"].["Code" => "004"]]);
+                echo json_encode(["Code" => "004"]);
             }
         }
         else 
         {
-           echo json_encode([["Status" => "OK"].["Erfolgreich"=>false]]);
+           echo json_encode(["Erfolgreich"=>false]);
         }
     }
 }
