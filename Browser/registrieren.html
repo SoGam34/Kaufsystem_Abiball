@@ -27,12 +27,12 @@
      </div>
     <h1 style="text-align:center;margin-top: 55px;position: relative;">Registrieren</h1>
     <section class="loginregisterstyle">
-		<form action="/Browser/LoginRegistrierenSachen.js" method="post">
+		<form action="/Server/index.php" method="post">
 		<table class="mittig">
-			<tr>
+			<tr hidden>
+				<th><input type="text" name="anfrageTyp" id="angefragt" value="Register" readonly></th>
 				<th></th>
-				<th></th>
-			</th>
+			</tr>
 			<tr>
 				<td><label for="userVorname">Vorname:</label></td>
 				<td><input type="text" id="UserVorname" name="vorname"></td>
@@ -60,7 +60,7 @@
 			</tr>
 			<tr>
 				<td><label for="e-mailpruefen">E-Mail best&aumltigen:</label></td>
-				<td><input type="email" id="e-mailpruefen" name="email"></td>
+				<td><input type="email" id="e-mailpruefen" name="emailprufen"></td>
 			</tr>
 			<tr>
 				<td><label for="passwort">Password (mindestens 10 Zeichen Lang):</label></td>
