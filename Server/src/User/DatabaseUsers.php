@@ -75,12 +75,13 @@ class DatabaseUsers
         $stmt->bindValue(":id",  $data["id"], PDO::PARAM_INT);
 
         $stmt->execute();
-
+        
+        echo $data["id"];
         echo json_encode(["Status" => "OK"]);
     }
     public function createRegistrierung()
     {
-
+/*
         $sql = "DROP TABLE registrierung;
             CREATE TABLE registrierung(
             registrierungs_id int AUTO_INCREMENT PRIMARY KEY,
@@ -92,7 +93,7 @@ class DatabaseUsers
             bearbeitungsstatus boolean default false, 
             datum timestamp default CURRENT_TIMESTAMP());
 
-            ";/*CREATE TABLE salt(
+            ";CREATE TABLE salt(
             salt_id int PRIMARY KEY, 
             salt varchar(5) UNIQUE
             );
@@ -110,14 +111,13 @@ class DatabaseUsers
             sitzplatz_id int PRIMARY KEY,
             PersonID int DEFAULT NULL,
             FOREIGN KEY (PersonID) REFERENCES teilnehmer(teilnehmer_id));";
-            */
+            
 
         try {
             $this->conn->exec($sql);
         } catch (PDOException $e) {
             echo "Connection failed in createRegistrierung(): \n" . $e->getMessage();
-        }//*/
-        echo "success";
+        } */
     }
 
     public function getFreischaltungsUebersicht()
@@ -131,16 +131,10 @@ class DatabaseUsers
         
         $stmt->execute();
 
-        if ($stmt->rowCount() > 0) {
-
-            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            }
-
-            return $row;
-        } 
-        else {
-            return false;
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         }
+        
+        return $row;
     }
 
     public function getFreischalten($data)

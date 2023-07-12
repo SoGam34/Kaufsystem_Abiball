@@ -21,7 +21,7 @@ class UserHandling
         }
         //Anlegen eines neuen Eintrags und damit eines neuen accaunts
         $id=$this->database->insertRegister(/*$this->sicher->encrypt(*/$data["vorname"]/*)*/, /*$this->sicher->encrypt(*/$data["nachname"], /*$this->sicher->encrypt(*/$data["klasse"], $data["email"], password_hash("AcFgP" . $data["passwort"] . $salt, PASSWORD_DEFAULT), $salt);
-        echo "versende Email";
+        //echo "versende Email";
         //Generieren und senden der Bestätigungs email
         mail($data["email"], "Verifizierung ihrer Email-Adresse bei Abi24bws.de",
         
@@ -67,7 +67,8 @@ class UserHandling
     {
         $data=$this->database->getFreischaltungsUebersicht();
 
-        if($data!=false)
+        echo $data;
+        if($data!="")
         {
 
             $tabelle = "
@@ -92,14 +93,15 @@ class UserHandling
                     </tr>';
             }
 
-            $tabelle += "</table>";
+            $tabelle .= "</table>";
             unset($value); 
+
+            return $tabelle;
         }
         else
         {
-            /*$tabelle =*/ echo "0 rows affected";
+            return "0 rows affected";
         }
-        return $data;
     }
 
     public function resetingEmail(): void 
