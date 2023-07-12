@@ -45,7 +45,7 @@ async function emailfuerzuruck()
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({email:emailvar}),
+    body: JSON.stringify({"email":emailvar}),
   }); 
 const result = await response.json();
 }
