@@ -49,7 +49,7 @@ class UserHandling
             $this->database->insertTeilnehmer($users["vorname"], $users["nachname"], $users["email"], $users["passwort"], $data["registrierungs_id"]);
             $this->database->deleteRegistrierung($users["email"]);
 
-            mail($this->sicher->decrypt($users["email"]), "Sie wurden von ihrem abi24bws.de Team freigeschaltet!",
+            mail(/*$this->sicher->decrypt(*/$users["email"], "Sie wurden von ihrem abi24bws.de Team freigeschaltet!",
             "Sehr geehrte Abiturientinne und Abituriente, \n\n
             Es freut uns ihnen mitteilen zu können das Sie nun vollen Zugriff auf unsere Abiseite haben.
             Das bedeutet für Sie, das Sie bis zu vier Tickets an einem frei wählbaren Ort kaufen können und Sie Bilder und Viedeos vom Abiball hoch und Runterladen können. 
@@ -61,17 +61,32 @@ class UserHandling
 
             echo json_encode(["Status" => "OK"]);
         }
+
+        else
+        {
+            echo json_encode(["Status"=> "Major ID problem"]);
+        }
     }
 
     public function FreischaltenTabelle()
     {
         $data=$this->database->getFreischaltungsUebersicht();
 
-        echo $data;
+        //echo $data;
         if($data!="")
         {
 
             $tabelle = "
+            <!DOCTYPE html>
+            <html lang='de'>
+            <head>
+                <meta charset='UTF-8'>
+                <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+                <title>Document</title>
+                <script type='text/javascript' src='Browser/Johannes.js'></script>
+            </head>
+            <body>
+                
             <table>
               <tr>
                   <th>Vorname</th>
@@ -93,7 +108,8 @@ class UserHandling
                     </tr>';
             }
 
-            $tabelle .= "</table>";
+            $tabelle .= "</table> </body>
+            </html>";
             unset($value); 
 
             return $tabelle;
@@ -114,13 +130,16 @@ class UserHandling
         mail($data["email"], "Zurücksetzen ihres Passwords bei Abi24bws.de",
         
         "Sehr geehrte Abiturientinne und Abituriente, \n\n
-        indem Sie auf den folgenden Link klicken können Sie ihr Passwort zurück setzen: \n\nhttps://abi24bws.de/Bestaetigung.html?id={ $key }\n
+        indem Sie auf den folgenden Link klicken können Sie ihr Passwort zurück setzen: \n\nhttps://abi24bws.de/passwortzuruck.html?id=" . $key ."\n
         Nachdem sie ihr neues Passwort eingegeben haben können Sie sich wie gewont anmelden. 
         \n\nWenn Sie nicht bei Abi24bws ihr Passwort zurücksetzen wollen, koennen Sie diese Email ignorieren und wir entschuldigen uns fuer die Stoerung\n\n\n
         Mit freundlichen Grueßen\n 
         Ihr Abi24bws Team",
 
         "From: noreplay@abi24bws.de");
+
+        //Bestätigen das alles erfolgreich war 
+        echo json_encode(["Status" => "OK"]);
     }
 
     public function resetPSW()
@@ -159,7 +178,7 @@ class UserHandling
             //Ausgeben des Überprüfungsergebnisses
             if (!$passVerfy)
             {
-                echo json_encode(["Erfolgreich"=>false]);
+                echo json_encode(["ErfolgreichP"=>false]);
             } 
             else if($passVerfy)
             {
@@ -172,7 +191,7 @@ class UserHandling
         }
         else 
         {
-           echo json_encode(["Erfolgreich"=>false]);
+           echo json_encode(["ErfolgreichU"=>false]);
         }
     }
 }

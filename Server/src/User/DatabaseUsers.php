@@ -131,8 +131,7 @@ class DatabaseUsers
         
         $stmt->execute();
 
-        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        }
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
         
         return $row;
     }
@@ -144,14 +143,13 @@ class DatabaseUsers
              FROM registrierung
              WHERE registrierungs_id = :registrierungs_id;");
 
-        $stmt->bindValue(":registrierungs_id",  $data["registrierungs_id"], PDO::PARAM_STR);
+        $stmt->bindValue(":registrierungs_id",  $data, PDO::PARAM_STR);
 
         $stmt->execute();
 
         if($stmt->rowCount() == 1) 
         {
-            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            }
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
             return $row;
         } 
@@ -213,7 +211,7 @@ class DatabaseUsers
     public function deleteRegistrierung(string $email)
     {
         $stmt = $this->conn->prepare(
-            "DELETE FROM teilnehmer
+            "DELETE FROM registrierung
              WHERE email = :email;");
 
         $stmt->bindValue(":email", $email, PDO::PARAM_STR);

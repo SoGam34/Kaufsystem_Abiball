@@ -40,12 +40,12 @@ async function emailfuerzuruck()
 {
   const emailvar = document.getElementById('e-mail').value;
   console.log(emailvar);
-  const response = await fetch("https://abi24bws.de/Register", {
+  const response = await fetch("https://abi24bws.de/RequestEmail", {
     method: "POST", // or 'PUT'
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({"email":emailvar}),
+    body: JSON.stringify({email:emailvar}),
   }); 
 const result = await response.json();
 }

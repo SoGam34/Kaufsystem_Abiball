@@ -20,5 +20,6 @@ async function Identitaet_bestaetigt(registrierungs_id) {
         },
         body: JSON.stringify({ "registrierungs_id": registrierungs_id })
     });
+
     window.location.reload();
 }
