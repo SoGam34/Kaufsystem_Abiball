@@ -4,7 +4,7 @@ class DatabaseUsers
 {
     private PDO $conn;
 
-    public function __construct()
+    public function __construct(private Security $sicher)
     {
         $dsn = "mysql:host=" . SQL_SERVER_NAME . ";dbname=" . SQL_DB_NAME . ";charset=utf8";
 
@@ -14,7 +14,20 @@ class DatabaseUsers
         ]);   
     }
 
-    public function insertRegister(string $vorname, string $nachname, string $klasse, string $email, string $passwort, string $salt)
+    public function cleardb()
+    {
+        $stmt = $this->conn->prepare(
+            "DELETE FROM registrierung;");
+        $stmt->execute();
+
+        $stmt = $this->conn->prepare(
+            "DELETE FROM teilnehmer;");
+        $stmt->execute();
+
+        echo "erfolgreich";
+    }
+
+    public function insertRegister(string $vorname, string $nachname, string $klasse, string $email, string $passwort, string $salt) : int
     {
         $stmt = $this->conn->prepare(
             "INSERT INTO registrierung (email, passwort, vorname, nachname, klasse)
@@ -41,10 +54,10 @@ class DatabaseUsers
 
         $stmt->execute();
 
-        return $id;
+        return intval($id);
     }
 
-    public function insertTeilnehmer(string $vorname, string $nachname, string $email, string $passwort, string $salt_id)
+    public function insertTeilnehmer(string $vorname, string $nachname, string $email, string $passwort, int $salt_id) : int
     {
         $stmt = $this->conn->prepare(
             "INSERT INTO teilnehmer (vorname, nachname, email, passwort, salt_id)
@@ -59,25 +72,32 @@ class DatabaseUsers
 
         $stmt->execute();
 
-        return $this->conn->lastInsertId();
+        return intval($this->conn->lastInsertId());
     }
 
     public function bestaetigen()
     {
         $data = (array)json_decode(file_get_contents("php://input"), true);
 
-        $stmt = $this->conn->prepare(
-            "UPDATE registrierung
-             SET bearbeitungsstatus = :zustand
-             WHERE registrierungs_id = :id;");
+        if($this->sicher->check_id($data["id"]))
+        {
+            $stmt = $this->conn->prepare(
+                "UPDATE registrierung
+                 SET bearbeitungsstatus = :zustand
+                 WHERE registrierungs_id = :id;");
 
-        $stmt->bindValue(":zustand",  true, PDO::PARAM_BOOL);
-        $stmt->bindValue(":id",  $data["id"], PDO::PARAM_INT);
+            $stmt->bindValue(":zustand",  true, PDO::PARAM_BOOL);
+            $stmt->bindValue(":id",  $data["id"], PDO::PARAM_INT);
 
-        $stmt->execute();
-        
-        echo $data["id"];
-        echo json_encode(["Status" => "OK"]);
+            $stmt->execute();
+            
+            echo json_encode(["Status" => "OK"]);
+        }
+
+        else 
+        {
+           echo json_encode([["Status" => "ERROR"], ["Massage"=>"Not allowed input"]]);
+        }
     }
     public function createRegistrierung()
     {
@@ -136,14 +156,14 @@ class DatabaseUsers
         return $row;
     }
 
-    public function getFreischalten($data)
+    public function getFreischalten(int $data)
     {
         $stmt = $this->conn->prepare(
             "SELECT vorname, nachname, email, passwort
              FROM registrierung
              WHERE registrierungs_id = :registrierungs_id;");
 
-        $stmt->bindValue(":registrierungs_id",  $data, PDO::PARAM_STR);
+        $stmt->bindValue(":registrierungs_id",  $data, PDO::PARAM_INT);
 
         $stmt->execute();
 
@@ -164,7 +184,7 @@ class DatabaseUsers
         return false;
     }
 
-    public function getSalt($id)
+    public function getSalt(int $id)
     {
         $stmt = $this->conn->prepare(
             "SELECT salt
@@ -195,7 +215,7 @@ class DatabaseUsers
         return $data;
     }
 
-    public function ResetPasswort($email, string $newPasswort): void
+    public function ResetPasswort(string $email, string $newPasswort): void
     {
         $stmt = $this->conn->prepare(
             "UPDATE teilnehmer

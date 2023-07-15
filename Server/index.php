@@ -18,7 +18,7 @@ $parts = explode("/", $_SERVER["REQUEST_URI"]);
 
 $Security = new Security();
 
-$dbUsers = new DatabaseUsers();
+$dbUsers = new DatabaseUsers($Security);
 
 $UserHandling = new UserHandling($dbUsers, $Security);
 
@@ -53,6 +53,9 @@ switch ($parts[1]) {
     case "create":
         $dbUsers->createRegistrierung();
         break;
+    /*case "clear":
+        $dbUsers->cleardb();
+        break;*/
     default:
     //Da keine bekannte aktion getetigt werden soll
         http_response_code(404);

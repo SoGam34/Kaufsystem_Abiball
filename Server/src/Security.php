@@ -37,6 +37,40 @@ class Security
 
         return false;
       }
-};
 
-new Security();
+      public function PSW_is_safe($data) : bool {
+         settype($data, "string");
+         
+         if(strlen($data)>10){
+            return true;
+         }      
+
+         return false;
+      }
+
+      public function EMail_is_safe($data) : bool {
+         settype($data, "string");
+
+         if(filter_var($data, FILTER_VALIDATE_EMAIL)){
+            return true;
+         }
+
+         return false;
+      }
+
+      public function check_id(&$data) : bool
+      {
+         if(!is_integer($data))
+         {
+            if(settype($data, "int") === true)
+            {
+               return true;
+            }
+
+            return false;
+         }
+
+         return true;
+      }
+
+};

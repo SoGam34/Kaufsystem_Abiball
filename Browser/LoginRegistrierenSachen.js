@@ -36,6 +36,23 @@ async function UeberpruefenPasswortUndEmailBestaetigen()
 
   }
 }
+
+async function loginanfrage()
+{
+  const emailvar = document.getElementById('e-mail').value;
+  const passwortvar = document.getElementById('passwort').value;
+  console.log(emailvar+passwortvar);
+  const response = await fetch("https://abi24bws.de/Login", {
+      method: "POST", // or 'PUT'
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({"email":emailvar,"passwort":passwortvar}),
+    });
+  const result = response.json();
+  console.log({result});
+}
+
 async function emailfuerzuruck()
 {
   const emailvar = document.getElementById('e-mail').value;
@@ -48,4 +65,20 @@ async function emailfuerzuruck()
     body: JSON.stringify({email:emailvar}),
   }); 
 const result = await response.json();
+}
+
+async function Passwortzurucksetzen()
+{
+  const emailvar = window.location.href.slice(43);
+  const passwortvar = document.getElementById('passwort').value;
+
+  const response = await fetch("https://abi24bws.de/Reseting", {
+      method: "POST", // or 'PUT'
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({"email":emailvar,"passwort":passwortvar}),
+    });
+  const result = response.json();
+  console.log({result});
 }
