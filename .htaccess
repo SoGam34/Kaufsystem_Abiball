@@ -2,7 +2,7 @@ RewriteEngine On
 
 RewriteRule ^$ Browser/homepage.html
 RewriteRule ^homepage.html$ Browser/homepage.html
-RewriteRule ^login.html$ Browser/login.html
+RewriteRule ^login.html$ Browser/Login.html
 RewriteRule ^registrieren.html$ Browser/registrieren.html
 RewriteRule ^styles.css$ Browser/styles.css
 RewriteRule ^bws.png$ Bilder/bws.png
@@ -12,12 +12,10 @@ RewriteRule ^bilder.html$ Browser/bilder.html
 RewriteRule ^program.html$ Browser/program.html
 RewriteRule ^Bestaetigung.html$ Browser/Bestaetigung.html
 RewriteRule ^Freischalten_Menu.php$ Server/src/Freischalten_Menu.php
+RewriteRule ^LoginRegistrierenSachen.js$ Browser/LoginRegistrierenSachen.js
+RewriteRule ^passwortzuruck.html$ Browser/passwortzuruck.html
+RewriteRule ^passwortzuruckemail.html$ Browser/passwortzuruckemail.html
 
-RewriteRule ^LogIn$ Server/index.php
-RewriteRule ^Register$ Server/index.php
-RewriteRule ^Reseting$ Server/index.php
-RewriteRule ^create$ Server/index.php
-RewriteRule ^bestaetigung$ Server/index.php
-RewriteRule ^Freischalten$ Server/index.php
-RewriteRule ^Freigeschaltet$ Server/index.php
-RewriteRule ^Teilnehmer$ Server/index.php
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule  ^(.*)$ Server/index.php
