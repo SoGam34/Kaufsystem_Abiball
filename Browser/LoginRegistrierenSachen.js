@@ -11,6 +11,7 @@ async function dieFuenfPersoenlicheDatenAnRegister(vorname,nachname,klasse,email
     });
   const result = response.json();
   console.log(result);
+  document.getElementById('textfeld').innerHTML = "Sie m&uumlssen Ihre Registrierungen, mit der an Ihr gesendete E-Mail, best&aumltigen.";
 }
 async function UeberpruefenPasswortUndEmailBestaetigen()
 {
@@ -51,6 +52,7 @@ async function loginanfrage()
     });
   const result = response.json();
   console.log({result});
+  document.getElementById('textfeld').innerHTML = "Sie wurden angemeldet. Oder auch nicht."
 }
 
 async function emailfuerzuruck()
@@ -65,6 +67,7 @@ async function emailfuerzuruck()
     body: JSON.stringify({email:emailvar}),
   }); 
 const result = await response.json();
+document.getElementById('textfeld').innerHTML = "In kürze erhalten Sie die E-Mail.";
 }
 
 async function Passwortzurucksetzen()
@@ -81,4 +84,5 @@ async function Passwortzurucksetzen()
     });
   const result = response.json();
   console.log({result});
+  document.getElementById('textfeld').innerHTML = "Ihr Passwort wurde zur&uumlckgesetzt und k&oumlnnen sich unter Login wieder anmelden.";
 }
