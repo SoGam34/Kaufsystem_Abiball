@@ -30,11 +30,11 @@ async function UeberpruefenPasswortUndEmailBestaetigen()
       dieFuenfPersoenlicheDatenAnRegister(vornamevar,nachnamevar,klassevar,emailvar,passwortvar);
     }
     else{
-
+      document.getElementById('infotext').innerHTML = "Pass&oumlrter &uumlbereinstimmen nicht";
     }
   }
   else{
-
+    document.getElementById('infotext').innerHTML = "E-Mails &uumlbereinstimmen nicht";
   }
 }
 
