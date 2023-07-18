@@ -29,7 +29,7 @@ class UserHandling
                 //Generieren und senden der Bestätigungs email
                 mail($data["email"], "Verifizierung ihrer Email-Adresse bei Abi24bws.de",
                 
-                "Sehr geehrte Abiturientinne und Abituriente, \n\n
+                "Sehr geehrte Abiturientinnen und Abiturienten, \n\n
                 bitte bestaetigen Sie ihre Email-Adresse indem Sie auf den folgenden Link klicken: \n\nhttps://abi24bws.de/Bestaetigung.html?id={$id}\n
                 Nachdem sie ihre Email bestaetigt haben, bitten wir Sie, um ein wenig Geduld bis Sie von unserem Admin-Team freigeschaltet sind. Sobald dies erfolgt ist, erhalten Sie Zugriff auf alle Dienste.
                 \n\nWenn Sie sich nicht bei Abi24bws registriert haben, koennen Sie diese Email ignorieren und wir entschuldigen uns fuer die Stoerung\n\n\n
@@ -44,13 +44,8 @@ class UserHandling
 
             else 
             {
-               echo json_encode(["Status" => "ERROR", "Massage"=>"Wrong Email"]);
+               echo json_encode(["Status" => "ERROR", "Message"=>"Wrong Email"]);
             }
-        }
-
-        else 
-        {
-           echo json_encode(["Status" => "ERROR", "Massage"=>"Wrong PSW"]);
         }
     }
 
@@ -89,13 +84,12 @@ class UserHandling
 
         else 
         {
-           echo json_encode([["Status" => "ERROR"], ["Massage"=>"Not allowed input"]]);
+           echo json_encode([["Status" => "ERROR"], ["Message"=>"Not allowed input"]]);
         }
     }
 
     public function FreischaltenTabelle()
     {
-        ;
         if(isset($_POST["Admin"]))
         {
             if($_POST["Admin"]==AdminID && $_POST["AdminPSW"]==AdminPSW)
@@ -126,13 +120,13 @@ class UserHandling
                           <th>Bestätigen</th>
                       </tr>";
 
-                    foreach ($data as &$value) 
+                    foreach ($data as $value) 
                     {
                         $tabelle .=
                             "<tr>
-                                <td>" . /*$this->sicher->decrypt(*/$data["vorname"] . "</td>
-                                <td>" . /*$this->sicher->decrypt(*/$data["nachname"] . "</td>
-                                <td>" . /*$this->sicher->decrypt(*/$data["klasse"] . "</td>
+                                <td>" . /*$this->sicher->decrypt(*/$value["vorname"] . "</td>
+                                <td>" . /*$this->sicher->decrypt(*/$value["nachname"] . "</td>
+                                <td>" . /*$this->sicher->decrypt(*/$value["klasse"] . "</td>
                                 <td>" . $data["email"] . "</td>
                         <td>" . '<input type="button" value="Identitaet Bestaetigen" onclick="Identitaet_bestaetigt(' . $data["registrierungs_id"] . ')"></td>
                     </tr>';
@@ -212,7 +206,7 @@ class UserHandling
         }
         else 
         {
-           echo json_encode(["Status" => "ERROR", "Massage"=>"Not allowed input"]);
+           echo json_encode(["Status" => "ERROR", "Message"=>"Not allowed input"]);
         }
     }
 
@@ -285,7 +279,8 @@ class UserHandling
                     } 
                     else if($passVerfy)
                     {
-                       echo json_encode(["Erfolgreich"=>true]);
+                        session_create_id();
+                        echo json_encode(["Erfolgreich"=>true]);
                     }
                     else
                     {

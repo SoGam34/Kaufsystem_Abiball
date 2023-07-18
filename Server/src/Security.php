@@ -38,14 +38,79 @@ class Security
         return false;
       }
 
-      public function PSW_is_safe($data) : bool {
+      public function PSW_is_safe($data) : bool 
+      {
          settype($data, "string");
          
-         if(strlen($data)>10){
-            return true;
-         }      
+         if(strlen($data)>9)
+         {
+            settype($zahl, "bool");
+            settype($buchstabe, "bool");
 
-         return false;
+            for($i=0; $i<strlen($data); $i++)
+            {
+               switch($data[$i])
+               {
+                  case "1":$zahl = true;break;
+                  case "2":$zahl = true;break;
+                  case "3":$zahl = true;break;
+                  case "4":$zahl = true;break;
+                  case "5":$zahl = true;break;
+                  case "6":$zahl = true;break;
+                  case "7":$zahl = true;break;
+                  case "8":$zahl = true;break;
+                  case "9":$zahl = true;break;
+                  case "0":$zahl = true;break;
+               
+                  case "a": $buchstabe = true;break;
+                  case "b": $buchstabe = true;break;
+                  case "c": $buchstabe = true;break;
+                  case "d": $buchstabe = true;break;
+                  case "e": $buchstabe = true;break;
+                  case "f": $buchstabe = true;break;
+                  case "g": $buchstabe = true;break;
+                  case "h": $buchstabe = true;break;
+                  case "i": $buchstabe = true;break;
+                  case "j": $buchstabe = true;break;
+                  case "k": $buchstabe = true;break;
+                  case "l": $buchstabe = true;break;
+                  case "m": $buchstabe = true;break;
+                  case "n": $buchstabe = true;break;
+                  case "o": $buchstabe = true;break;
+                  case "p": $buchstabe = true;break;
+                  case "q": $buchstabe = true;break;
+                  case "r": $buchstabe = true;break;
+                  case "s": $buchstabe = true;break;
+                  case "t": $buchstabe = true;break;
+                  case "u": $buchstabe = true;break;
+                  case "v": $buchstabe = true;break;
+                  case "w": $buchstabe = true;break;
+                  case "x": $buchstabe = true;break;
+                  case "y": $buchstabe = true;break;
+                  case "z": $buchstabe = true;break;
+               }
+            }
+
+            if($buchstabe&&$zahl)
+            {
+               return true;
+            }
+
+            else if($buchstabe)
+            {
+               echo json_encode(["Status" => "ERROR", "Message"=>"Es muss mindestens eine Zahl im Passwort enthalten sein."]);
+               exit;
+            }
+
+            else 
+            {
+               echo json_encode(["Status" => "ERROR", "Message"=>"Es muss mindestens ein Buchstabe im Passwort sein."]);
+               exit;
+            }
+
+         }
+         echo json_encode(["Status" => "ERROR", "Message"=>"Das Passwort muss mindestens 10 Zeichen lang sein."]);
+         exit;
       }
 
       public function EMail_is_safe($data) : bool {

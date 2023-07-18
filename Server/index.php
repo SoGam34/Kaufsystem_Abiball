@@ -1,4 +1,5 @@
 <?php
+session_start();
 
 require_once "src/ErrorHandler.php";
 require_once "src/User/DatabaseUsers.php";
