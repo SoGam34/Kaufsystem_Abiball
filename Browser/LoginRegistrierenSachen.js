@@ -8,12 +8,13 @@ async function dieFuenfPersoenlicheDatenAnRegister(vorname,nachname,klasse,email
         "Content-Type": "application/json",
       },
       body: JSON.stringify({"vorname":vorname,"nachname":nachname,"klasse":klasse,"email":email,"passwort":passwort}),
+    }).then((response) => response.json())
+    .then((data) => {
+      return data;
     });
-  console.log(response);
-  const obj = JSON.parse(response);
-  console.log(obj.Status);
-  console.log(obj.Message);
-  document.getElementById('textfeld').innerHTML = "Sie m&uumlssen Ihre Registrierungen, mit der an Ihr gesendete E-Mail, best&aumltigen.";
+  console.log(response.Status);
+  console.log(response.Message);
+  document.getElementById('textfeld').innerHTML = response.Message;
 }
 async function UeberpruefenPasswortUndEmailBestaetigen()
 {
@@ -50,10 +51,17 @@ async function loginanfrage()
         "Content-Type": "application/json",
       },
       body: JSON.stringify({"email":emailvar,"passwort":passwortvar}),
+    }).then((response) => response.json())
+    .then((data) => {
+      return data;
     });
-  const result = JSON.parse(response);
-//  console.log(result.Message);
-  document.getElementById('textfeld').innerHTML = result.Erfolgreich;
+    console.log(response);
+    if (response.Erfolgreich==false){
+      document.getElementById('textfeld').innerHTML = "Account existiert nicht";
+    }
+    else{
+      document.getElementById('textfeld').innerHTML = response.Message;
+    }
 }
 
 async function emailfuerzuruck()
@@ -66,9 +74,17 @@ async function emailfuerzuruck()
       "Content-Type": "application/json",
     },
     body: JSON.stringify({email:emailvar}),
-  }); 
-const result = await response.json();
-document.getElementById('textfeld').innerHTML = "In kürze erhalten Sie die E-Mail.";
+  }).then((response) => response.json())
+  .then((data) => {
+    return data;
+  });
+  console.log(response);
+  if (response.Status=="OK"){
+    document.getElementById('textfeld').innerHTML = "In k&uumlrze erhalten Sie die E-Mail.";
+  }
+  else {
+    document.getElementById('infofeld').innerHTML = response.Message;
+  }
 }
 
 async function Passwortzurucksetzen()
@@ -82,8 +98,19 @@ async function Passwortzurucksetzen()
         "Content-Type": "application/json",
       },
       body: JSON.stringify({"email":emailvar,"passwort":passwortvar}),
+    }).then((response) => response.json())
+    .then((data) => {
+      return data;
     });
-  const result = response.json();
-  console.log({result});
-  document.getElementById('textfeld').innerHTML = "Ihr Passwort wurde zur&uumlckgesetzt und k&oumlnnen sich unter Login wieder anmelden.";
+    console.log(response);
+    if(response.Status=="ERROR"){
+      document.getElementById('infofeld').innerHTML = response.Message;
+    }
+    if(response.Status=="OK"&&response.Erfolgreich==false){
+      document.getElementById('textfeld').innerHTML = "Ihr Passwort wurde zur&uumlckgesetzt und k&oumlnnen sich unter Login wieder anmelden?";
+    }
+    if(response.Status=="OK"&&response.Erfolgreich==true){
+      document.getElementById('textfeld').innerHTML = "Ihr Passwort wurde zur&uumlckgesetzt und k&oumlnnen sich unter Login wieder anmelden.";
+    }
+
 }

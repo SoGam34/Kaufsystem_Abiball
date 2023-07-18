@@ -1,6 +1,10 @@
 body {
-  background-color: rgb(0,0,80);
+  background-color: rgb(27, 27, 168);
   margin: 0%;
+}
+
+h1 {
+  color: rgb(139, 139, 139);
 }
 
 .mittig{
@@ -16,11 +20,11 @@ body {
 
 .loginregisterstyle {
   transform: translateX(-50%) translateY(-50%);
-  top: 50%;
+  top: 300px;
   left: 50%;
-  position: absolute;
+  position: relative;
   padding: 1%;
-  border: 5px solid rgb(51,0,153);
+  border: 5px solid rgb(180, 109, 61);
   border-radius: 10px;
   border-style: outset;
   width: 35%;
