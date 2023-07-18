@@ -9,10 +9,8 @@ async function dieFuenfPersoenlicheDatenAnRegister(vorname,nachname,klasse,email
       },
       body: JSON.stringify({"vorname":vorname,"nachname":nachname,"klasse":klasse,"email":email,"passwort":passwort}),
     });
-  
-//  const obj = JSON.parse(response);
-const obj = '{"Status":"ERROR","Message":"Das Passwort muss mindestens 10 Zeichen lang sein."}';
-
+  console.log(response);
+  const obj = JSON.parse(response);
   console.log(obj.Status);
   console.log(obj.Message);
   document.getElementById('textfeld').innerHTML = "Sie m&uumlssen Ihre Registrierungen, mit der an Ihr gesendete E-Mail, best&aumltigen.";
@@ -55,7 +53,7 @@ async function loginanfrage()
     });
   const result = JSON.parse(response);
 //  console.log(result.Message);
-  document.getElementById('textfeld').innerHTML = result.Message;
+  document.getElementById('textfeld').innerHTML = result.Erfolgreich;
 }
 
 async function emailfuerzuruck()
