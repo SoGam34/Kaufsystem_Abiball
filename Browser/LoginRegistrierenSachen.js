@@ -9,8 +9,12 @@ async function dieFuenfPersoenlicheDatenAnRegister(vorname,nachname,klasse,email
       },
       body: JSON.stringify({"vorname":vorname,"nachname":nachname,"klasse":klasse,"email":email,"passwort":passwort}),
     });
-  const result = response.json();
-  console.log(result);
+  
+//  const obj = JSON.parse(response);
+const obj = '{"Status":"ERROR","Message":"Das Passwort muss mindestens 10 Zeichen lang sein."}';
+
+  console.log(obj.Status);
+  console.log(obj.Message);
   document.getElementById('textfeld').innerHTML = "Sie m&uumlssen Ihre Registrierungen, mit der an Ihr gesendete E-Mail, best&aumltigen.";
 }
 async function UeberpruefenPasswortUndEmailBestaetigen()
@@ -42,7 +46,6 @@ async function loginanfrage()
 {
   const emailvar = document.getElementById('e-mail').value;
   const passwortvar = document.getElementById('passwort').value;
-  console.log(emailvar+passwortvar);
   const response = await fetch("https://abi24bws.de/Login", {
       method: "POST", // or 'PUT'
       headers: {
@@ -50,9 +53,9 @@ async function loginanfrage()
       },
       body: JSON.stringify({"email":emailvar,"passwort":passwortvar}),
     });
-  const result = response.json();
-  console.log({result});
-  document.getElementById('textfeld').innerHTML = "Sie wurden angemeldet. Oder auch nicht."
+  const result = JSON.parse(response);
+//  console.log(result.Message);
+  document.getElementById('textfeld').innerHTML = result.Message;
 }
 
 async function emailfuerzuruck()
