@@ -1,6 +1,8 @@
 <?php
 session_start();
 
+header("content-type: application/json");
+
 require_once "src/ErrorHandler.php";
 require_once "src/User/DatabaseUsers.php";
 require_once "src/User/UserHandling.php";

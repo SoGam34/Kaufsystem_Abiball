@@ -109,7 +109,9 @@ class Security
             }
 
          }
-         echo json_encode(["Status" => "ERROR", "Message"=>"Das Passwort muss mindestens 10 Zeichen lang sein."]);
+
+         echo json_encode(["Status"=>"ERROR", "Message"=>"Das Passwort muss mindestens 10 Zeichen lang sein."]);
+
          exit;
       }
 
@@ -120,7 +122,12 @@ class Security
             return true;
          }
 
-         return false;
+         else 
+         {
+            echo json_encode(["Status" => "ERROR", "Message"=>"Die Email ist ungültig, bitte verwenden Sie gueltige Email-Adressen"]);
+            exit;
+         }
+
       }
 
       public function check_id(&$data) : bool

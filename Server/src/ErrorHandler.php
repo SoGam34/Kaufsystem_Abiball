@@ -6,12 +6,20 @@ class ErrorHandler
     {
         http_response_code(500);
         
-        echo json_encode([
+        if($exception->getCode()=="23000")
+        {
+            echo json_encode(["Status"=>"ERROR", "Message"=>"Die Email-Adresse wird bereits von wem anders Verwendet"]);
+        }
+
+        else{
+             echo json_encode([
             "code" => $exception->getCode(),
             "message" => $exception->getMessage(),
             "file" => $exception->getFile(),
             "line" => $exception->getLine()
         ]);
+        }
+       
     }
     
     public static function handleError(
@@ -25,13 +33,3 @@ class ErrorHandler
     }
 }
 ?>
-
-
-
-
-
-
-
-
-
-

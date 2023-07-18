@@ -37,14 +37,9 @@ class UserHandling
                 Ihr Abi24bws Team",
                 
                 
-                "From: noreplay@abi24bws.de");
+                "From: noreply@abi24bws.de");
                 //Bestätigen das alles erfolgreich war 
                 echo json_encode(["Status" => "OK"]);
-            }
-
-            else 
-            {
-               echo json_encode(["Status" => "ERROR", "Message"=>"Wrong Email"]);
             }
         }
     }
@@ -71,28 +66,28 @@ class UserHandling
                 Mit freundlichen Grueßen\n 
                 Ihr Abi24bws Team",
 
-                "From: noreplay@abi24bws.de");
+                "From: noreply@abi24bws.de");
 
                 echo json_encode(["Status" => "OK"]);
             }
 
             else
             {
-                echo json_encode(["Status"=> "Major ID problem"]);
+                echo json_encode(["Status"=> "ERROR", "Message"=>"Schwerwiegender interner System fehler, bitte kontaktieren Sie den Support"]);
             }
         }
 
         else 
         {
-           echo json_encode([["Status" => "ERROR"], ["Message"=>"Not allowed input"]]);
+           echo json_encode(["Status" => "ERROR", "Message"=>"Ungultige Eingabe, bitte kontaktieren Sie den Supprt"]);
         }
     }
 
     public function FreischaltenTabelle()
     {
-        if(isset($_POST["Admin"]))
-        {
-            if($_POST["Admin"]==AdminID && $_POST["AdminPSW"]==AdminPSW)
+        $input = (array)json_decode(file_get_contents("php://input"), true);
+
+            if($input["Admin"]==AdminID && $input["AdminPSW"]==AdminPSW)
             {
                 $data=$this->database->getFreischaltungsUebersicht();
 
@@ -136,6 +131,7 @@ class UserHandling
                     </html>";
                     unset($value); 
                 
+                    echo json_encode(["Status"=>"OK", "Message"=>$tabelle]);exit;
                     return $tabelle;
                 }
                 else
@@ -149,32 +145,6 @@ class UserHandling
             {
                 echo "Wrong Input";
             }
-        }
-
-        else
-        {
-            return
-            "<!DOCTYPE html>
-            <html lang='de'>
-            <head>
-                <meta charset='UTF-8'>
-                <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-                <title>Document</title>
-            </head>
-            <body>
-            <form action='/Freischalten' method = 'POST'>
-            "/*<tr hidden>
-		        		<th><input type="text" name="anfrageTyp" id="angefragt" value="Login" readonly></th>
-		        		<th></th>
-		        	</tr>*/
-                    ."
-                    <label for='fname'>First name:</label><br>
-                    <input type='text' id='fname' name='Admin'><br>
-                    <label for='lname'>Last name:</label><br>
-                    <input type='password' id='lname' name='AdminPSW'<br><br>
-                    <input type='submit' value='Submit'>
-                  </form> ";
-        }
     }
          
 
@@ -185,9 +155,7 @@ class UserHandling
 
         if($this->sicher->EMail_is_safe($data["email"]))
         {
-            $key = $this->sicher->encrypt($data["email"]);
-
-            echo $key;
+            //$key = $this->sicher->encrypt($data["email"]);
 
             mail($data["email"], "Zurücksetzen ihres Passwords bei Abi24bws.de",
             
@@ -199,14 +167,10 @@ class UserHandling
             Mit freundlichen Grueßen\n 
             Ihr Abi24bws Team",
 
-            "From: noreplay@abi24bws.de");
+            "From: noreply@abi24bws.de");
 
             //Bestätigen das alles erfolgreich war 
             echo json_encode(["Status" => "OK"]);
-        }
-        else 
-        {
-           echo json_encode(["Status" => "ERROR", "Message"=>"Not allowed input"]);
         }
     }
 
@@ -231,27 +195,15 @@ class UserHandling
                     $this->database->ResetPasswort($email, password_hash("AcFgP" . $data["passwort"] . $salt["salt"], PASSWORD_DEFAULT));
                 
                     //Bestätigen das alles erfolgreich war 
-                    echo json_encode(["Status" => "OK"]);
+                    echo json_encode(["Status" => "OK", "Erfolgreich"=>true]);
                 }
 
                 else 
                 {
-                   echo json_encode(["Erfolgreich"=>false]);
+                   echo json_encode(["Status" => "OK", "Erfolgreich"=>false]);
                 }
             }
-
-            else 
-            {
-               echo json_encode(["Erfolgreich"=>false]);
-            }
-
         }
-
-        else 
-        {
-           echo json_encode(["Erfolgreich"=>false]);
-        }
-
     }
 
     public function checkLogin()
@@ -275,34 +227,23 @@ class UserHandling
                     //Ausgeben des Überprüfungsergebnisses
                     if (!$passVerfy)
                     {
-                        echo json_encode(["Erfolgreich"=>false]);
+                        echo json_encode(["Status" => "OK", "Erfolgreich"=>false]);
                     } 
                     else if($passVerfy)
                     {
                         session_create_id();
-                        echo json_encode(["Erfolgreich"=>true]);
+                        echo json_encode(["Status" => "OK", "Erfolgreich"=>true]);
                     }
                     else
                     {
-                        echo json_encode(["Code" => "004"]);
+                        echo json_encode(["Status" => "ERROR", "Message" => "004"]);
                     }
                 }
                 else 
                 {
-                   echo json_encode(["Erfolgreich"=>false]);
+                   echo json_encode(["Status" => "OK", "Erfolgreich"=>false]);
                 }
             }
-
-            else 
-            {
-               echo json_encode(["Erfolgreich"=>false]);
-            }
-        }
-
-        else 
-        {
-           echo json_encode(["Erfolgreich"=>false]);
-        }
-            
+        }  
     }
 }

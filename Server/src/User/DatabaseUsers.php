@@ -96,7 +96,7 @@ class DatabaseUsers
 
         else 
         {
-           echo json_encode([["Status" => "ERROR"], ["Massage"=>"Not allowed input"]]);
+           echo json_encode([["Status" => "ERROR"], ["Massage"=>"Ungultige Eingabe, bitte kontaktieren Sie den Support"]]);
         }
     }
     public function createRegistrierung()
@@ -174,11 +174,11 @@ class DatabaseUsers
             return $row;
         } 
         else if($stmt->rowCount() > 1){
-            echo json_encode([["Status" => "ERROR"].["CODE"=>"001"]]);
+            echo json_encode([["Status" => "ERROR"].["Message"=>"001"]]);
         }
 
         else if($stmt->rowCount() == 0){
-            echo json_encode([["Status" => "ERROR"].["CODE"=>"002"]]);
+            echo json_encode([["Status" => "ERROR"].["Message"=>"002"]]);
         }
 
         return false;
