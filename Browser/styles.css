@@ -11,6 +11,21 @@ h1 {
 	margin:auto;
 }
 
+.fehlerbox{
+  transform: translateX(-50%) translateY(-50%);
+  top: 210px;
+  left: 50%;
+  position: relative;
+  padding: 1%;
+  border: 5px solid rgb(180, 109, 61);
+  border-radius: 10px;
+  border-style: outset;
+  width: 35%;
+  line-height: 30px;
+  background-color: rgb(224, 71, 71);
+  visibility: hidden;
+}
+
 .registrierenButton{
 	padding-bottom:6px;
 	padding-top:6px;

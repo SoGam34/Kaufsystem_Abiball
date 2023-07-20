@@ -14,6 +14,7 @@ async function dieFuenfPersoenlicheDatenAnRegister(vorname,nachname,klasse,email
     });
   console.log(response.Status);
   console.log(response.Message);
+  document.getElementById('textfeld').style.visibility = "visible"
   document.getElementById('textfeld').innerHTML = response.Message;
 }
 async function UeberpruefenPasswortUndEmailBestaetigen()
@@ -33,11 +34,13 @@ async function UeberpruefenPasswortUndEmailBestaetigen()
       dieFuenfPersoenlicheDatenAnRegister(vornamevar,nachnamevar,klassevar,emailvar,passwortvar);
     }
     else{
-      document.getElementById('infotext').innerHTML = "Pass&oumlrter &uumlbereinstimmen nicht";
+      document.getElementById('textfeld').style.visibility = "visible"
+      document.getElementById('textfeld').innerHTML = "Pass&oumlrter &uumlbereinstimmen nicht";
     }
   }
   else{
-    document.getElementById('infotext').innerHTML = "E-Mails &uumlbereinstimmen nicht";
+    document.getElementById('textfeld').style.visibility = "visible"
+    document.getElementById('textfeld').innerHTML = "E-Mails &uumlbereinstimmen nicht";
   }
 }
 
@@ -57,9 +60,11 @@ async function loginanfrage()
     });
     console.log(response);
     if (response.Erfolgreich==false){
+      document.getElementById('textfeld').style.visibility = "visible"
       document.getElementById('textfeld').innerHTML = "Account existiert nicht";
     }
     else{
+      document.getElementById('textfeld').style.visibility = "visible"
       document.getElementById('textfeld').innerHTML = response.Message;
     }
 }
@@ -83,6 +88,7 @@ async function emailfuerzuruck()
     document.getElementById('textfeld').innerHTML = "In k&uumlrze erhalten Sie die E-Mail.";
   }
   else {
+    document.getElementById('infofeld').style.visibility = "visible"
     document.getElementById('infofeld').innerHTML = response.Message;
   }
 }
@@ -91,8 +97,9 @@ async function Passwortzurucksetzen()
 {
   const emailvar = window.location.href.slice(43);
   const passwortvar = document.getElementById('passwort').value;
-
-  const response = await fetch("https://abi24bws.de/Reseting", {
+  const passwortuberprufen = document.getElementById('passwortuberprufen').value;
+  if (passwortvar==passwortuberprufen) {
+    const response = await fetch("https://abi24bws.de/Reseting", {
       method: "POST", // or 'PUT'
       headers: {
         "Content-Type": "application/json",
@@ -104,13 +111,20 @@ async function Passwortzurucksetzen()
     });
     console.log(response);
     if(response.Status=="ERROR"){
+      document.getElementById('infofeld').style.visibility = "visible"
       document.getElementById('infofeld').innerHTML = response.Message;
     }
     if(response.Status=="OK"&&response.Erfolgreich==false){
+      document.getElementById('textfeld').style.visibility = "visible"
       document.getElementById('textfeld').innerHTML = "Ihr Passwort wurde zur&uumlckgesetzt und k&oumlnnen sich unter Login wieder anmelden?";
     }
     if(response.Status=="OK"&&response.Erfolgreich==true){
+      document.getElementById('textfeld').style.visibility = "visible"
       document.getElementById('textfeld').innerHTML = "Ihr Passwort wurde zur&uumlckgesetzt und k&oumlnnen sich unter Login wieder anmelden.";
     }
-
+  }
+  else {
+    document.getElementById('infofeld').style.visibility = "visible"
+    document.getElementById('infofeld').innerHTML = "Passw&oumlrter &uumlbereinstimmen nicht";
+  }
 }

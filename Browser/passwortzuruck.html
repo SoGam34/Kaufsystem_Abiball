@@ -28,16 +28,20 @@
     <section class="loginregisterstyle" id="textfeld">
 		<table class="mittig">
 			<tr>
-				<td><label for="passwort">Password:</label></td>
+				<td><label for="passwort">Passwort:</label></td>
 				<td><input type="password" id="passwort" name="pwd"></td>
+			</tr>
+         <tr>
+				<td><label for="passwortuberprufen">Passwort &uumlberpr&uumlfen:</label></td>
+				<td><input type="password" id="passwortuberprufen" name="pwduberprufen"></td>
 			</tr>
 			<tr>
 				<td><button type="button" class="registrierenButton" onclick="Passwortzurucksetzen()">Login</button></td>
 				<td></td>
 			</tr>
-         <tr style="color: red;"><td></td><td id="infofeld"></td></tr>
 		</table>
 	</form>
     </section>
+    <section class="fehlerbox" id="infofeld" style="top: 280px;"></section>
 </BODY>
 </HTML>
