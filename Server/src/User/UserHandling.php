@@ -29,12 +29,48 @@ class UserHandling
                 //Generieren und senden der Bestätigungs email
                 mail($data["email"], "Verifizierung ihrer Email-Adresse bei Abi24bws.de",
                 
-                "Sehr geehrte Abiturientinnen und Abiturienten, \n\n
-                bitte bestaetigen Sie ihre Email-Adresse indem Sie auf den folgenden Link klicken: \n\nhttps://abi24bws.de/Bestaetigung.html?id={$id}\n
-                Nachdem sie ihre Email bestaetigt haben, bitten wir Sie, um ein wenig Geduld bis Sie von unserem Admin-Team freigeschaltet sind. Sobald dies erfolgt ist, erhalten Sie Zugriff auf alle Dienste.
-                \n\nWenn Sie sich nicht bei Abi24bws registriert haben, koennen Sie diese Email ignorieren und wir entschuldigen uns fuer die Stoerung\n\n\n
-                Mit freundlichen Grueßen\n 
-                Ihr Abi24bws Team",
+                "<!DOCTYPE html>
+<html lang='en'>
+<head>
+	<meta charset='UTF-8'>
+	<title>Mail Adresse Bestätigen</title>
+	<meta name='description' content='Kurzbeschreibung'>
+	<link href='design.css' rel='stylesheet'>
+
+    <body bgcolor='FFFFFF'></body>
+    
+    
+    <body>
+        <center>
+        <pre>
+            <font color='black'>
+            <font size='5'><B>Verifizierung deiner Email-Adresse</B></font>
+
+            <img src='https://play-lh.googleusercontent.com/74y1Y3ER3TqHwCeT93MgkFXeaTiS7xVMWCZyd9o9CEQb8j7tzHKMXMpiNh4c4KYRV5E' height='100' width='100' align='center'>
+            
+            Sehr geehrte Abiturientinnen und Abiturienten,
+
+            
+            bitte bestätigt <a href='https://abi24bws.de/Bestaetigung.html?id={$id}'>hier</a> eure Email-Adresse.
+
+            Nachdem ihr eure Email bestätigt habt, bitten 
+            wir euch um ein wenig Geduld, bis ihr von unserem 
+            Admin-Team freigeschaltet werdet. 
+            Sobald dies erfolgt ist, erhaltet ihr Zugriff auf 
+            alle Dienste.
+
+            Wenn du dich nicht bei Abi24bws registriert hast, 
+            kannst du diese Email ignorieren und wir 
+            entschuldigen uns für die Störung.
+
+            Mit freundlichen Grüßen
+
+            Euer Abi24bws Team
+            </font>
+        </pre>
+        </center>
+    </body>
+    </html>",
                 
                 
                 "From: noreply@abi24bws.de");
@@ -84,10 +120,10 @@ class UserHandling
     }
 
     public function FreischaltenTabelle()
-    {
-        $input = (array)json_decode(file_get_contents("php://input"), true);
-
-            if($input["Admin"]==AdminID && $input["AdminPSW"]==AdminPSW)
+    {        
+        if(isset($_POST["Admin"]))
+        {
+            if($_POST["Admin"]==AdminID && $_POST["AdminPSW"]==AdminPSW)
             {
                 $data=$this->database->getFreischaltungsUebersicht();
 
@@ -105,7 +141,6 @@ class UserHandling
                         <script type='text/javascript' src='Browser/Johannes.js'></script>
                     </head>
                     <body>
-
                     <table>
                       <tr>
                           <th>Vorname</th>
@@ -114,24 +149,23 @@ class UserHandling
                           <th>email</th>
                           <th>Bestätigen</th>
                       </tr>";
-
-                    foreach ($data as $value) 
+                    foreach ($data as &$value) 
                     {
                         $tabelle .=
-                            "<tr>
-                                <td>" . /*$this->sicher->decrypt(*/$value["vorname"] . "</td>
-                                <td>" . /*$this->sicher->decrypt(*/$value["nachname"] . "</td>
-                                <td>" . /*$this->sicher->decrypt(*/$value["klasse"] . "</td>
-                                <td>" . $data["email"] . "</td>
+                        "<tr>
+                        <td>" . /*$this->sicher->decrypt(*/$data["vorname"] . "</td>
+                        <td>" . /*$this->sicher->decrypt(*/$data["nachname"] . "</td>
+                        <td>" . /*$this->sicher->decrypt(*/$data["klasse"] . "</td>
+                        <td>" . $data["email"] . "</td>
                         <td>" . '<input type="button" value="Identitaet Bestaetigen" onclick="Identitaet_bestaetigt(' . $data["registrierungs_id"] . ')"></td>
-                    </tr>';
+                        </tr>';
                     }
-                
+
                     $tabelle .= "</table> </body>
                     </html>";
                     unset($value); 
                 
-                    echo json_encode(["Status"=>"OK", "Message"=>$tabelle]);exit;
+                   // echo json_encode(["Status"=>"OK", "Message"=>$tabelle]);exit;
                     return $tabelle;
                 }
                 else
@@ -145,6 +179,33 @@ class UserHandling
             {
                 echo "Wrong Input";
             }
+
+        }
+
+        else
+        {
+            return
+            "<!DOCTYPE html>
+            <html lang='de'>
+            <head>
+                <meta charset='UTF-8'>
+                <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+                <title>Document</title>
+            </head>
+            <body>
+            <form action='/Freischalten' method = 'POST'>
+            "/*<tr hidden>
+		        		<th><input type="text" name="anfrageTyp" id="angefragt" value="Login" readonly></th>
+		        		<th></th>
+		        	</tr>*/
+                    ."
+                    <label for='fname'>First name:</label><br>
+                    <input type='text' id='fname' name='Admin'><br>
+                    <label for='lname'>Last name:</label><br>
+                    <input type='password' id='lname' name='AdminPSW'<br><br>
+                    <input type='submit' value='Submit'>
+                  </form> ";
+        }
     }
          
 
@@ -231,8 +292,8 @@ class UserHandling
                     } 
                     else if($passVerfy)
                     {
-                        session_create_id();
-                        echo json_encode(["Status" => "OK", "Erfolgreich"=>true]);
+                        $sessionID=session_create_id();
+                        echo json_encode(["Status" => "OK", "Erfolgreich"=>true, "ID"=>$sessionID]);
                     }
                     else
                     {

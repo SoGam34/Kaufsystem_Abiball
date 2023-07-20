@@ -1,7 +1,7 @@
 <?php
-session_start();
 
-header("content-type: application/json");
+session_start();
+//header("content-type: application/json");
 
 require_once "src/ErrorHandler.php";
 require_once "src/User/DatabaseUsers.php";
@@ -55,6 +55,9 @@ switch ($parts[1]) {
         break;
     case "create":
         $dbUsers->createRegistrierung();
+        break;
+    case "Tickets":
+        $SitzHandling;
         break;
     /*case "clear":
         $dbUsers->cleardb();
