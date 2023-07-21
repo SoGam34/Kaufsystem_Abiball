@@ -23,57 +23,60 @@ class UserHandling
                 {
                     $salt .= $abc[rand(0, strlen($abc)-1)];
                 }
-                //Anlegen eines neuen Eintrags und damit eines neuen accaunts
+                //Anlegen eines neuen Eintrags und damit eines neuen accounts
                 $id=$this->database->insertRegister(/*$this->sicher->encrypt(*/$data["vorname"]/*)*/, /*$this->sicher->encrypt(*/$data["nachname"], /*$this->sicher->encrypt(*/$data["klasse"], $data["email"], password_hash("AcFgP" . $data["passwort"] . $salt, PASSWORD_DEFAULT), $salt);
                 //echo "versende Email";
                 //Generieren und senden der Bestätigungs email
+
+                $header = "MIME-Version: 1.0\r\n";
+                $header .= "Content-type: text/html; charset=utf-8\r\n"
+                $header .= "From: noreply@abi24bws.de"
+
                 mail($data["email"], "Verifizierung ihrer Email-Adresse bei Abi24bws.de",
                 
-                "<!DOCTYPE html>
-<html lang='en'>
-<head>
-	<meta charset='UTF-8'>
-	<title>Mail Adresse Bestätigen</title>
-	<meta name='description' content='Kurzbeschreibung'>
-	<link href='design.css' rel='stylesheet'>
-
-    <body bgcolor='FFFFFF'></body>
-    
-    
-    <body>
-        <center>
-        <pre>
-            <font color='black'>
-            <font size='5'><B>Verifizierung deiner Email-Adresse</B></font>
-
-            <img src='https://play-lh.googleusercontent.com/74y1Y3ER3TqHwCeT93MgkFXeaTiS7xVMWCZyd9o9CEQb8j7tzHKMXMpiNh4c4KYRV5E' height='100' width='100' align='center'>
-            
-            Sehr geehrte Abiturientinnen und Abiturienten,
-
-            
-            bitte bestätigt <a href='https://abi24bws.de/Bestaetigung.html?id={$id}'>hier</a> eure Email-Adresse.
-
-            Nachdem ihr eure Email bestätigt habt, bitten 
-            wir euch um ein wenig Geduld, bis ihr von unserem 
-            Admin-Team freigeschaltet werdet. 
-            Sobald dies erfolgt ist, erhaltet ihr Zugriff auf 
-            alle Dienste.
-
-            Wenn du dich nicht bei Abi24bws registriert hast, 
-            kannst du diese Email ignorieren und wir 
-            entschuldigen uns für die Störung.
-
-            Mit freundlichen Grüßen
-
-            Euer Abi24bws Team
-            </font>
-        </pre>
-        </center>
-    </body>
-    </html>",
+                "<html>
+                <html lang='en'>
+                <head>
+                    <meta charset='UTF-8'>
+                    <title>Mail Adresse Bestätigen</title>
+                    <meta name='description' content='Kurzbeschreibung'>
+                    <link href='design.css' rel='stylesheet'>
                 
+                    <body bgcolor='FFFFFF'></body>
+                    
+                    
+                    <body>
+                        <center>
+                        <pre>
+                            <font color='black'>
+                            <font size='5'><B>Verifizierung deiner Email-Adresse</B></font>
                 
-                "From: noreply@abi24bws.de");
+                            <img src='https://play-lh.googleusercontent.com/74y1Y3ER3TqHwCeT93MgkFXeaTiS7xVMWCZyd9o9CEQb8j7tzHKMXMpiNh4c4KYRV5E' height='100' width='100' align='center'>
+                            
+                            Sehr geehrte Abiturientinnen und Abiturienten,
+                
+                            
+                            bitte bestätigt <a href='https://abi24bws.de/Bestaetigung.html?id={$id}'>hier</a> eure Email-Adresse.
+                
+                            Nachdem ihr eure Email bestätigt habt, bitten 
+                            wir euch um ein wenig Geduld, bis ihr von unserem 
+                            Admin-Team freigeschaltet werdet. 
+                            Sobald dies erfolgt ist, erhaltet ihr Zugriff auf 
+                            alle Dienste.
+                
+                            Wenn du dich nicht bei Abi24bws registriert hast, 
+                            kannst du diese Email ignorieren und wir 
+                            entschuldigen uns für die Störung.
+                
+                            Mit freundlichen Grüßen
+                
+                            Euer Abi24bws Team
+                            </font>
+                        </pre>
+                        </center>
+                    </body>
+                    </html>",
+                $header);
                 //Bestätigen das alles erfolgreich war 
                 echo json_encode(["Status" => "OK"]);
             }
