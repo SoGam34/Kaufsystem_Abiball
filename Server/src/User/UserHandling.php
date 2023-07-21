@@ -29,8 +29,8 @@ class UserHandling
                 //Generieren und senden der Bestätigungs email
 
                 $header = "MIME-Version: 1.0\r\n";
-                $header .= "Content-type: text/html; charset=utf-8\r\n"
-                $header .= "From: noreply@abi24bws.de"
+                $header .= "Content-type: text/html; charset=utf-8\r\n";
+                $header .= "From: noreply@abi24bws.de";
 
                 mail($data["email"], "Verifizierung ihrer Email-Adresse bei Abi24bws.de",
                 
@@ -97,6 +97,10 @@ class UserHandling
                 $this->database->insertTeilnehmer($users["vorname"], $users["nachname"], $users["email"], $users["passwort"], $data["registrierungs_id"]);
                 $this->database->deleteRegistrierung($users["email"]);
 
+                $header = "MIME-Version: 1.0\r\n";
+                $header .= "Content-type: text/html; charset=utf-8\r\n";
+                $header .= "From: noreply@abi24bws.de";
+
                 mail(/*$this->sicher->decrypt(*/$users["email"], "Sie wurden von ihrem abi24bws.de Team freigeschaltet!",
                 "Sehr geehrte Abiturientinne und Abituriente, \n\n
                 Es freut uns ihnen mitteilen zu können das Sie nun vollen Zugriff auf unsere Abiseite haben.
@@ -104,8 +108,7 @@ class UserHandling
                 Falls Sie Ideen, Verbesserungsvorschlage oder Probleme haben sagen Sie uns bitte Bescheid, wir versuchen diese so schnell wie möglich umzusetzen.\n\n\n
                 Mit freundlichen Grueßen\n 
                 Ihr Abi24bws Team",
-
-                "From: noreply@abi24bws.de");
+                $header);
 
                 echo json_encode(["Status" => "OK"]);
             }
@@ -220,7 +223,9 @@ class UserHandling
         if($this->sicher->EMail_is_safe($data["email"]))
         {
             //$key = $this->sicher->encrypt($data["email"]);
-
+            $header = "MIME-Version: 1.0\r\n";
+            $header .= "Content-type: text/html; charset=utf-8\r\n";
+            $header .= "From: noreply@abi24bws.de";
             mail($data["email"], "Zurücksetzen ihres Passwords bei Abi24bws.de",
             
             "Sehr geehrte Abiturientinne und Abituriente,
@@ -230,8 +235,7 @@ class UserHandling
             \n\nWenn Sie nicht bei Abi24bws ihr Passwort zurücksetzen wollen, koennen Sie diese Email ignorieren und wir entschuldigen uns fuer die Stoerung\n\n\n
             Mit freundlichen Grueßen\n 
             Ihr Abi24bws Team",
-
-            "From: noreply@abi24bws.de");
+            $header);
 
             //Bestätigen das alles erfolgreich war 
             echo json_encode(["Status" => "OK"]);
