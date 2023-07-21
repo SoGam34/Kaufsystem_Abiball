@@ -281,7 +281,7 @@ class UserHandling
             <font color='black'>
             <font size='5'><B>Passwort zurücksetzen</B></font>
 
-            <img src='https://play-lh.googleusercontent.com/74y1Y3ER3TqHwCeT93MgkFXeaTiS7xVMWCZyd9o9CEQb8j7tzHKMXMpiNh4c4KYRV5E' height='100' width='100' align='center'>
+            <img src='https://play-lh.googleusercontent.com/74y1Y3ER3TqHwCeT93MgkFXeaTiS7xVMWCZyd9o9CEQb8j7tzHKMXMpiNh4c4KYRV5E' height='100' width='100' align='left'>
             
             Wenn du dein Passwort zurücksetzen möchtest, 
             kannst du dies <a href='https://abi24bws.de/passwortzuruck.html?id='>hier</a> tun.
