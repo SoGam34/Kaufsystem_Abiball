@@ -102,6 +102,47 @@ class UserHandling
                 $header .= "From: noreply@abi24bws.de";
 
                 mail(/*$this->sicher->decrypt(*/$users["email"], "Du wurdest vom abi24bws.de Team freigeschaltet!",
+<<<<<<< HEAD
+                   "<!DOCTYPE html>
+                    <html lang='en'>
+                    <head>
+	                <meta charset='UTF-8'>
+	                <title>Freigeschaltet</title>
+	                <meta name='description' content='Kurzbeschreibung'>
+	                <link href='design.css' rel='stylesheet'>
+                                
+                    <body bgcolor='FFFFFF'></body>
+                                
+                                
+                    <body>
+                        <left>
+                        <pre>
+                            <font color='black'>
+                            <font size='5'><B>Du wurdest vom Abi24bws Team freigeschaltet</B></font>
+                                
+                            <img src='https://play-lh.googleusercontent.com/74y1Y3ER3TqHwCeT93MgkFXeaTiS7xVMWCZyd9o9CEQb8j7tzHKMXMpiNh4c4KYRV5E' height='100' width='100' align='center'>
+                                
+                            Es freut uns dir mitteilen zu können, dass du nun vollen 
+                            Zugriff auf unsere Abi-Webseite hast.
+                                
+                            Das bedeutet für dich, dass du bis zu vier Tickets an 
+                            einem frei wählbaren Ort kaufen kannst. 
+                            Zusätzlich kannst du Bilder und Videos vom Abiball 
+                            hoch- bzw. runterladen.
+                                
+                            Falls du noch Ideen, Verbesserungsvorschläge oder 
+                            Probleme hast, sag uns bitte bescheid, damit wir uns 
+                            schnellstmöglich darum kümmern können.
+                                
+                                
+                            Mit freundlichen Grüßen
+                                
+                            Dein Abi24bws Team
+                            </font>
+                        </pre>
+                        </left>
+                    </body>",
+=======
                     "<!DOCTYPE html>
                     <html lang='en'>
                     <head>
@@ -144,6 +185,7 @@ class UserHandling
                             </pre>
                             </left>
                         </body>",
+>>>>>>> cb454129f0e1095a761416b07d087b8b4f9e925e
                 $header);
 
                 echo json_encode(["Status" => "OK"]);
@@ -284,7 +326,11 @@ class UserHandling
             <img src='https://play-lh.googleusercontent.com/74y1Y3ER3TqHwCeT93MgkFXeaTiS7xVMWCZyd9o9CEQb8j7tzHKMXMpiNh4c4KYRV5E' height='100' width='100' align='left'>
             
             Wenn du dein Passwort zurücksetzen möchtest, 
+<<<<<<< HEAD
+            kannst du dies <a href='https://abi24bws.de/passwortzuruck.html?id=".$data["email"].">hier</a> tun.
+=======
             kannst du dies <a href='https://abi24bws.de/passwortzuruck.html?id='>hier</a> tun.
+>>>>>>> cb454129f0e1095a761416b07d087b8b4f9e925e
 
             Nachdem du dein neues Passwort eingedgeben hast, 
             kannst du dich wie gewohnt anmelden.
