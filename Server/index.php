@@ -1,9 +1,6 @@
 <?php
 
-<<<<<<< HEAD
-=======
 session_start();
->>>>>>> cb454129f0e1095a761416b07d087b8b4f9e925e
 //header("content-type: application/json");
 
 require_once "src/ErrorHandler.php";
@@ -59,19 +56,18 @@ switch ($parts[1]) {
     case "create":
         $dbUsers->createRegistrierung();
         break;
-<<<<<<< HEAD
     case "clear":
         //$dbUsers->cleardb();
-        $dbUsers->deleteRegistrierung("widawski.nico@gmail.com");
+        try {
+            $dbUsers->deleteRegistrierung("widawski.nico@gmail.com");
+        } catch (PDOException $e) {
+            echo "Error deleting entry: \n" . $e->getMessage();
+        }
+        echo "succes";
         break;
-=======
     case "Tickets":
         $SitzHandling;
         break;
-    /*case "clear":
-        $dbUsers->cleardb();
-        break;*/
->>>>>>> cb454129f0e1095a761416b07d087b8b4f9e925e
     default:
     //Da keine bekannte aktion getetigt werden soll
         http_response_code(404);

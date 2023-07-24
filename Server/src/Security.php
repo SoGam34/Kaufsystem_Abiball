@@ -88,6 +88,33 @@ class Security
                   case "x": $buchstabe = true;break;
                   case "y": $buchstabe = true;break;
                   case "z": $buchstabe = true;break;
+
+                  case "A": $buchstabe = true;break;
+                  case "B": $buchstabe = true;break;
+                  case "C": $buchstabe = true;break;
+                  case "D": $buchstabe = true;break;
+                  case "E": $buchstabe = true;break;
+                  case "F": $buchstabe = true;break;
+                  case "G": $buchstabe = true;break;
+                  case "H": $buchstabe = true;break;
+                  case "I": $buchstabe = true;break;
+                  case "J": $buchstabe = true;break;
+                  case "K": $buchstabe = true;break;
+                  case "L": $buchstabe = true;break;
+                  case "M": $buchstabe = true;break;
+                  case "N": $buchstabe = true;break;
+                  case "O": $buchstabe = true;break;
+                  case "P": $buchstabe = true;break;
+                  case "Q": $buchstabe = true;break;
+                  case "R": $buchstabe = true;break;
+                  case "S": $buchstabe = true;break;
+                  case "T": $buchstabe = true;break;
+                  case "U": $buchstabe = true;break;
+                  case "V": $buchstabe = true;break;
+                  case "W": $buchstabe = true;break;
+                  case "X": $buchstabe = true;break;
+                  case "Y": $buchstabe = true;break;
+                  case "Z": $buchstabe = true;break;
                }
             }
 
