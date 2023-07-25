@@ -45,8 +45,7 @@ class UserHandling
                     <body bgcolor='FFFFFF'></body>
                     
                     
-                    <body>
-                        <left>
+                    <body> 
                         <pre>
                             <font color='black'>
                             <font size='5'><B>Verifizierung deiner Email-Adresse</B></font>
@@ -72,7 +71,6 @@ class UserHandling
                             Euer Abi24bws Team
                             </font>
                         </pre>
-                        </left>
                     </body>
                     </html>",
                 $header);
