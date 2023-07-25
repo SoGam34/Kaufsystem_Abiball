@@ -49,8 +49,10 @@ class UserHandling
                             <font color='black'>
                             <font size='5'><B>Verifizierung deiner Email-Adresse</B></font><br />
                 <br />
+			<img src='https://play-lh.googleusercontent.com/74y1Y3ER3TqHwCeT93MgkFXeaTiS7xVMWCZyd9o9CEQb8j7tzHKMXMpiNh4c4KYRV5E' height='100' width='100' align='center'><br /> 
                 <br />        
-                            Sehr geehrte Abiturientinnen und Abiturienten,<br /> 
+                            Sehr geehrte Abiturientinnen und Abiturienten,<br />
+                <br /> 
                 <br />        
                             bitte bestätigt <a href='https://abi24bws.de/Bestaetigung.html?id={$id}'>hier</a> eure Email-Adresse.<br />
                 <br />
@@ -95,42 +97,46 @@ class UserHandling
                 $header .= "Content-type: text/html; charset=utf-8\r\n";
                 $header .= "From: noreply@abi24bws.de";
 
-                mail($data["email"], "Du wurdest vom Abi24bws Team freigeschaltet",
-                
-                "<html>
-                <html lang='en'>
-                <head>
-                    <meta charset='UTF-8'>
-                    <title>Freigeschaltet</title>
-                    <meta name='description' content='Kurzbeschreibung'>
-                    <link href='design.css' rel='stylesheet'>
-                
+                mail(/*$this->sicher->decrypt(*/$users["email"], "Du wurdest vom abi24bws.de Team freigeschaltet!",
+                   "<!DOCTYPE html>
+                    <html lang='en'>
+                    <head>
+	                <meta charset='UTF-8'>
+	                <title>Freigeschaltet</title>
+	                <meta name='description' content='Kurzbeschreibung'>
+	                <link href='design.css' rel='stylesheet'>
+                                
                     <body bgcolor='FFFFFF'></body>
-                    
-                    
-                    <body> 
+                                
+                                
+                    <body>
+                        <left>
+                        <pre>
                             <font color='black'>
-                            <font size='5'><B>Du wurdest vom Abi24bws Team freigeschaltet</B></font><br />
-                <br />
-                <br />        
-                            Es freut uns dir mitteilen zu können, dass du nun vollen<br /> 
-			    Zugriff auf unsere Abi-Website hast.<br> 
-                <br />        
-                            Das bedeutet für dich, dass du bis zu vier Tickets an<br />
-			    einem frei wählbaren Ort kaufen kannst.<br />
-       			    Zusätzlich kannst du Bilder und Videos vom Abiball<br />
-	      		    hoch- bzw. runterladen.<br />
-                <br />
-                            Falls du noch Ideen, Verbesserungsvorschläge oder<br />
-                            Probleme hast, sag uns bitte bescheid, damit wir uns<br />
-                            schnellstmöglich darum kümmern können.<br />
-                <br />
-                            Mit freundlichen Grüßen<br />
-                <br />
-                            Dein Abi24bws Team<br />
+                            <font size='5'><B>Du wurdest vom Abi24bws Team freigeschaltet</B></font>
+                                
+                            <img src='https://play-lh.googleusercontent.com/74y1Y3ER3TqHwCeT93MgkFXeaTiS7xVMWCZyd9o9CEQb8j7tzHKMXMpiNh4c4KYRV5E' height='100' width='100' align='center'>
+                                
+                            Es freut uns dir mitteilen zu können, dass du nun vollen 
+                            Zugriff auf unsere Abi-Webseite hast.
+                                
+                            Das bedeutet für dich, dass du bis zu vier Tickets an 
+                            einem frei wählbaren Ort kaufen kannst. 
+                            Zusätzlich kannst du Bilder und Videos vom Abiball 
+                            hoch- bzw. runterladen.
+                                
+                            Falls du noch Ideen, Verbesserungsvorschläge oder 
+                            Probleme hast, sag uns bitte bescheid, damit wir uns 
+                            schnellstmöglich darum kümmern können.
+                                
+                                
+                            Mit freundlichen Grüßen
+                                
+                            Dein Abi24bws Team
                             </font>
-                    </body>
-                    </html>",
+                        </pre>
+                        </left>
+                    </body>",
                 $header);
 
                 echo json_encode(["Status" => "OK"]);
@@ -246,41 +252,45 @@ class UserHandling
         if($this->sicher->EMail_is_safe($data["email"]))
         {
             //$key = $this->sicher->encrypt($data["email"]);
-             $header = "MIME-Version: 1.0\r\n";
-                $header .= "Content-type: text/html; charset=utf-8\r\n";
-                $header .= "From: noreply@abi24bws.de";
+            $header = "MIME-Version: 1.0\r\n";
+            $header .= "Content-type: text/html; charset=utf-8\r\n";
+            $header .= "From: noreply@abi24bws.de";
+            mail($data["email"], "Zurücksetzen ihres Passwords bei Abi24bws.de",
+            
+            "<!DOCTYPE html>
+<html lang='en'>
+<head>
+	<meta charset='UTF-8'>
+	<title>Passwort Zurücksetzen</title>
+	<meta name='description' content='Kurzbeschreibung'>
+	<link href='design.css' rel='stylesheet'>
 
-                mail($data["email"], "Zurücksetzen deines Passworts bei Abi24bws.de",
-                
-                "<html>
-                <html lang='en'>
-                <head>
-                    <meta charset='UTF-8'>
-                    <title>Passwort zurücksetzen</title>
-                    <meta name='description' content='Kurzbeschreibung'>
-                    <link href='design.css' rel='stylesheet'>
-                
-                    <body bgcolor='FFFFFF'></body>
-                    
-                    
-                    <body> 
-                            <font color='black'>
-                            <font size='5'><B>Passwort Zurücksetzen</B></font><br />
-                <br />
-                <br />        
-                            Wenn du dein Passwort zurücksetzen möchtest,<br /> 
-			    kannst du dies <a href='https://abi24bws.de/passwortzuruck.html?id='.$data['email'].'>hier</a> tun.<br />
-                <br />        
-                            Nachdem du dein neues Passwort eingegeben hast,<br />
-			    kannst du dich wie gewohnt anmelden. <br />
-                <br />
-                            Mit freundlichen Grüßen<br />
-                <br />
-                            Dein Abi24bws Team<br />
-                            </font>
-                    </body>
-                    </html>",
-                $header);
+    <body bgcolor='FFFFFF'></body>
+    
+    
+    <body>
+        <left>
+        <pre>
+            <font color='black'>
+            <font size='5'><B>Passwort zurücksetzen</B></font>
+
+            <img src='https://play-lh.googleusercontent.com/74y1Y3ER3TqHwCeT93MgkFXeaTiS7xVMWCZyd9o9CEQb8j7tzHKMXMpiNh4c4KYRV5E' height='100' width='100' align='left'>
+            
+            Wenn du dein Passwort zurücksetzen möchtest, 
+            kannst du dies <a href='https://abi24bws.de/passwortzuruck.html?id=".$data["email"].">hier</a> tun.
+
+            Nachdem du dein neues Passwort eingedgeben hast, 
+            kannst du dich wie gewohnt anmelden.
+
+
+            Mit freundlichen Grüßen
+
+            Dein Abi24bws Team
+            </font>
+        </pre>
+        </left>
+    </body>",
+            $header);
 
             //Bestätigen das alles erfolgreich war 
             echo json_encode(["Status" => "OK"]);
