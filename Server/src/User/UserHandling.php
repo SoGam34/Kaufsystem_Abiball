@@ -262,8 +262,6 @@ class UserHandling
     
     
     <body>
-        <left>
-        <pre>
             <font color='black'>
             <font size='5'><B>Passwort zurücksetzen</B></font><br />
 <br />
@@ -278,8 +276,6 @@ class UserHandling
 <br />
             Dein Abi24bws Team<br />
             </font>
-        </pre>
-        </left>
     </body>",
             $header);
 
