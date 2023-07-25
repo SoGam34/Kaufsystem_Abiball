@@ -48,27 +48,27 @@ class UserHandling
                     <body> 
 		    <pre>
                             <font color='black'>
-                            <font size='5'><B>Verifizierung deiner Email-Adresse</B></font>
-                
-                            
-                            Sehr geehrte Abiturientinnen und Abiturienten,
-                
-                            
-                            bitte bestätigt <a href='https://abi24bws.de/Bestaetigung.html?id={$id}'>hier</a> eure Email-Adresse.
-                
-                            Nachdem ihr eure Email bestätigt habt, bitten
-                            wir euch um ein wenig Geduld, bis ihr von unserem
-                            Admin-Team freigeschaltet werdet.
-                            Sobald dies erfolgt ist, erhaltet ihr Zugriff auf
-                            alle Dienste.
-                
-                            Wenn du dich nicht bei Abi24bws registriert hast,
-                            kannst du diese Email ignorieren und wir
-                            entschuldigen uns für die Störung.
-                
-                            Mit freundlichen Grüßen
-                
-                            Euer Abi24bws Team
+                            <font size='5'><B>Verifizierung deiner Email-Adresse</B></font><br />
+                <br />
+                <br />        
+                            Sehr geehrte Abiturientinnen und Abiturienten,<br />
+                <br /> 
+                <br />        
+                            bitte bestätigt <a href='https://abi24bws.de/Bestaetigung.html?id={$id}'>hier</a> eure Email-Adresse.<br />
+                <br />
+                            Nachdem ihr eure Email bestätigt habt, bitten<br />
+                            wir euch um ein wenig Geduld, bis ihr von unserem<br />
+                            Admin-Team freigeschaltet werdet.<br />
+                            Sobald dies erfolgt ist, erhaltet ihr Zugriff auf<br />
+                            alle Dienste.<br />
+                <br />
+                            Wenn du dich nicht bei Abi24bws registriert hast,<br />
+                            kannst du diese Email ignorieren und wir<br />
+                            entschuldigen uns für die Störung.<br />
+                <br />
+                            Mit freundlichen Grüßen<br />
+                <br />
+                            Euer Abi24bws Team<br />
                             </font>
 			    </pre>
                     </body>
