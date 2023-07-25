@@ -108,32 +108,27 @@ class UserHandling
                                 
                                 
                     <body>
-                        <left>
-                        <pre>
+
                             <font color='black'>
-                            <font size='5'><B>Du wurdest vom Abi24bws Team freigeschaltet</B></font>
-                                
-                            <img src='https://play-lh.googleusercontent.com/74y1Y3ER3TqHwCeT93MgkFXeaTiS7xVMWCZyd9o9CEQb8j7tzHKMXMpiNh4c4KYRV5E' height='100' width='100' align='center'>
-                                
-                            Es freut uns dir mitteilen zu können, dass du nun vollen 
-                            Zugriff auf unsere Abi-Webseite hast.
-                                
-                            Das bedeutet für dich, dass du bis zu vier Tickets an 
-                            einem frei wählbaren Ort kaufen kannst. 
-                            Zusätzlich kannst du Bilder und Videos vom Abiball 
-                            hoch- bzw. runterladen.
-                                
-                            Falls du noch Ideen, Verbesserungsvorschläge oder 
-                            Probleme hast, sag uns bitte bescheid, damit wir uns 
-                            schnellstmöglich darum kümmern können.
-                                
-                                
-                            Mit freundlichen Grüßen
-                                
-                            Dein Abi24bws Team
+                            <font size='5'><B>Du wurdest vom Abi24bws Team freigeschaltet</B></font><br />
+                <br />
+                <br />          
+                            Es freut uns dir mitteilen zu können, dass du nun vollen <br />
+                            Zugriff auf unsere Abi-Webseite hast.<br />
+                <br />    
+                            Das bedeutet für dich, dass du bis zu vier Tickets an <br />
+                            einem frei wählbaren Ort kaufen kannst. <br />
+                            Zusätzlich kannst du Bilder und Videos vom Abiball <br />
+                            hoch- bzw. runterladen.<br />
+                <br />  
+                            Falls du noch Ideen, Verbesserungsvorschläge oder <br />
+                            Probleme hast, sag uns bitte bescheid, damit wir uns <br />
+                            schnellstmöglich darum kümmern können.<br />
+                <br />           
+                            Mit freundlichen Grüßen<br />
+                <br />               
+                            Dein Abi24bws Team<br />
                             </font>
-                        </pre>
-                        </left>
                     </body>",
                 $header);
 
@@ -270,20 +265,18 @@ class UserHandling
         <left>
         <pre>
             <font color='black'>
-            <font size='5'><B>Passwort zurücksetzen</B></font>
-
-            <img src='https://play-lh.googleusercontent.com/74y1Y3ER3TqHwCeT93MgkFXeaTiS7xVMWCZyd9o9CEQb8j7tzHKMXMpiNh4c4KYRV5E' height='100' width='100' align='left'>
-            
-            Wenn du dein Passwort zurücksetzen möchtest, 
-            kannst du dies <a href='https://abi24bws.de/passwortzuruck.html?id=".$data["email"].">hier</a> tun.
-
-            Nachdem du dein neues Passwort eingedgeben hast, 
-            kannst du dich wie gewohnt anmelden.
-
-
-            Mit freundlichen Grüßen
-
-            Dein Abi24bws Team
+            <font size='5'><B>Passwort zurücksetzen</B></font><br />
+<br />
+<br />          
+            Wenn du dein Passwort zurücksetzen möchtest, <br />
+            kannst du dies <a href='https://abi24bws.de/passwortzuruck.html?id=".$data["email"].">hier</a> tun.<br />
+<br />
+            Nachdem du dein neues Passwort eingedgeben hast, <br />
+            kannst du dich wie gewohnt anmelden.<br />
+<br />
+            Mit freundlichen Grüßen<br />
+<br />
+            Dein Abi24bws Team<br />
             </font>
         </pre>
         </left>
