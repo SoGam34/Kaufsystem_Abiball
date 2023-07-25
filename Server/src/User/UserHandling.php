@@ -96,7 +96,7 @@ class UserHandling
                 $header .= "From: noreply@abi24bws.de";
 
                 mail(/*$this->sicher->decrypt(*/$users["email"], "Du wurdest vom abi24bws.de Team freigeschaltet!",
-                   "<!DOCTYPE html>
+                   "<html>
                     <html lang='en'>
                     <head>
 	                <meta charset='UTF-8'>
@@ -129,7 +129,8 @@ class UserHandling
                 <br />               
                             Dein Abi24bws Team<br />
                             </font>
-                    </body>",
+                    </body>
+		    </html>",
                 $header);
 
                 echo json_encode(["Status" => "OK"]);
@@ -213,7 +214,7 @@ class UserHandling
         else
         {
             return
-            "<!DOCTYPE html>
+            "<html>
             <html lang='de'>
             <head>
                 <meta charset='UTF-8'>
@@ -250,7 +251,7 @@ class UserHandling
             $header .= "From: noreply@abi24bws.de";
             mail($data["email"], "Zurücksetzen ihres Passwords bei Abi24bws.de",
             
-            "<!DOCTYPE html>
+            "<html>
 <html lang='en'>
 <head>
 	<meta charset='UTF-8'>
@@ -276,7 +277,8 @@ class UserHandling
 <br />
             Dein Abi24bws Team<br />
             </font>
-    </body>",
+    </body>
+    </html>",
             $header);
 
             //Bestätigen das alles erfolgreich war 
