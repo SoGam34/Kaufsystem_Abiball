@@ -46,29 +46,31 @@ class UserHandling
                     
                     
                     <body> 
+		    <pre>
                             <font color='black'>
-                            <font size='5'><B>Verifizierung deiner Email-Adresse</B></font>\n
+                            <font size='5'><B>Verifizierung deiner Email-Adresse</B></font>
                 
                             
-                            Sehr geehrte Abiturientinnen und Abiturienten,\n
+                            Sehr geehrte Abiturientinnen und Abiturienten,
                 
                             
-                            bitte bestätigt <a href='https://abi24bws.de/Bestaetigung.html?id={$id}'>hier</a> eure Email-Adresse.\n
+                            bitte bestätigt <a href='https://abi24bws.de/Bestaetigung.html?id={$id}'>hier</a> eure Email-Adresse.
                 
-                            Nachdem ihr eure Email bestätigt habt, bitten \n
-                            wir euch um ein wenig Geduld, bis ihr von unserem \n
-                            Admin-Team freigeschaltet werdet. \n
-                            Sobald dies erfolgt ist, erhaltet ihr Zugriff auf \n
-                            alle Dienste.\n
+                            Nachdem ihr eure Email bestätigt habt, bitten
+                            wir euch um ein wenig Geduld, bis ihr von unserem
+                            Admin-Team freigeschaltet werdet.
+                            Sobald dies erfolgt ist, erhaltet ihr Zugriff auf
+                            alle Dienste.
                 
-                            Wenn du dich nicht bei Abi24bws registriert hast, \n
-                            kannst du diese Email ignorieren und wir \n
-                            entschuldigen uns für die Störung.\n
+                            Wenn du dich nicht bei Abi24bws registriert hast,
+                            kannst du diese Email ignorieren und wir
+                            entschuldigen uns für die Störung.
                 
-                            Mit freundlichen Grüßen\n
+                            Mit freundlichen Grüßen
                 
                             Euer Abi24bws Team
                             </font>
+			    </pre>
                     </body>
                     </html>",
                 $header);
