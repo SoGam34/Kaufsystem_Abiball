@@ -144,7 +144,7 @@ class UserHandling
 
             else
             {
-                echo json_encode(["Status"=> "ERROR", "Message"=>"Schwerwiegender interner System fehler, bitte kontaktieren Sie den Support"]);
+                echo json_encode(["Status"=> "ERROR", "Message"=>"Schwerwiegender interner System fehler, bitte kontaktieren Sie den Support mit dem Fehlercode 005."]);
             }
         }
 
@@ -350,21 +350,30 @@ class UserHandling
                     //Ausgeben des Überprüfungsergebnisses
                     if (!$passVerfy)
                     {
+                        header("Access-Control-Allow-Origin: https://abi24bws.de");
+                        header("Access-Control-Allow-Methods: POST, GET");
                         echo json_encode(["Status" => "OK", "Erfolgreich"=>false]);
+                        return false;
                     } 
+
                     else if($passVerfy)
                     {
-                        $sessionID=session_create_id();
-                        echo json_encode(["Status" => "OK", "Erfolgreich"=>true, "ID"=>$sessionID]);
+                        return true;
                     }
                     else
                     {
+                        header("Access-Control-Allow-Origin: https://abi24bws.de");
+                        header("Access-Control-Allow-Methods: POST, GET");
                         echo json_encode(["Status" => "ERROR", "Message" => "004"]);
+                        return false;
                     }
                 }
                 else 
                 {
-                   echo json_encode(["Status" => "OK", "Erfolgreich"=>false]);
+                    header("Access-Control-Allow-Origin: https://abi24bws.de");
+                    header("Access-Control-Allow-Methods: POST, GET");
+                    echo json_encode(["Status" => "OK", "Erfolgreich"=>false]);
+                    return false;
                 }
             }
         }  

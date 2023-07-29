@@ -238,4 +238,12 @@ class DatabaseUsers
 
         $stmt->execute();
     }
+
+    public function addsession($sID) {
+        
+    }
+
+    public function verifysession($sID) {
+        
+    }
 }
