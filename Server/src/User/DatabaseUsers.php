@@ -101,8 +101,8 @@ class DatabaseUsers
     }
     public function createRegistrierung()
     {
-/*
-        $sql = "DROP TABLE registrierung;
+
+        /*$sql = /*"DROP TABLE registrierung;
             CREATE TABLE registrierung(
             registrierungs_id int AUTO_INCREMENT PRIMARY KEY,
             email varchar (255) UNIQUE, 
@@ -113,7 +113,7 @@ class DatabaseUsers
             bearbeitungsstatus boolean default false, 
             datum timestamp default CURRENT_TIMESTAMP());
 
-            ";CREATE TABLE salt(
+            CREATE TABLE salt(
             salt_id int PRIMARY KEY, 
             salt varchar(5) UNIQUE
             );
@@ -131,6 +131,11 @@ class DatabaseUsers
             sitzplatz_id int PRIMARY KEY,
             PersonID int DEFAULT NULL,
             FOREIGN KEY (PersonID) REFERENCES teilnehmer(teilnehmer_id));";
+            
+
+            "CREATE TABLE loginsession(
+             Temail varchar(255) PRIMARY KEY,
+             session_id varchar(120) UNIQUE);";
             
 
         try {
@@ -239,11 +244,66 @@ class DatabaseUsers
         $stmt->execute();
     }
 
-    public function addsession($sID) {
-        
+    public function addsession(string $ID, string $temail)
+    {
+        try{
+        $stmt = $this->conn->prepare(
+            "INSERT INTO loginsession (Temail, session_id)
+             VALUES (:Temail, :ID);");
+
+        $stmt->bindValue(":ID", $ID, PDO::PARAM_STR);
+
+        $stmt->bindValue(":Temail", $temail, PDO::PARAM_STR);
+
+        $stmt->execute();
+    } catch (PDOException $e) {
+        echo "Error in addsession: \n" . $e->getMessage();
+    }
     }
 
-    public function verifysession($sID) {
-        
+    public function verifysession(string $ID) 
+    {
+        try{
+        $stmt = $this->conn->prepare(
+            "SELECT Temail
+             FROM loginsession
+             WHERE session_id = :session_id;");
+
+        $stmt->bindValue(":session_id", $ID, PDO::PARAM_STR);
+
+        $stmt->execute();
+
+        if($stmt->rowCount() == 1) 
+        {
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            return $row;
+        } 
+        else if($stmt->rowCount() > 1){
+            echo json_encode([["Status" => "ERROR"].["Message"=>"011"]]);
+            exit;
+        }
+
+        else if($stmt->rowCount() == 0){
+            return false;
+        }
+    } catch (PDOException $e) {
+        echo "Error in verifysession: \n" . $e->getMessage();
+    }
+    }
+
+    public function EndSession(string $ID) 
+    {
+        try{
+        $stmt = $this->conn->prepare(
+            "DELETE FROM loginsession
+             WHERE session_id = :session_id;");
+
+        $stmt->bindValue(":session_id", $ID, PDO::PARAM_STR);
+
+        $stmt->execute();
+    } catch (PDOException $e) {
+        echo "Error in deleting session: \n" . $e->getMessage();
+    }
     }
 }

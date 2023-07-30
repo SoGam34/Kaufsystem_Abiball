@@ -358,7 +358,7 @@ class UserHandling
 
                     else if($passVerfy)
                     {
-                        return true;
+                        return $data["email"];
                     }
                     else
                     {

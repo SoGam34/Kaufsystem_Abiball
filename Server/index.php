@@ -19,7 +19,7 @@ $UserHandling = new UserHandling($dbUsers, $Security);
 
     $state=$UserHandling->checkLogin();
     
-    if($state==true)
+    if($state!=false)
     {
         $session=session_start([
             'name'=>"UId",
@@ -31,7 +31,7 @@ $UserHandling = new UserHandling($dbUsers, $Security);
         header("Access-Control-Allow-Origin: https://abi24bws.de");
         header("Access-Control-Allow-Methods: POST, GET");
         
-        if($session)
+        if($session==true)
         {
             $UId = session_id();
 
@@ -49,20 +49,38 @@ $UserHandling = new UserHandling($dbUsers, $Security);
 
             else
             {
-                $dbUsers->addsession($UId);
+                $dbUsers->addsession($UId, $state);
+                echo json_encode(["Status" => "OK", "Erfolgreich"=>true]);
             }
-
-            echo json_encode(["Status" => "OK", "Erfolgreich"=>true]);
         }
         
         else
         {
             echo json_encode(["Status" => "ERROR", "Message" => "Schwerwiegender interner Systemfehler, bitte kontaktieren Sie den Support mit dem Fehlercode 006."]);
         }
-        
-       
     }
     exit;
+}
+
+else if($parts[1]=="Logout"){
+require_once "src/User/DatabaseUsers.php";
+require_once "src/Security.php";
+require_once "src/config.php";
+
+$Security = new Security();
+
+$dbUsers = new DatabaseUsers($Security);
+
+    $dbUsers->EndSession($_COOKIE["UId"]);
+    $state=setcookie("UId", time()-3600);
+    if($state==true)
+    {
+    echo json_encode(["Status" => "OK"]);
+    }
+    else{
+        echo json_encode(["Status" => "ERROR", "Message" => "Schwerwiegender interner Systemfehler, bitte kontaktieren Sie den Support mit dem Fehlercode 020."]);
+        exit;
+    }
 }
 
 else 
@@ -132,7 +150,18 @@ switch ($parts[1]) {
         break;
 
     case  "Tickets":
-        $dbUsers->verifysession($_COOKIE["UId"]);
+        $teilnehmer=$dbUsers->verifysession($_COOKIE["UId"]);
+
+        if($teilnehmer==false)
+        {
+            echo json_encode(["Status" => "ERROR", "Message" => "Sie sind entweder nicht angemeldet oder es liegt ein interner Systemfehler vor bei dem wir Sie bitten den Support, mit dem Fehlercode 009, zu kontaktieren."]);
+            exit;
+        }
+
+        foreach($teilnehmer as $value)
+        {
+            echo "\nnext value: ".$value;
+        }
         break;
     default:
     //Da keine bekannte aktion getetigt werden soll
