@@ -157,11 +157,7 @@ switch ($parts[1]) {
             echo json_encode(["Status" => "ERROR", "Message" => "Sie sind entweder nicht angemeldet oder es liegt ein interner Systemfehler vor bei dem wir Sie bitten den Support, mit dem Fehlercode 009, zu kontaktieren."]);
             exit;
         }
-
-        foreach($teilnehmer as $value)
-        {
-            echo "\nnext value: ".$value;
-        }
+    
         break;
     default:
     //Da keine bekannte aktion getetigt werden soll
