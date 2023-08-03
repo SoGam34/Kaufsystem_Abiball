@@ -2,19 +2,8 @@
 
 class Database
 {
-    private PDO $conn;
-
-    public function __construct()
-    {
-        try {
-            $this->conn = $this->getConnection();
-        } catch (PDOException $e) {
-            echo "Connection failed: " . $e->getMessage();
-        }
-    }
-
-    public function __destruct()
-    {
+    public function __construct(private Security $sicher, private PDO $dbwrite, private PDO $dbreade)
+    { 
     }
 
     public function getConnection(): PDO

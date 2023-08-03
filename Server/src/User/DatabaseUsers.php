@@ -2,25 +2,17 @@
 
 class DatabaseUsers
 {
-    private PDO $conn;
-
-    public function __construct(private Security $sicher)
-    {
-        $dsn = "mysql:host=" . SQL_SERVER_NAME . ";dbname=" . SQL_DB_NAME . ";charset=utf8";
-
-        $this->conn = new PDO($dsn, SQL_DB_USER, SQL_DB_PSW, [
-            PDO::ATTR_EMULATE_PREPARES => false,
-            PDO::ATTR_STRINGIFY_FETCHES => false
-        ]);   
+    public function __construct(private Security $sicher, private PDO &$dbwrite, private PDO &$dbreade)
+    { 
     }
 
     public function cleardb()
     {
-        $stmt = $this->conn->prepare(
+        $stmt = $this->dbwrite->prepare(
             "DELETE FROM registrierung;");
         $stmt->execute();
 
-        $stmt = $this->conn->prepare(
+        $stmt = $this->dbwrite->prepare(
             "DELETE FROM teilnehmer;");
         $stmt->execute();
 
@@ -29,7 +21,7 @@ class DatabaseUsers
 
     public function insertRegister(string $vorname, string $nachname, string $klasse, string $email, string $passwort, string $salt) : int
     {
-        $stmt = $this->conn->prepare(
+        $stmt = $this->dbwrite->prepare(
             "INSERT INTO registrierung (email, passwort, vorname, nachname, klasse)
              VALUES (:email,  :passwort, :vorname,  :nachname,  :klasse);"
         );
@@ -42,9 +34,9 @@ class DatabaseUsers
 
         $stmt->execute();
 
-        $id = $this->conn->lastInsertId();
+        $id = $this->dbwrite->lastInsertId();
 
-        $stmt = $this->conn->prepare(
+        $stmt = $this->dbwrite->prepare(
             "INSERT INTO salt (salt_id, salt)
              VALUES (:salt_id, :salt);"
         );
@@ -59,7 +51,7 @@ class DatabaseUsers
 
     public function insertTeilnehmer(string $vorname, string $nachname, string $email, string $passwort, int $salt_id) : int
     {
-        $stmt = $this->conn->prepare(
+        $stmt = $this->dbwrite->prepare(
             "INSERT INTO teilnehmer (vorname, nachname, email, passwort, salt_id)
              VALUES ( :vorname,  :nachname,  :email,  :passwort, :salt_id);"
         );
@@ -72,7 +64,7 @@ class DatabaseUsers
 
         $stmt->execute();
 
-        return intval($this->conn->lastInsertId());
+        return intval($this->dbwrite->lastInsertId());
     }
 
     public function bestaetigen()
@@ -81,7 +73,7 @@ class DatabaseUsers
 
         if($this->sicher->check_id($data["id"]))
         {
-            $stmt = $this->conn->prepare(
+            $stmt = $this->dbwrite->prepare(
                 "UPDATE registrierung
                  SET bearbeitungsstatus = :zustand
                  WHERE registrierungs_id = :id;");
@@ -147,7 +139,7 @@ class DatabaseUsers
 
     public function getFreischaltungsUebersicht()
     {
-        $stmt = $this->conn->prepare(
+        $stmt = $this->dbreade->prepare(
             "SELECT vorname, nachname, klasse, email, registrierungs_id
              FROM registrierung
              WHERE bearbeitungsstatus = :zustand;");
@@ -163,7 +155,7 @@ class DatabaseUsers
 
     public function getFreischalten(int $data)
     {
-        $stmt = $this->conn->prepare(
+        $stmt = $this->dbreade->prepare(
             "SELECT vorname, nachname, email, passwort
              FROM registrierung
              WHERE registrierungs_id = :registrierungs_id;");
@@ -191,7 +183,7 @@ class DatabaseUsers
 
     public function getSalt(int $id)
     {
-        $stmt = $this->conn->prepare(
+        $stmt = $this->dbreade->prepare(
             "SELECT salt
              FROM salt
              WHERE salt_id = :id;");
@@ -206,7 +198,7 @@ class DatabaseUsers
     }
     public function getUser(string $email)
     {
-        $stmt = $this->conn->prepare(
+        $stmt = $this->dbreade->prepare(
             "SELECT passwort, salt_id
              FROM teilnehmer
              WHERE email = :email;");
@@ -222,7 +214,7 @@ class DatabaseUsers
 
     public function ResetPasswort(string $email, string $newPasswort): void
     {
-        $stmt = $this->conn->prepare(
+        $stmt = $this->dbwrite->prepare(
             "UPDATE teilnehmer
              SET passwort = :passwort
              WHERE email = :email;");
@@ -235,7 +227,7 @@ class DatabaseUsers
 
     public function deleteRegistrierung(string $email)
     {
-        $stmt = $this->conn->prepare(
+        $stmt = $this->dbwrite->prepare(
             "DELETE FROM registrierung
              WHERE email = :email;");
 
@@ -247,7 +239,7 @@ class DatabaseUsers
     public function addsession(string $ID, string $temail)
     {
         try{
-        $stmt = $this->conn->prepare(
+        $stmt = $this->dbwrite->prepare(
             "INSERT INTO loginsession (Temail, session_id)
              VALUES (:Temail, :ID);");
 
@@ -264,7 +256,7 @@ class DatabaseUsers
     public function verifysession(string $ID) 
     {
         try{
-        $stmt = $this->conn->prepare(
+        $stmt = $this->dbreade->prepare(
             "SELECT Temail
              FROM loginsession
              WHERE session_id = :session_id;");
@@ -295,7 +287,7 @@ class DatabaseUsers
     public function EndSession(string $ID) 
     {
         try{
-        $stmt = $this->conn->prepare(
+        $stmt = $this->dbwrite->prepare(
             "DELETE FROM loginsession
              WHERE session_id = :session_id;");
 

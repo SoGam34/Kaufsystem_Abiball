@@ -2,11 +2,8 @@
 
 class DatabaseTickets
 {
-    private PDO $conn;
-
-    public function __construct()
-    {
-        
+    public function __construct(private Security $sicher, private PDO $dbwrite, private PDO $dbreade)
+    { 
     }
 }
 ?>
