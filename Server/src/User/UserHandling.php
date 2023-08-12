@@ -269,9 +269,9 @@ class UserHandling
             <br />
             <br />
             Wenn du dein Passwort zurücksetzen möchtest, <br />
-            kannst du dies <a href='https://abi24bws.de/passwortzuruck.html?id=".$data["email"].">hier</a> tun.<br />
+            kannst du dies <a href='https://abi24bws.de/passwortzuruck.html?id={$id}'>hier</a> tun.<br />
             <br />
-            Nachdem du dein neues Passwort eingedgeben hast, <br />
+            Nachdem du dein neues Passwort eingegeben hast, <br />
             kannst du dich wie gewohnt anmelden.<br />
             <br />
             <br />
