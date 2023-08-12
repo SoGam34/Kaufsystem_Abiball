@@ -49,7 +49,6 @@ class UserHandling
                             <font color='black'>
                             <font size='5'><B>Verifizierung deiner Email-Adresse</B></font><br />
                 <br />
-			<img src='https://play-lh.googleusercontent.com/74y1Y3ER3TqHwCeT93MgkFXeaTiS7xVMWCZyd9o9CEQb8j7tzHKMXMpiNh4c4KYRV5E' height='100' width='100' align='center'><br /> 
                 <br />        
                             Sehr geehrte Abiturientinnen und Abiturienten,<br />
                 <br /> 
