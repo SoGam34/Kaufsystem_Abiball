@@ -114,12 +114,14 @@
                 require_once "src/User/DatabaseUsers.php";
                 require_once "src/Security.php";
                 require_once "src/config.php";
+                require_once "src/Tickets/DatabaseTickets.php";
+                require_once "src/Tickets/Tickets.php";
 
                 require_once "src/ErrorHandler.php";
 
-                    //Setzen der Selbsterstellten Fehlerhandhabungstools
-        set_error_handler("ErrorHandler::handleError");
-        set_exception_handler("ErrorHandler::handleException");
+                //Setzen der Selbsterstellten Fehlerhandhabungstools
+                set_error_handler("ErrorHandler::handleError");
+                set_exception_handler("ErrorHandler::handleException");
 
                 $Security = new Security();
                 
@@ -145,7 +147,55 @@
                     exit;
                 }
 
-                echo "erfolgreich";
+                $dbTickets = new DatabaseTickets($Security, $dbwrite, $dbreade);
+
+                $SitzHandling = new Tickets($dbTickets, $Security);
+
+                $SitzHandling->AlleTickets();
+            break;
+
+            case  "KaufTicket":
+                require_once "src/User/DatabaseUsers.php";
+                require_once "src/Security.php";
+                require_once "src/config.php";
+                require_once "src/Tickets/DatabaseTickets.php";
+                require_once "src/Tickets/Tickets.php";
+
+                require_once "src/ErrorHandler.php";
+
+                //Setzen der Selbsterstellten Fehlerhandhabungstools
+                set_error_handler("ErrorHandler::handleError");
+                set_exception_handler("ErrorHandler::handleException");
+
+                $Security = new Security();
+                
+                $dsnW = "mysql:host=" . SQL_SERVER_NAME_W . ";dbname=" . SQL_DB_NAME_W . ";charset=utf8";
+                $dbwrite = new PDO($dsnW, SQL_DB_USER_W, SQL_DB_PSW_W, [
+                    PDO::ATTR_EMULATE_PREPARES => false,
+                    PDO::ATTR_STRINGIFY_FETCHES => false
+                ]);
+                
+                $dsnR = "mysql:host=" . SQL_SERVER_NAME_R . ";dbname=" . SQL_DB_NAME_R . ";charset=utf8";
+                $dbreade = new PDO($dsnR, SQL_DB_USER_R, SQL_DB_PSW_R, [
+                    PDO::ATTR_EMULATE_PREPARES => false,
+                    PDO::ATTR_STRINGIFY_FETCHES => false
+                ]);
+                
+                $dbUsers = new DatabaseUsers($Security, $dbwrite, $dbreade);
+                
+                $teilnehmer=$dbUsers->verifysession($_COOKIE["UId"]);
+                
+                if($teilnehmer==false)
+                {
+                    echo json_encode(["Status" => "ERROR", "Message" => "Sie sind nicht angemeldet, daher wird diese anfrage nicht bearbeitet."]);
+                    exit;
+                }
+
+                $dbTickets = new DatabaseTickets($Security, $dbwrite, $dbreade);
+
+                $SitzHandling = new Tickets($dbTickets, $Security);
+
+                $SitzHandling->Ticketgekauft();
             break;
         }
     }
@@ -155,8 +205,6 @@
         require_once "src/ErrorHandler.php";
         require_once "src/User/DatabaseUsers.php";
         require_once "src/User/UserHandling.php";
-        require_once "src/Tickets/DatabaseTickets.php";
-        require_once "src/Tickets/Tickets.php";
         require_once "src/Security.php";
         require_once "src/config.php";
 
@@ -179,10 +227,6 @@
         $dbUsers = new DatabaseUsers($Security, $dbwrite, $dbreade);
         
         $UserHandling = new UserHandling($dbUsers, $Security);
-
-        $dbTickets = new DatabaseTickets($Security, $dbwrite, $dbreade);
-
-        $SitzHandling = new Tickets($dbTickets, $Security);
 
         /*-------------------Bearabeiten der Anfrage-------------*/
 
