@@ -9,9 +9,9 @@ async function Email_Bestaetigen() {
         },
         body: JSON.stringify({ "id": id })
     }).then((response) => response.json())
-        .then((data) => {
-            console.log(data);
-        });
+    .then((data) => {
+      return data;
+    });
 
     if(response.Status=="ERROR"){            
         document.getElementById('textfeld').style.visibility = "visible";
