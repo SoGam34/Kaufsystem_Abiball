@@ -139,13 +139,13 @@ class UserHandling
 
             else
             {
-                echo json_encode(["Status"=> "ERROR", "Message"=>"Schwerwiegender interner System fehler, bitte kontaktieren Sie den Support mit dem Fehlercode 005."]);
+                echo (["Status"=> "ERROR", "Message"=>"Schwerwiegender interner System fehler, bitte kontaktieren Sie den Support mit dem Fehlercode 005."]);
             }
         }
 
         else 
         {
-           echo json_encode(["Status" => "ERROR", "Message"=>"Ungultige Eingabe, bitte kontaktieren Sie den Supprt"]);
+           echo (["Status" => "ERROR", "Message"=>"Ungultige Eingabe, bitte kontaktieren Sie den Supprt"]);
         }
     }
 
@@ -179,7 +179,7 @@ class UserHandling
                           <th>email</th>
                           <th>Bestätigen</th>
                       </tr>";
-                    foreach ($data as &$value) 
+                    foreach ($data as $value) 
                     {
                         $tabelle .=
                         "<tr>
@@ -269,7 +269,7 @@ class UserHandling
             <br />
             <br />
             Wenn du dein Passwort zurücksetzen möchtest, <br />
-            kannst du dies <a href='https://abi24bws.de/passwortzuruck.html?id={$id}'>hier</a> tun.<br />
+            kannst du dies <a href='https://abi24bws.de/passwortzuruck.html'>hier</a> tun.<br />
             <br />
             Nachdem du dein neues Passwort eingegeben hast, <br />
             kannst du dich wie gewohnt anmelden.<br />

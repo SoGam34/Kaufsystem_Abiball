@@ -9,9 +9,9 @@ async function Email_Bestaetigen() {
         },
         body: JSON.stringify({ "id": id })
     }).then((response) => response.json())
-    .then((data) => {
-      return data;
-    });
+        .then((data) => {
+            return data;
+        });
 
     if(response.Status=="ERROR"){            
         document.getElementById('textfeld').style.visibility = "visible";
@@ -33,7 +33,8 @@ async function Identitaet_bestaetigt(registrierungs_id) {
             "Content-Type": "application/json",
         },
         body: JSON.stringify({ "registrierungs_id": registrierungs_id })
+    }).then((response) => response.json())
+    .then((data) => {
+        return data;
     });
-
-    window.location.reload();
 }
