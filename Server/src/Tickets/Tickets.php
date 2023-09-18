@@ -6,9 +6,7 @@ class Tickets
     }
 
     public function AlleTickets() {
-        $data = $database->getAlleStizplaze();
-
-        echo $data; 
+        $data = $this->database->getAlleSitzplatze();
 
         if(empty($data))
         {
@@ -18,19 +16,34 @@ class Tickets
         
         settype($Message, "string");
 
-        foreach($data as &$value)
+        foreach ($data as $k => $v) {
+            $Message = $Message . $Message . '"' . $k . '"' . "=>" . $v . ",";
+        }
+
+        echo $Message;
+
+
+        echo "\n\n\n";
+
+        foreach ($data as $k => $v) {
+            echo "\$data[$k] => $v.\n";
+        }
+
+        echo "\n\n\n";
+
+        echo implode(" ", $data);
+       /* for( $i = 0; $i<25; $i++)
         {
             if($data["PersonID"]==0)
             {
-                $Message+= '"' . $data["sitzplatz_id"] . '"' . "=>" . "frei" . ",";
+                $Message = $Message . '"' . $data["sitzplatz_id"] . '"' . "=>" . "frei" . ",";
             }
             else
             {
-                $Message+= '"' . $data["sitzplatz_id"] . '"' . "=>" . "belegt" . ",";
+                $Message = $Message . '"' . $data["sitzplatz_id"] . '"' . "=>" . "belegt" . ",";
             }
-        }
+        }*/
 
-        echo json_encode(["Status" => "OK", $Message]);
+        //echo json_encode(["Status" => "OK", $Message]);
     }
 }
-?>

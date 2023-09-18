@@ -2,8 +2,20 @@
 
 class DatabaseUsers
 {
-    public function __construct(private Security $sicher, private PDO &$dbwrite, private PDO &$dbreade)
+    
+    
+    
+    
+    
+    private Security $sicher;
+     private PDO $dbwrite;
+      private PDO $dbreade;
+
+    public function __construct(Security $msicher, PDO $mdbwrite, PDO $mdbreade)
     { 
+        $this->sicher =$msicher;
+        $this->dbwrite=$mdbreade;
+        $this->dbreade=$mdbwrite;
     }
 
     public function cleardb()
@@ -93,8 +105,8 @@ class DatabaseUsers
     }
     public function createRegistrierung()
     {
-
-        /*$sql = /*"DROP TABLE registrierung;
+        try {
+        $stmt = $this->dbwrite->prepare( /*"DROP TABLE registrierung;
             CREATE TABLE registrierung(
             registrierungs_id int AUTO_INCREMENT PRIMARY KEY,
             email varchar (255) UNIQUE, 
@@ -109,7 +121,7 @@ class DatabaseUsers
             salt_id int PRIMARY KEY, 
             salt varchar(5) UNIQUE
             );
-        
+           */ "DROP TABLE teilnehmer;
             CREATE TABLE teilnehmer(
             teilnehmer_id int AUTO_INCREMENT PRIMARY KEY,
             email varchar(255) UNIQUE, 
@@ -119,22 +131,23 @@ class DatabaseUsers
             salt_id int NOT NULL,
             FOREIGN KEY (salt_id) REFERENCES salt(salt_id));
 
+           DROP TABLE sitzplatze;
             CREATE TABLE sitzplatze(
-            sitzplatz_id int PRIMARY KEY,
+            sitzplatz_id int AUTO_INCREMENT PRIMARY KEY,
             PersonID int DEFAULT NULL,
-            FOREIGN KEY (PersonID) REFERENCES teilnehmer(teilnehmer_id));";
-            
+            FOREIGN KEY (PersonID) REFERENCES teilnehmer(teilnehmer_id));"
+            /*
 
             "CREATE TABLE loginsession(
              Temail varchar(255) PRIMARY KEY,
              session_id varchar(120) UNIQUE);";
             
-
-        try {
-            $this->conn->exec($sql);
+            */);
+        
+            $stmt->execute();
         } catch (PDOException $e) {
             echo "Connection failed in createRegistrierung(): \n" . $e->getMessage();
-        } */
+        } 
     }
 
     public function getFreischaltungsUebersicht()

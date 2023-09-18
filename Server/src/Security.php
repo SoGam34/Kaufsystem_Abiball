@@ -3,8 +3,8 @@
 class Security
 {
      public function encrypt(string $data) : string {
-        $crypt_key = Firstkey;
-        $hash_key = Secondkey;    
+        $crypt_key = base64_decode(Firstkey);
+        $hash_key = base64_decode(Secondkey);    
     
         $method = "aes-256-cbc";    
         $iv_length = openssl_cipher_iv_length($method);
@@ -13,14 +13,14 @@ class Security
         $data_encrypted = openssl_encrypt($data, $method, $crypt_key, OPENSSL_RAW_DATA , $iv);    
         $hash_encrypted = hash_hmac('sha3-512', $data_encrypted, $hash_key, TRUE);
 
-        $output = $iv.$hash_encrypted.$data_encrypted;    
+        $output = base64_encode($iv.$hash_encrypted.$data_encrypted);    
         return $output;        
      }
 
-     public function decrypt(string $data) {
-        $crypt_key = Firstkey;
-        $hash_key = Secondkey;            
-        $mix = $data;
+     public function decrypt(string $input) {
+        $crypt_key = base64_decode(Firstkey);
+        $hash_key = base64_decode(Secondkey);            
+        $mix = base64_decode($input);
 
         $method = "aes-256-cbc";    
         $iv_length = openssl_cipher_iv_length($method);

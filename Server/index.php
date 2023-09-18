@@ -1,8 +1,11 @@
 <?php
 
+echo "AUf dem Server";
+exit(1);
+
     $parts = explode("/", $_SERVER["REQUEST_URI"]);
 
-    if((isset($_COOKIE["UId"]) )|| ($parts[1]=="Login"))
+   if((isset($_COOKIE["UId"]) )|| ($parts[1]=="Login"))
     {
         switch($parts[1])
         {
@@ -202,12 +205,18 @@
 
     else 
     {
+
+        echo "in else";
         require_once "src/ErrorHandler.php";
+
+        set_error_handler("ErrorHandler::handleError");
+        set_exception_handler("ErrorHandler::handleException");
+        echo "vor once";
         require_once "src/User/DatabaseUsers.php";
         require_once "src/User/UserHandling.php";
         require_once "src/Security.php";
         require_once "src/config.php";
-
+       
         /*-------------------Erstellen aller Klassenobjeckte-------------*/
 
         $Security = new Security();
@@ -228,14 +237,26 @@
         
         $UserHandling = new UserHandling($dbUsers, $Security);
 
+       
+
         /*-------------------Bearabeiten der Anfrage-------------*/
 
-        header("Access-Control-Allow-Origin: https://abi24bws.de");
-        header("Access-Control-Allow-Methods: POST, GET");
+        //header("Access-Control-Allow-Origin: https://abi24bws.de");
+        //header("Access-Control-Allow-Methods: POST, GET");
 
         //Setzen der Selbsterstellten Fehlerhandhabungstools
-        set_error_handler("ErrorHandler::handleError");
-        set_exception_handler("ErrorHandler::handleException");
+        //set_error_handler("ErrorHandler::handleError");
+        //set_exception_handler("ErrorHandler::handleException");
+ 
+        echo "vor tickets";
+        require_once "src/Tickets/Tickets.php";
+        require_once "src/Tickets/DatabaseTickets.php";
+
+        echo "vor db";
+        $dbTickets = new DatabaseTickets($Security, $dbwrite, $dbreade);
+
+        echo "vor Ticket";
+        $SitzHandling = new Tickets($dbTickets, $Security);
 
         switch ($parts[1]) 
         {
@@ -268,6 +289,21 @@
                     echo "Error deleting entry: \n" . $e->getMessage();
                 }
                 echo "succes";
+                break;
+            case "SITHASH":
+
+                echo "vor Drop";
+                $dbUsers->createRegistrierung();
+
+                echo "vor teilnehmer";
+                $UserHandling->insertTeilnehmer("Test", "Dummy", "Test@test.com", "HaltsMaul123", 0)
+                
+                echo "vor insert";
+              $dbTickets->insertSitzplatze();
+              
+              echo "vor Ausgabe";
+              $SitzHandling->AlleTickets();
+
                 break;
             default:
             //Da keine bekannte aktion getetigt werden soll
