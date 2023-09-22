@@ -150,3 +150,33 @@ async function Passwortzurucksetzen()
     document.getElementById('infofeld').innerHTML = "Passw&oumlrter &uumlbereinstimmen nicht";
   }
 }
+
+async function cookieverarbeiter()
+{
+  console.log(document.cookie);
+  if (document.cookie.length>3) {
+    var hatcookie = true;
+  }
+  else {
+    var hatcookie = false;
+  }
+  console.log(hatcookie);
+  if (hatcookie == true){
+    document.getElementById('navbarLRAlternative').innerHTML = '<button type="button" class="registrierenButton" onclick="Ausloggen()">Logout</button>';
+  }
+}
+
+async function Ausloggen()
+{
+  const response = await fetch("https://abi24bws.de/Logout", {
+      method: "POST", // or 'PUT'
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "text/html,application/js"
+      },
+    }).then((response) => response.json())
+    .then((data) => {
+      return data;
+    });
+    window.location.reload();
+}
