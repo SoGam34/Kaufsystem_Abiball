@@ -160,9 +160,38 @@ async function cookieverarbeiter()
   else {
     var hatcookie = false;
   }
-  console.log(hatcookie);
+  console.log("Hat Cookie? " + hatcookie);
+  console.log(wo);
   if (hatcookie == true){
     document.getElementById('navbarLRAlternative').innerHTML = '<button type="button" class="registrierenButton" onclick="Ausloggen()">Logout</button>';
+    switch (wo) {
+      case "abstimmung":
+        document.getElementById('abstimmungNichtangemeldetNachricht').style.display = 'none';
+        document.getElementById('abstimmungAuswahl').style.visibility = "visible";
+        document.getElementById('abstimmungButton').style.visibility = "visible";
+        break;
+      case "homepage":
+      break;
+      default:
+        console.log("Wie?");
+      break;
+    }
+        
+  }
+  else {
+    switch (wo) {
+      case "abstimmung":
+        document.getElementById('abstimmungNichtangemeldetNachricht').style.visibility = 'visible';
+        document.getElementById('abstimmungAuswahl').style.display = "none";
+        document.getElementById('abstimmungButton').style.display = "none";  
+      break;
+      case "homepage":
+      
+      break;
+      default:
+        console.log("Wie?");
+      break;
+    }
   }
 }
 
@@ -178,5 +207,23 @@ async function Ausloggen()
     .then((data) => {
       return data;
     });
+    window.location.reload();
+}
+
+async function abiballAbstimmung()
+{
+  const abiballOrt = document.getElementById('ortAbstimmung').value;
+  console.log(abiballOrt);
+/*   const response = await fetch("https://abi24bws.de/Register", {
+      method: "POST", // or 'PUT'
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "text/html,application/js"
+      },
+      body: JSON.stringify({"vorname":vorname,"nachname":nachname,"klasse":klasse,"email":email,"passwort":passwort}),
+    }).then((response) => response.json())
+    .then((data) => {
+      return data;
+    }); */
     window.location.reload();
 }

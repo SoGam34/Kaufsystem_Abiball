@@ -25,7 +25,23 @@
    </div>
    <h1 style="text-align:center;margin-top: 55px;position: relative">Abstimmung &uumlber die Abiball-Lokation</h1>
    <section class="loginregisterstyle" id="abstimmungfeld">
-    Wow
+      <table class="mittig">
+			<tr id="abstimmungNichtangemeldetNachricht">
+				<td>Sie k&oumlnnen nur abstimmen wenn Sie regstriert und angemeldet sind.<br>
+               <a href="login.html">Hier zum Login</a></td>
+			</tr>
+         <tr id="abstimmungAuswahl">
+            <td><label for="ortAbstimmung">Wo soll unser Abiball stattfinden?</label></td>
+            <td><select name="ortAbstimmung" id="ortAbstimmung">
+               <option value="Stadthalle Hofheim">Stadthalle Hofheim</option>
+               <option value="Pyramide in Mainz">Pyramide in Mainz</option>
+            </select></td>
+         </tr>
+         <tr id="abstimmungButton">
+            <td><button type="button" class="registrierenButton" onclick="abiballAbstimmung()">Stimme abgeben</button></td>
+         </tr>
+		</table>
    </section>
+   <script> const wo = "abstimmung";</script>
 </body>
 </html>
