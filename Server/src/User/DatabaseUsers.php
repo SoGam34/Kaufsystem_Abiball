@@ -106,7 +106,11 @@ class DatabaseUsers
     public function createRegistrierung()
     {
         try {
-        $stmt = $this->dbwrite->prepare( /*"DROP TABLE registrierung;
+        $stmt = $this->dbwrite->prepare( 
+/*
+            "ALTER TABLE teilnehmer
+            ADD abstimung varchar(255);"
+            "DROP TABLE registrierung;
             CREATE TABLE registrierung(
             registrierungs_id int AUTO_INCREMENT PRIMARY KEY,
             email varchar (255) UNIQUE, 
@@ -121,7 +125,7 @@ class DatabaseUsers
             salt_id int PRIMARY KEY, 
             salt varchar(5) UNIQUE
             );
-           */ "DROP TABLE teilnehmer;
+            "DROP TABLE teilnehmer;
             CREATE TABLE teilnehmer(
             teilnehmer_id int AUTO_INCREMENT PRIMARY KEY,
             email varchar(255) UNIQUE, 
@@ -310,5 +314,39 @@ class DatabaseUsers
     } catch (PDOException $e) {
         echo "Error in deleting session: \n" . $e->getMessage();
     }
+    }
+
+    public function setAbstimmung($email)
+    {
+        try{
+            $data = array("location"=>"Hofheim");//(array)json_decode(file_get_contents("php://input"), true);
+
+            $stmt = $this->dbwrite->prepare(
+                "UPDATE FROM teilnehmer
+                 SET abstimung = :abstimung
+                 WHERE email = :email;");
+    
+            $stmt->bindValue(":email", $email, PDO::PARAM_STR);
+            $stmt->bindValue(":abstimung", $data["location"], PDO::PARAM_STR);
+    
+            $stmt->execute();
+
+            $stmt = $this->dbreade->prepare(
+                "SELECT abstimung
+                 FROM teilnehmer
+                 WHERE email = :email;");
+    
+            $stmt->bindValue(":email",  $email, PDO::PARAM_STR);
+           
+            $stmt->execute();
+    
+            $data = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+            echo implode( $data);
+        } catch (PDOException $e) {
+            echo "Error in deleting session: \n" . $e->getMessage();
+        }
+        }
+        
     }
 }

@@ -13,37 +13,24 @@ class Tickets
             echo json_encode(["Status" => "ERROR", "Message" => "Schwerwiegender interner Systemfehler, bitte kontaktieren Sie den Support mit dem Fehlercode 111."]);
             exit;
         } 
-        
+
+       
+
+        $a; 
+        $b;
         settype($Message, "string");
 
-        foreach ($data as $k => $v) {
-            $Message = $Message . $Message . '"' . $k . '"' . "=>" . $v . ",";
-        }
-
-        echo $Message;
-
-
-        echo "\n\n\n";
-
-        foreach ($data as $k => $v) {
-            echo "\$data[$k] => $v.\n";
-        }
-
-        echo "\n\n\n";
-
-        echo implode(" ", $data);
-       /* for( $i = 0; $i<25; $i++)
-        {
-            if($data["PersonID"]==0)
+        foreach ($data as list($a, $b)) {
+            if($b==1)
             {
-                $Message = $Message . '"' . $data["sitzplatz_id"] . '"' . "=>" . "frei" . ",";
+                $Message = $Message . '"' . $a . '":"frei",';
             }
             else
             {
-                $Message = $Message . '"' . $data["sitzplatz_id"] . '"' . "=>" . "belegt" . ",";
+                $Message = $Message . '"' . $a . '":"belegt",';
             }
-        }*/
+        }
 
-        //echo json_encode(["Status" => "OK", $Message]);
+        echo json_encode(["Status" => "OK","Message" => $Message]);
     }
 }

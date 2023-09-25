@@ -2,13 +2,8 @@
 
 class DatabaseTickets
 {
-    private Security $sicher, private PDO $dbwrite, private PDO $dbreade;
-
-    public function __construct(Security $msicher, PDO $mdbwrite, PDO $mdbreade)
+    public function __construct(private Security $sicher, private PDO $dbwrite, private PDO $dbreade)
     { 
-        $this->sicher =$msicher;
-        $this->dbwrite=$mdbreade;
-        $this->dbreade=$mdbwrite;
     }
 
     public function getAlleSitzplatze() : array {
@@ -18,7 +13,7 @@ class DatabaseTickets
 
         $stmt->execute();
 
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        $row = $stmt->fetchAll();
         
         return $row;
     }

@@ -1,8 +1,5 @@
 <?php
 
-echo "AUf dem Server";
-exit(1);
-
     $parts = explode("/", $_SERVER["REQUEST_URI"]);
 
    if((isset($_COOKIE["UId"]) )|| ($parts[1]=="Login"))
@@ -200,18 +197,49 @@ exit(1);
 
                 $SitzHandling->Ticketgekauft();
             break;
+
+            case "Abstimmung":
+                require_once "src/User/DatabaseUsers.php";
+                require_once "src/Security.php";
+                require_once "src/config.php";
+                require_once "src/ErrorHandler.php";
+
+                //Setzen der Selbsterstellten Fehlerhandhabungstools
+                set_error_handler("ErrorHandler::handleError");
+                set_exception_handler("ErrorHandler::handleException");
+
+                $Security = new Security();
+                
+                $dsnW = "mysql:host=" . SQL_SERVER_NAME_W . ";dbname=" . SQL_DB_NAME_W . ";charset=utf8";
+                $dbwrite = new PDO($dsnW, SQL_DB_USER_W, SQL_DB_PSW_W, [
+                    PDO::ATTR_EMULATE_PREPARES => false,
+                    PDO::ATTR_STRINGIFY_FETCHES => false
+                ]);
+                
+                $dsnR = "mysql:host=" . SQL_SERVER_NAME_R . ";dbname=" . SQL_DB_NAME_R . ";charset=utf8";
+                $dbreade = new PDO($dsnR, SQL_DB_USER_R, SQL_DB_PSW_R, [
+                    PDO::ATTR_EMULATE_PREPARES => false,
+                    PDO::ATTR_STRINGIFY_FETCHES => false
+                ]);
+                
+                $dbUsers = new DatabaseUsers($Security, $dbwrite, $dbreade);
+                
+                $teilnehmer=$dbUsers->verifysession($_COOKIE["UId"]);
+
+                if($teilnehmer==false)
+                {
+                    echo json_encode(["Status" => "ERROR", "Message" => "Sie sind nicht angemeldet, daher wird diese anfrage nicht bearbeitet."]);
+                    exit;
+                }
+
+                $dbUsers->setAbstimmung($teilnehmer);
+            break;
         }
     }
 
     else 
     {
-
-        echo "in else";
         require_once "src/ErrorHandler.php";
-
-        set_error_handler("ErrorHandler::handleError");
-        set_exception_handler("ErrorHandler::handleException");
-        echo "vor once";
         require_once "src/User/DatabaseUsers.php";
         require_once "src/User/UserHandling.php";
         require_once "src/Security.php";
@@ -241,21 +269,17 @@ exit(1);
 
         /*-------------------Bearabeiten der Anfrage-------------*/
 
-        //header("Access-Control-Allow-Origin: https://abi24bws.de");
-        //header("Access-Control-Allow-Methods: POST, GET");
+        header("Access-Control-Allow-Origin: https://abi24bws.de");
+        header("Access-Control-Allow-Methods: POST, GET");
 
         //Setzen der Selbsterstellten Fehlerhandhabungstools
-        //set_error_handler("ErrorHandler::handleError");
-        //set_exception_handler("ErrorHandler::handleException");
+        set_error_handler("ErrorHandler::handleError");
+        set_exception_handler("ErrorHandler::handleException");
  
-        echo "vor tickets";
         require_once "src/Tickets/Tickets.php";
         require_once "src/Tickets/DatabaseTickets.php";
 
-        echo "vor db";
         $dbTickets = new DatabaseTickets($Security, $dbwrite, $dbreade);
-
-        echo "vor Ticket";
         $SitzHandling = new Tickets($dbTickets, $Security);
 
         switch ($parts[1]) 
@@ -290,21 +314,9 @@ exit(1);
                 }
                 echo "succes";
                 break;
-            case "SITHASH":
 
-                echo "vor Drop";
-                $dbUsers->createRegistrierung();
-
-                echo "vor teilnehmer";
-                $UserHandling->insertTeilnehmer("Test", "Dummy", "Test@test.com", "HaltsMaul123", 0)
-                
-                echo "vor insert";
-              $dbTickets->insertSitzplatze();
-              
-              echo "vor Ausgabe";
-              $SitzHandling->AlleTickets();
-
-                break;
+                case "AB":
+                    $dbUsers->setAbstimmung("JohannesEMH@web.de");
             default:
             //Da keine bekannte aktion getetigt werden soll
                 http_response_code(404);
