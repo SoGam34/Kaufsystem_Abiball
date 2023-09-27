@@ -31,7 +31,7 @@ class Tickets
             }
         }
 
-        echo json_encode(["Status" => "OK","Message" => $Message]);
+        echo json_encode(["Status" => "OK", "Message" => $Message]);
     }
 
     public function Ticketgekauft() {

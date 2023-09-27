@@ -24,7 +24,7 @@ class UserHandling
                     $salt .= $abc[rand(0, strlen($abc)-1)];
                 }
                 //Anlegen eines neuen Eintrags und damit eines neuen accounts
-                $id=$this->database->insertRegister(/*$this->sicher->encrypt(*/$data["vorname"]/*)*/, /*$this->sicher->encrypt(*/$data["nachname"], /*$this->sicher->encrypt(*/$data["klasse"], $data["email"], password_hash("AcFgP" . $data["passwort"] . $salt, PASSWORD_DEFAULT), $salt);
+                $id=$this->database->insertRegister($this->sicher->encrypt($data["vorname"]), $this->sicher->encrypt($data["nachname"]), $this->sicher->encrypt($data["klasse"]), $data["email"], password_hash("AcFgP" . $data["passwort"] . $salt, PASSWORD_DEFAULT), $salt);
                 //echo "versende Email";
                 //Generieren und senden der Bestätigungs email
 
@@ -74,6 +74,7 @@ class UserHandling
                 $header);
                 //Bestätigen das alles erfolgreich war 
                 echo json_encode(["Status" => "OK"]);
+                exit;
             }
         }
     }
@@ -96,7 +97,7 @@ class UserHandling
                 $header .= "Content-type: text/html; charset=utf-8\r\n";
                 $header .= "From: noreply@abi24bws.de";
 
-                mail(/*$this->sicher->decrypt(*/$users["email"], "Du wurdest vom abi24bws.de Team freigeschaltet!",
+                mail($users["email"], "Du wurdest vom abi24bws.de Team freigeschaltet!",
                    "<html>
                     <html lang='en'>
                     <head>
@@ -135,6 +136,7 @@ class UserHandling
                 $header);
 
                 echo json_encode(["Status" => "OK"]);
+                exit;
             }
 
             else
@@ -185,11 +187,11 @@ class UserHandling
                     {
                         $tabelle .=
                         "<tr>
-                        <td>" . /*$this->sicher->decrypt(*/$data["vorname"] . "</td>
-                        <td>" . /*$this->sicher->decrypt(*/$data["nachname"] . "</td>
-                        <td>" . /*$this->sicher->decrypt(*/$data["klasse"] . "</td>
-                        <td>" . $data["email"] . "</td>
-                        <td>" . '<input type="button" value="Identitaet Bestaetigen" onclick="Identitaet_bestaetigt(' . $data["registrierungs_id"] . ')"></td>
+                        <td>" . $this->sicher->decrypt($value["vorname"] ). "</td>
+                        <td>" . $this->sicher->decrypt($value["nachname"]) . "</td>
+                        <td>" . $this->sicher->decrypt($value["klasse"]) . "</td>
+                        <td>" . $value["email"] . "</td>
+                        <td>" . '<input type="button" value="Identitaet Bestaetigen" onclick="Identitaet_bestaetigt(' . $value["registrierungs_id"] . ')"></td>
                         </tr>';
                     }
 
@@ -287,6 +289,7 @@ class UserHandling
 
             //Bestätigen das alles erfolgreich war 
             echo json_encode(["Status" => "OK"]);
+            exit;
         }
     }
 
@@ -312,11 +315,13 @@ class UserHandling
                 
                     //Bestätigen das alles erfolgreich war 
                     echo json_encode(["Status" => "OK", "Erfolgreich"=>true]);
+                    exit;
                 }
 
                 else 
                 {
                    echo json_encode(["Status" => "OK", "Erfolgreich"=>false]);
+                   exit;
                 }
             }
         }

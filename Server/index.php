@@ -63,6 +63,7 @@
                         
                         $dbUsers->addsession($UId, $state);
                         echo json_encode(["Status" => "OK", "Erfolgreich"=>true]);
+                        exit;
                     }
 
                     else
@@ -101,6 +102,7 @@
                 if($state==true)
                 {
                     echo json_encode(["Status" => "OK"]);
+                    exit;
                 }
                 
                 else
@@ -304,11 +306,7 @@
             case "Freigeschaltet":
                 $UserHandling->UserFreischalten();
                 break;
-            case "create":
-                $dbUsers->createRegistrierung();
-                break;
             case "clear":
-                //$dbUsers->cleardb();
                 try {
                     $dbUsers->deleteRegistrierung("widawski.nico@gmail.com");
                 } catch (PDOException $e) {

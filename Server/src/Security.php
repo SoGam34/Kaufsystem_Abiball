@@ -144,7 +144,6 @@ class Security
          header("Access-Control-Allow-Origin: https://abi24bws.de");
          header("Access-Control-Allow-Methods: POST, GET");
          echo json_encode(["Status"=>"ERROR", "Message"=>"Das Passwort muss mindestens 10 Zeichen lang sein."]);
-
          exit;
       }
 

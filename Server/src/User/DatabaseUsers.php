@@ -71,62 +71,14 @@ class DatabaseUsers
             $stmt->execute();
             
             echo json_encode(["Status" => "OK"]);
+            exit;
         }
 
         else 
         {
-           echo json_encode([["Status" => "ERROR"], ["Massage"=>"Ungultige Eingabe, bitte kontaktieren Sie den Support"]]);
+            echo json_encode(["Status" => "ERROR", "Message" => "Ungultige Eingabe, bitte kontaktieren Sie den Support"]);
+           exit;
         }
-    }
-    public function createRegistrierung()
-    {
-        try {
-        $stmt = $this->dbwrite->prepare( 
-
-           ""/* "ALTER TABLE teilnehmer
-            ADD abstimung varchar(255);"
-            "DROP TABLE registrierung;
-            CREATE TABLE registrierung(
-            registrierungs_id int AUTO_INCREMENT PRIMARY KEY,
-            email varchar (255) UNIQUE, 
-            passwort varchar(255) NOT NULL,
-            vorname varchar (255) NOT NULL, 
-            nachname varchar (255) NOT NULL, 
-            klasse varchar (5) NOT NULL, 
-            bearbeitungsstatus boolean default false, 
-            datum timestamp default CURRENT_TIMESTAMP());
-
-            CREATE TABLE salt(
-            salt_id int PRIMARY KEY, 
-            salt varchar(5) UNIQUE
-            );
-            "DROP TABLE teilnehmer;
-            CREATE TABLE teilnehmer(
-            teilnehmer_id int AUTO_INCREMENT PRIMARY KEY,
-            email varchar(255) UNIQUE, 
-            passwort varchar(255) NOT NULL,
-            vorname varchar(255) NOT NULL, 
-            nachname varchar(255) NOT NULL,
-            salt_id int NOT NULL,
-            FOREIGN KEY (salt_id) REFERENCES salt(salt_id));
-
-           DROP TABLE sitzplatze;
-            CREATE TABLE sitzplatze(
-            sitzplatz_id int AUTO_INCREMENT PRIMARY KEY,
-            PersonID int DEFAULT NULL,
-            FOREIGN KEY (PersonID) REFERENCES teilnehmer(teilnehmer_id));"
-            /*
-
-            "CREATE TABLE loginsession(
-             Temail varchar(255) PRIMARY KEY,
-             session_id varchar(120) UNIQUE);";
-            
-            */);
-        
-            $stmt->execute();
-        } catch (PDOException $e) {
-            echo "Connection failed in createRegistrierung(): \n" . $e->getMessage();
-        } 
     }
 
     public function getFreischaltungsUebersicht()
@@ -140,7 +92,7 @@ class DatabaseUsers
         
         $stmt->execute();
 
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
         
         return $row;
     }
@@ -243,7 +195,8 @@ class DatabaseUsers
 
         $stmt->execute();
     } catch (PDOException $e) {
-        echo "Error in addsession: \n" . $e->getMessage();
+        echo json_encode(["Status" => "ERROR", "Message" =>  $e->getMessage()]);
+        exit;
     }
     }
 
@@ -266,7 +219,7 @@ class DatabaseUsers
             return $row;
         } 
         else if($stmt->rowCount() > 1){
-            echo json_encode([["Status" => "ERROR"].["Message"=>"011"]]);
+            echo json_encode(["Status" => "ERROR", "Message" => "011"]);
             exit;
         }
 
@@ -274,7 +227,8 @@ class DatabaseUsers
             return false;
         }
     } catch (PDOException $e) {
-        echo "Error in verifysession: \n" . $e->getMessage();
+        echo json_encode(["Status" => "ERROR", "Message" =>  $e->getMessage()]);
+        exit;
     }
     }
 
@@ -289,7 +243,8 @@ class DatabaseUsers
 
         $stmt->execute();
     } catch (PDOException $e) {
-        echo "Error in deleting session: \n" . $e->getMessage();
+        echo json_encode(["Status" => "ERROR", "Message" =>  $e->getMessage()]);
+        exit;
     }
     }
 
@@ -306,7 +261,8 @@ class DatabaseUsers
     
             $stmt->execute();
         } catch (PDOException $e) {
-            echo "Error in setAbstimmung: \n" . $e->getMessage();
+            echo json_encode(["Status" => "ERROR", "Message" =>  $e->getMessage()]);
+            exit;
         }
     }
 }

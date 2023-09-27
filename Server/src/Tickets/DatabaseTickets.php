@@ -34,7 +34,8 @@ class DatabaseTickets
             $stmt->execute();
         }
     } catch (PDOException $e) {
-        echo "Error creating entry: \n" . $e->getMessage();
+        echo json_encode(["Status" => "ERROR", "Message" =>  $e->getMessage()]);
+        exit;
     }
     }
 }
