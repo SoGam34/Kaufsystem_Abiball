@@ -37,4 +37,6 @@ async function Identitaet_bestaetigt(registrierungs_id) {
     .then((data) => {
         return data;
     });
+
+    window.location.reload();
 }

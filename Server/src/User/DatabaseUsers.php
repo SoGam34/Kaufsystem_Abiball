@@ -2,33 +2,8 @@
 
 class DatabaseUsers
 {
-    
-    
-    
-    
-    
-    private Security $sicher;
-     private PDO $dbwrite;
-      private PDO $dbreade;
-
-    public function __construct(Security $msicher, PDO $mdbwrite, PDO $mdbreade)
+    public function __construct(private Security $sicher, private PDO $dbwrite, private PDO $dbreade)
     { 
-        $this->sicher =$msicher;
-        $this->dbwrite=$mdbreade;
-        $this->dbreade=$mdbwrite;
-    }
-
-    public function cleardb()
-    {
-        $stmt = $this->dbwrite->prepare(
-            "DELETE FROM registrierung;");
-        $stmt->execute();
-
-        $stmt = $this->dbwrite->prepare(
-            "DELETE FROM teilnehmer;");
-        $stmt->execute();
-
-        echo "erfolgreich";
     }
 
     public function insertRegister(string $vorname, string $nachname, string $klasse, string $email, string $passwort, string $salt) : int
@@ -107,8 +82,8 @@ class DatabaseUsers
     {
         try {
         $stmt = $this->dbwrite->prepare( 
-/*
-            "ALTER TABLE teilnehmer
+
+           ""/* "ALTER TABLE teilnehmer
             ADD abstimung varchar(255);"
             "DROP TABLE registrierung;
             CREATE TABLE registrierung(
@@ -188,11 +163,13 @@ class DatabaseUsers
             return $row;
         } 
         else if($stmt->rowCount() > 1){
-            echo json_encode([["Status" => "ERROR"].["Message"=>"001"]]);
+            echo json_encode(["Status" => "ERROR", "Message"=>"001"]);
+            exit;
         }
 
         else if($stmt->rowCount() == 0){
-            echo json_encode([["Status" => "ERROR"].["Message"=>"002"]]);
+            echo json_encode(["Status" => "ERROR", "Message"=>"002"]);
+            exit;
         }
 
         return false;
@@ -316,37 +293,20 @@ class DatabaseUsers
     }
     }
 
-    public function setAbstimmung($email)
+    public function setAbstimmung($email, $location)
     {
         try{
-            $data = array("location"=>"Hofheim");//(array)json_decode(file_get_contents("php://input"), true);
-
             $stmt = $this->dbwrite->prepare(
-                "UPDATE FROM teilnehmer
+                "UPDATE teilnehmer
                  SET abstimung = :abstimung
                  WHERE email = :email;");
     
             $stmt->bindValue(":email", $email, PDO::PARAM_STR);
-            $stmt->bindValue(":abstimung", $data["location"], PDO::PARAM_STR);
+            $stmt->bindValue(":abstimung", $location, PDO::PARAM_STR);
     
             $stmt->execute();
-
-            $stmt = $this->dbreade->prepare(
-                "SELECT abstimung
-                 FROM teilnehmer
-                 WHERE email = :email;");
-    
-            $stmt->bindValue(":email",  $email, PDO::PARAM_STR);
-           
-            $stmt->execute();
-    
-            $data = $stmt->fetch(PDO::FETCH_ASSOC);
-    
-            echo implode( $data);
         } catch (PDOException $e) {
-            echo "Error in deleting session: \n" . $e->getMessage();
+            echo "Error in setAbstimmung: \n" . $e->getMessage();
         }
-        }
-        
     }
 }

@@ -140,12 +140,14 @@ class UserHandling
             else
             {
                 echo (["Status"=> "ERROR", "Message"=>"Schwerwiegender interner System fehler, bitte kontaktieren Sie den Support mit dem Fehlercode 005."]);
+                exit;
             }
         }
 
         else 
         {
            echo (["Status" => "ERROR", "Message"=>"Ungultige Eingabe, bitte kontaktieren Sie den Supprt"]);
+           exit;
         }
     }
 
@@ -269,7 +271,7 @@ class UserHandling
             <br />
             <br />
             Wenn du dein Passwort zurücksetzen möchtest, <br />
-            kannst du dies <a href='https://abi24bws.de/passwortzuruck.html'>hier</a> tun.<br />
+            kannst du dies <a href='https://abi24bws.de/passwortzuruck.html?{$this->sicher->encrypt($data['email'])}'>hier</a> tun.<br />
             <br />
             Nachdem du dein neues Passwort eingegeben hast, <br />
             kannst du dich wie gewohnt anmelden.<br />
@@ -295,7 +297,7 @@ class UserHandling
         
         if($this->sicher->PSW_is_safe($data["passwort"]))
         {
-            $email = /*$this->sicher->decrypt(*/$data["email"];
+            $email = $this->sicher->decrypt($data["email"]);
 
             if($this->sicher->EMail_is_safe($email))
             {

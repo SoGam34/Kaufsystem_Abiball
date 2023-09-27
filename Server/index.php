@@ -38,7 +38,7 @@
                     $session=session_start([
                         'name'=>"UId",
                         'cookie_secure'=>true,
-                        'cookie_httponly'=>"true", 
+                        'cookie_httponly'=>"false", 
                         'cookie_samesite'=>"Strict"
                     ]);
                 
@@ -232,7 +232,9 @@
                     exit;
                 }
 
-                $dbUsers->setAbstimmung($teilnehmer);
+                $data = (array)json_decode(file_get_contents("php://input"), true);
+
+                $dbUsers->setAbstimmung($teilnehmer["Temail"], $data["location"]);
             break;
         }
     }
@@ -314,9 +316,6 @@
                 }
                 echo "succes";
                 break;
-
-                case "AB":
-                    $dbUsers->setAbstimmung("JohannesEMH@web.de");
             default:
             //Da keine bekannte aktion getetigt werden soll
                 http_response_code(404);
