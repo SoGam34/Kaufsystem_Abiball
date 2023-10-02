@@ -31,7 +31,12 @@
                <a href="login.html">Hier zum Login</a></td>
 			</tr>
          <tr id="inhaltTickets">
-            <td>WIP. In der Zukunft sind hier Bilder zur Abiballlocation zu finden.</td>
+            <td>
+               
+               <form action="/tickets.php">
+                  <label for="anzahltickets">Anzahl Tickets (1,2 oder 3):</label><input type="number" id="anzahltickets" name="anzahltickets" min="1" max="3"><input type="submit" onclick="ticketsAnzahlbestellen()">
+                </form>
+            </td>
          </tr>
 		</table>
    </section>
