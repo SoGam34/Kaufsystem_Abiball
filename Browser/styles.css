@@ -33,6 +33,15 @@ h1 {
 	padding-right:10px;
 }
 
+.logoutButton{
+	padding-bottom:6px;
+	padding-top:6px;
+	padding-left:10px;
+	padding-right:10px;
+  background-color:rgb(77, 187, 230);
+  border: none;
+}
+
 .loginregisterstyle {
   transform: translateX(-50%) translateY(-50%);
   top: 300px;

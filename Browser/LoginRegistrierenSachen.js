@@ -163,14 +163,20 @@ async function cookieverarbeiter()
   console.log("Hat Cookie? " + hatcookie);
   console.log(wo);
   if (hatcookie == true){
-    document.getElementById('navbarLRAlternative').innerHTML = '<button type="button" class="registrierenButton" onclick="Ausloggen()">Logout</button>';
+    document.getElementById('navbarLRAlternative').innerHTML = '<button type="button" class="logoutButton" onclick="Ausloggen()">Logout</button>';
     switch (wo) {
       case "abstimmung":
         document.getElementById('abstimmungNichtangemeldetNachricht').style.display = 'none';
         document.getElementById('abstimmungAuswahl').style.visibility = "visible";
         document.getElementById('abstimmungButton').style.visibility = "visible";
         break;
-      case "homepage":
+      case "bilder":
+        document.getElementById('bilderNichtangemeldetNachricht').style.display = 'none';
+        document.getElementById('inhaltBilder').style.visibility = "visible";
+      break;
+      case "tickets":
+        document.getElementById('ticketsNichtangemeldetNachricht').style.display = 'none';
+        document.getElementById('inhaltTickets').style.visibility = "visible";
       break;
       default:
         console.log("Wie?");
@@ -185,8 +191,13 @@ async function cookieverarbeiter()
         document.getElementById('abstimmungAuswahl').style.display = "none";
         document.getElementById('abstimmungButton').style.display = "none";  
       break;
-      case "homepage":
-      
+      case "bilder":
+        document.getElementById('bilderNichtangemeldetNachricht').style.visibility = 'visible';
+        document.getElementById('inhaltBilder').style.display = "none";
+      break;
+      case "tickets":
+        document.getElementById('ticketsNichtangemeldetNachricht').style.visibility = 'visible';
+        document.getElementById('inhaltTickets').style.display = "none";
       break;
       default:
         console.log("Wie?");
