@@ -60,6 +60,7 @@ h1 {
   width: 35%;
   line-height: 30px;
   background-color: rgb(69, 174, 216);
+  min-width: 300px;
 }
 
 .navbar {
