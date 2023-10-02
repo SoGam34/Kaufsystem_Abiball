@@ -40,6 +40,12 @@ h1 {
 	padding-right:10px;
   background-color:rgb(77, 187, 230);
   border: none;
+  font-size: 15px;
+}
+
+.logoutButton:hover{
+	background-color: rgb(70,150,200);
+  font-weight: 900;
 }
 
 .loginregisterstyle {
