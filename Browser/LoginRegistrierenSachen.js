@@ -238,27 +238,3 @@ async function abiballAbstimmung()
     }); */
     window.location.reload();
 }
-
-async function ticketsAnzahlbestellen()
-{
-  const anzahlticketsvar = document.getElementById('anzahltickets').value;
-  console.log(anzahlticketsvar);
-  const response = await fetch("https://abi24bws.de/RequestEmail", {
-    method: "POST", // or 'PUT'
-    headers: {
-      "Content-Type": "application/json",
-      "Accept": "text/html,application/js"
-    },
-    body: JSON.stringify({email:anzahlticketsvar}),
-  }).then((response) => response.json())
-  .then((data) => {
-    return data;
-  });
-  
-  if (response.Status=="OK"){
-    
-  }
-  else {
-
-  }
-}
