@@ -60,7 +60,7 @@
 
                                 "intent": "CAPTURE",
                                 "purchase_units": [{
-                                    "reference_id": "<?php echo $_COOKIE["UId"]; ?>",
+                                    "reference_id": <?php echo $_COOKIE["UId"]; ?>,
                                     "description": "Ticket",
                                     "amount": {
                                         "currency_code": "EUR",
