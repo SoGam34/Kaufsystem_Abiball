@@ -24,7 +24,7 @@ class UserHandling
                     $salt .= $abc[rand(0, strlen($abc)-1)];
                 }
                 //Anlegen eines neuen Eintrags und damit eines neuen accounts
-                $id=$this->database->insertRegister($this->sicher->encrypt($data["vorname"]), $this->sicher->encrypt($data["nachname"]), $this->sicher->encrypt($data["klasse"]), $data["email"], password_hash("AcFgP" . $data["passwort"] . $salt, PASSWORD_DEFAULT), $salt);
+                $id=$this->database->insertRegister($this->sicher->encrypt($data["vorname"]), $this->sicher->encrypt($data["nachname"]), $this->sicher->encrypt($data["klasse"]), $data["email"], password_hash($this->sicher->decrypt(Pfeffer) . $data["passwort"] . $salt, PASSWORD_DEFAULT), $salt);
                 //echo "versende Email";
                 //Generieren und senden der Bestätigungs email
 
@@ -53,7 +53,7 @@ class UserHandling
                             Sehr geehrte Abiturientinnen und Abiturienten,<br />
                 <br /> 
                 <br />        
-                            bitte bestätigt <a href='https://abi24bws.de/Bestaetigung.html?id={$id}'>hier</a> eure Email-Adresse.<br />
+                            bitte bestätigt <a href='https://abi24bws.de/Bestaetigung.html?id={$this->sicher->encrypt($id)}'>hier</a> eure Email-Adresse.<br />
                 <br />
                             Nachdem ihr eure Email bestätigt habt, bitten<br />
                             wir euch um ein wenig Geduld, bis ihr von unserem<br />
@@ -157,7 +157,7 @@ class UserHandling
     {        
         if(isset($_POST["Admin"]))
         {
-            if($_POST["Admin"]==AdminID && $_POST["AdminPSW"]==AdminPSW)
+            if($_POST["Admin"]==$this->sicher->decrypt(AdminID) && $_POST["AdminPSW"]==$this->sicher->decrypt(AdminPSW))
             {
                 $data=$this->database->getFreischaltungsUebersicht();
 
@@ -219,7 +219,7 @@ class UserHandling
         else
         {
             return
-            "<!DOCTYPE html>
+                "<!DOCTYPE html>
             <html lang='de'>
             <head>
                 <meta charset='UTF-8'>
@@ -228,17 +228,12 @@ class UserHandling
             </head>
             <body>
             <form action='/Freischalten' method = 'POST'>
-            "/*<tr hidden>
-		        		<th><input type="text" name="anfrageTyp" id="angefragt" value="Login" readonly></th>
-		        		<th></th>
-		        	</tr>*/
-                    ."
-                    <label for='fname'>First name:</label><br>
-                    <input type='text' id='fname' name='Admin'><br>
-                    <label for='lname'>Last name:</label><br>
-                    <input type='password' id='lname' name='AdminPSW'<br><br>
-                    <input type='submit' value='Submit'>
-                  </form> ";
+                <label for='fname'>First name:</label><br>
+                <input type='text' id='fname' name='Admin'><br>
+                <label for='lname'>Last name:</label><br>
+                <input type='password' id='lname' name='AdminPSW'<br><br>
+                <input type='submit' value='Submit'>
+            </form> ";
         }
     }
          
@@ -343,9 +338,9 @@ class UserHandling
                     $salt=$this->database->getSalt($user["salt_id"]);
                 
                     //Überprüfen des passwords 
-                    $passVerfy = password_verify("AcFgP" . $data["passwort"] . $salt["salt"],  $user["passwort"]);
+                    $passVerfy = password_verify($this->sicher->decrypt(Pfeffer) . $data["passwort"] . $salt["salt"],  $user["passwort"]);
 
-                    //Ausgeben des Überprüfungsergebnisses
+                    //Ausgeben des Überprüfungsergebnisses 
                     if (!$passVerfy)
                     {
                         header("Access-Control-Allow-Origin: https://abi24bws.de");

@@ -1,189 +1,209 @@
 <?php
 
-$parts = explode("/", $_SERVER["REQUEST_URI"]);
+    $parts = explode("/", $_SERVER["REQUEST_URI"]);
 
-if ((isset($_COOKIE["UId"])) || ($parts[1] == "Login")) {
-    switch ($parts[1]) {
-        case "Login":
-            require_once "src/User/DatabaseUsers.php";
-            require_once "src/User/UserHandling.php";
-            require_once "src/Security.php";
-            require_once "src/config.php";
+   if((isset($_COOKIE["UId"]) )|| ($parts[1]=="Login"))
+    {
+        switch($parts[1])
+        {
+            case "Login":
+                require_once "src/User/DatabaseUsers.php";
+                require_once "src/User/UserHandling.php";
+                require_once "src/Security.php";
+                require_once "src/config.php";
 
-            $Security = new Security();
-
-            $dsnW = "mysql:host=" . SQL_SERVER_NAME_W . ";dbname=" . SQL_DB_NAME_W . ";charset=utf8";
-            $dbwrite = new PDO($dsnW, SQL_DB_USER_W, SQL_DB_PSW_W, [
-                PDO::ATTR_EMULATE_PREPARES => false,
-                PDO::ATTR_STRINGIFY_FETCHES => false
-            ]);
-
-
-            $dsnR = "mysql:host=" . SQL_SERVER_NAME_R . ";dbname=" . SQL_DB_NAME_R . ";charset=utf8";
-            $dbreade = new PDO($dsnR, SQL_DB_USER_R, SQL_DB_PSW_R, [
-                PDO::ATTR_EMULATE_PREPARES => false,
-                PDO::ATTR_STRINGIFY_FETCHES => false
-            ]);
-
-            $dbUsers = new DatabaseUsers($Security, $dbwrite, $dbreade);
-
-            $UserHandling = new UserHandling($dbUsers, $Security);
-
-            $state = $UserHandling->checkLogin();
-
-            if ($state != false) {
-                $session = session_start([
-                    'name' => "UId",
-                    'cookie_secure' => true,
-                    'cookie_httponly' => "false",
-                    'cookie_samesite' => "Strict"
+                $Security = new Security();
+                
+                $dsnW = "mysql:host=" . $Security->decrypt(SQL_SERVER_NAME_W) . ";dbname=" . $Security->decrypt(SQL_DB_NAME_W) . ";charset=utf8";
+                $dbwrite = new PDO($dsnW, $Security->decrypt(SQL_DB_USER_W), $Security->decrypt(SQL_DB_PSW_W), [
+                    PDO::ATTR_EMULATE_PREPARES => false,
+                    PDO::ATTR_STRINGIFY_FETCHES => false
                 ]);
 
-                header("Access-Control-Allow-Origin: https://abi24bws.de");
-                header("Access-Control-Allow-Methods: POST, GET");
 
-                if ($session == true) {
-                    $UId = session_id();
+                $dsnR = "mysql:host=" . $Security->decrypt(SQL_SERVER_NAME_R) . ";dbname=" . $Security->decrypt(SQL_DB_NAME_R) . ";charset=utf8";
+                $dbreade = new PDO($dsnR, $Security->decrypt(SQL_DB_USER_R), $Security->decrypt(SQL_DB_PSW_R), [
+                    PDO::ATTR_EMULATE_PREPARES => false,
+                    PDO::ATTR_STRINGIFY_FETCHES => false
+                ]);
 
-                    if ($UId == false) {
-                        echo json_encode(["Status" => "ERROR", "Message" => "Schwerwiegender interner Systemfehler, bitte kontaktieren Sie den Support mit dem Fehlercode 007."]);
-                        exit;
-                    } else if ($UId == "") {
-                        echo json_encode(["Status" => "ERROR", "Message" => "Schwerwiegender interner Systemfehler, bitte kontaktieren Sie den Support mit dem Fehlercode 008."]);
+                $dbUsers = new DatabaseUsers($Security, $dbwrite, $dbreade);
+
+                $UserHandling = new UserHandling($dbUsers, $Security);
+
+                $state = $UserHandling->checkLogin();
+
+                if($state!=false)
+                {
+                    $session=session_start([
+                        'name'=>"UId",
+                        'cookie_secure'=>true,
+                        'cookie_httponly'=>"false", 
+                        'cookie_samesite'=>"Strict"
+                    ]);
+                
+                    header("Access-Control-Allow-Origin: https://abi24bws.de");
+                    header("Access-Control-Allow-Methods: POST, GET");
+                    
+                    if($session==true)
+                    {
+                        $UId = session_id();
+                    
+                        if($UId==false)
+                        {
+                            echo json_encode(["Status" => "ERROR", "Message" => "Schwerwiegender interner Systemfehler, bitte kontaktieren Sie den Support mit dem Fehlercode 007."]);
+                            exit;
+                        }
+                        
+                        else if($UId=="")
+                        {
+                            echo json_encode(["Status" => "ERROR", "Message" => "Schwerwiegender interner Systemfehler, bitte kontaktieren Sie den Support mit dem Fehlercode 008."]);
+                            exit;
+                        }
+                        
+                        $dbUsers->addsession($UId, $state);
+                        echo json_encode(["Status" => "OK", "Erfolgreich"=>true]);
                         exit;
                     }
 
-                    $dbUsers->addsession($UId, $state);
-                    echo json_encode(["Status" => "OK", "Erfolgreich" => true]);
-                    exit;
-                } else {
-                    echo json_encode(["Status" => "ERROR", "Message" => "Schwerwiegender interner Systemfehler, bitte kontaktieren Sie den Support mit dem Fehlercode 006."]);
+                    else
+                    {
+                        echo json_encode(["Status" => "ERROR", "Message" => "Schwerwiegender interner Systemfehler, bitte kontaktieren Sie den Support mit dem Fehlercode 006."]);
+                        exit;
+                    }
+                }
+            break;
+
+            case "Logout":
+                require_once "src/User/DatabaseUsers.php";
+                require_once "src/Security.php";
+                require_once "src/config.php";
+
+                $Security = new Security();
+
+                $dsnW = "mysql:host=" . $Security->decrypt(SQL_SERVER_NAME_W) . ";dbname=" . $Security->decrypt(SQL_DB_NAME_W) . ";charset=utf8";
+                $dbwrite = new PDO($dsnW, $Security->decrypt(SQL_DB_USER_W), $Security->decrypt(SQL_DB_PSW_W), [
+                    PDO::ATTR_EMULATE_PREPARES => false,
+                    PDO::ATTR_STRINGIFY_FETCHES => false
+                ]);
+
+
+                $dsnR = "mysql:host=" . $Security->decrypt(SQL_SERVER_NAME_R) . ";dbname=" . $Security->decrypt(SQL_DB_NAME_R) . ";charset=utf8";
+                $dbreade = new PDO($dsnR, $Security->decrypt(SQL_DB_USER_R), $Security->decrypt(SQL_DB_PSW_R), [
+                    PDO::ATTR_EMULATE_PREPARES => false,
+                    PDO::ATTR_STRINGIFY_FETCHES => false
+                ]);
+                
+                $dbUsers = new DatabaseUsers($Security, $dbwrite, $dbreade);
+                
+                $dbUsers->EndSession($_COOKIE["UId"]);
+
+                $state=setcookie("UId");
+                    
+                if($state==true)
+                {
+                    echo json_encode(["Status" => "OK"]);
                     exit;
                 }
-            }
+                
+                else
+                {
+                    echo json_encode(["Status" => "ERROR", "Message" => "Schwerwiegender interner Systemfehler, bitte kontaktieren Sie den Support mit dem Fehlercode 020."]);
+                    exit;
+                }
+            break;
+            
+            case  "Tickets":
+                require_once "src/User/DatabaseUsers.php";
+                require_once "src/Security.php";
+                require_once "src/config.php";
+                require_once "src/Tickets/DatabaseTickets.php";
+                require_once "src/Tickets/Tickets.php";
+
+                require_once "src/ErrorHandler.php";
+
+                //Setzen der Selbsterstellten Fehlerhandhabungstools
+                set_error_handler("ErrorHandler::handleError");
+                set_exception_handler("ErrorHandler::handleException");
+
+                $Security = new Security();
+                
+                $dsnW = "mysql:host=" . $Security->decrypt(SQL_SERVER_NAME_W) . ";dbname=" . $Security->decrypt(SQL_DB_NAME_W) . ";charset=utf8";
+                $dbwrite = new PDO($dsnW, $Security->decrypt(SQL_DB_USER_W), $Security->decrypt(SQL_DB_PSW_W), [
+                    PDO::ATTR_EMULATE_PREPARES => false,
+                    PDO::ATTR_STRINGIFY_FETCHES => false
+                ]);
+
+
+                $dsnR = "mysql:host=" . $Security->decrypt(SQL_SERVER_NAME_R) . ";dbname=" . $Security->decrypt(SQL_DB_NAME_R) . ";charset=utf8";
+                $dbreade = new PDO($dsnR, $Security->decrypt(SQL_DB_USER_R), $Security->decrypt(SQL_DB_PSW_R), [
+                    PDO::ATTR_EMULATE_PREPARES => false,
+                    PDO::ATTR_STRINGIFY_FETCHES => false
+                ]);
+                
+                $dbUsers = new DatabaseUsers($Security, $dbwrite, $dbreade);
+                
+                $teilnehmer=$dbUsers->verifysession($_COOKIE["UId"]);
+                
+                if($teilnehmer==false)
+                {
+                    echo json_encode(["Status" => "ERROR", "Message" => "Sie sind nicht angemeldet, daher wird diese anfrage nicht bearbeitet."]);
+                    exit;
+                }
+
+                $dbTickets = new DatabaseTickets($Security, $dbwrite, $dbreade);
+
+                $SitzHandling = new Tickets($dbTickets, $Security);
+
+                $SitzHandling->AlleTickets();
             break;
 
-        case "Logout":
-            require_once "src/User/DatabaseUsers.php";
-            require_once "src/Security.php";
-            require_once "src/config.php";
+            case  "KaufTicket":
+                require_once "src/User/DatabaseUsers.php";
+                require_once "src/Security.php";
+                require_once "src/config.php";
+                require_once "src/Tickets/DatabaseTickets.php";
+                require_once "src/Tickets/Tickets.php";
+                require_once "src/Tickets/PaypalCheckout.class.php";
+                require_once "src/ErrorHandler.php";
 
-            $Security = new Security();
+                //Setzen der Selbsterstellten Fehlerhandhabungstools
+                set_error_handler("ErrorHandler::handleError");
+                set_exception_handler("ErrorHandler::handleException");
 
-            $dsnW = "mysql:host=" . SQL_SERVER_NAME_W . ";dbname=" . SQL_DB_NAME_W . ";charset=utf8";
-            $dbwrite = new PDO($dsnW, SQL_DB_USER_W, SQL_DB_PSW_W, [
-                PDO::ATTR_EMULATE_PREPARES => false,
-                PDO::ATTR_STRINGIFY_FETCHES => false
-            ]);
+                $Security = new Security();
+                
+                $dsnW = "mysql:host=" . $Security->decrypt(SQL_SERVER_NAME_W) . ";dbname=" . $Security->decrypt(SQL_DB_NAME_W) . ";charset=utf8";
+                $dbwrite = new PDO($dsnW, $Security->decrypt(SQL_DB_USER_W), $Security->decrypt(SQL_DB_PSW_W), [
+                    PDO::ATTR_EMULATE_PREPARES => false,
+                    PDO::ATTR_STRINGIFY_FETCHES => false
+                ]);
 
-            $dsnR = "mysql:host=" . SQL_SERVER_NAME_R . ";dbname=" . SQL_DB_NAME_R . ";charset=utf8";
-            $dbreade = new PDO($dsnR, SQL_DB_USER_R, SQL_DB_PSW_R, [
-                PDO::ATTR_EMULATE_PREPARES => false,
-                PDO::ATTR_STRINGIFY_FETCHES => false
-            ]);
 
-            $dbUsers = new DatabaseUsers($Security, $dbwrite, $dbreade);
-
-            $dbUsers->EndSession($_COOKIE["UId"]);
-
-            $state = setcookie("UId");
-
-            if ($state == true) {
-                echo json_encode(["Status" => "OK"]);
-                exit;
-            } else {
-                echo json_encode(["Status" => "ERROR", "Message" => "Schwerwiegender interner Systemfehler, bitte kontaktieren Sie den Support mit dem Fehlercode 020."]);
-                exit;
-            }
-            break;
-
-        case  "Tickets":
-            require_once "src/User/DatabaseUsers.php";
-            require_once "src/Security.php";
-            require_once "src/config.php";
-            require_once "src/Tickets/DatabaseTickets.php";
-            require_once "src/Tickets/Tickets.php";
-
-            require_once "src/ErrorHandler.php";
-
-            //Setzen der Selbsterstellten Fehlerhandhabungstools
-            set_error_handler("ErrorHandler::handleError");
-            set_exception_handler("ErrorHandler::handleException");
-
-            $Security = new Security();
-
-            $dsnW = "mysql:host=" . SQL_SERVER_NAME_W . ";dbname=" . SQL_DB_NAME_W . ";charset=utf8";
-            $dbwrite = new PDO($dsnW, SQL_DB_USER_W, SQL_DB_PSW_W, [
-                PDO::ATTR_EMULATE_PREPARES => false,
-                PDO::ATTR_STRINGIFY_FETCHES => false
-            ]);
-
-            $dsnR = "mysql:host=" . SQL_SERVER_NAME_R . ";dbname=" . SQL_DB_NAME_R . ";charset=utf8";
-            $dbreade = new PDO($dsnR, SQL_DB_USER_R, SQL_DB_PSW_R, [
-                PDO::ATTR_EMULATE_PREPARES => false,
-                PDO::ATTR_STRINGIFY_FETCHES => false
-            ]);
-
-            $dbUsers = new DatabaseUsers($Security, $dbwrite, $dbreade);
-
-            $teilnehmer = $dbUsers->verifysession($_COOKIE["UId"]);
-
-            if ($teilnehmer == false) {
-                echo json_encode(["Status" => "ERROR", "Message" => "Sie sind nicht angemeldet, daher wird diese anfrage nicht bearbeitet."]);
-                exit;
-            }
+                $dsnR = "mysql:host=" . $Security->decrypt(SQL_SERVER_NAME_R) . ";dbname=" . $Security->decrypt(SQL_DB_NAME_R) . ";charset=utf8";
+                $dbreade = new PDO($dsnR, $Security->decrypt(SQL_DB_USER_R), $Security->decrypt(SQL_DB_PSW_R), [
+                    PDO::ATTR_EMULATE_PREPARES => false,
+                    PDO::ATTR_STRINGIFY_FETCHES => false
+                ]);
+                
+                $dbUsers = new DatabaseUsers($Security, $dbwrite, $dbreade);
+                
+                $teilnehmer=$dbUsers->verifysession($_COOKIE["UId"]);
+                
+                if($teilnehmer==false)
+                {
+                    echo json_encode(["Status" => "ERROR", "Message" => "Sie sind nicht angemeldet, daher wird diese anfrage nicht bearbeitet."]);
+                    exit;
+                }
 
             $dbTickets = new DatabaseTickets($Security, $dbwrite, $dbreade);
 
             $SitzHandling = new Tickets($dbTickets, $Security);
 
-            $SitzHandling->AlleTickets();
-            break;
-
-        case  "KaufTicket":
-            require_once "src/User/DatabaseUsers.php";
-            require_once "src/Security.php";
-            require_once "src/config.php";
-            require_once "src/Tickets/DatabaseTickets.php";
-            require_once "src/Tickets/Tickets.php";
-            require_once "src/Tickets/PaypalCheckout.class.php";
-            require_once "src/ErrorHandler.php";
-
-            //Setzen der Selbsterstellten Fehlerhandhabungstools
-            set_error_handler("ErrorHandler::handleError");
-            set_exception_handler("ErrorHandler::handleException");
-
-            $Security = new Security();
-
-            $dsnW = "mysql:host=" . SQL_SERVER_NAME_W . ";dbname=" . SQL_DB_NAME_W . ";charset=utf8";
-            $dbwrite = new PDO($dsnW, SQL_DB_USER_W, SQL_DB_PSW_W, [
-                PDO::ATTR_EMULATE_PREPARES => false,
-                PDO::ATTR_STRINGIFY_FETCHES => false
-            ]);
-
-            $dsnR = "mysql:host=" . SQL_SERVER_NAME_R . ";dbname=" . SQL_DB_NAME_R . ";charset=utf8";
-            $dbreade = new PDO($dsnR, SQL_DB_USER_R, SQL_DB_PSW_R, [
-                PDO::ATTR_EMULATE_PREPARES => false,
-                PDO::ATTR_STRINGIFY_FETCHES => false
-            ]);
-
-            $dbUsers = new DatabaseUsers($Security, $dbwrite, $dbreade);
-
-            $teilnehmer = $dbUsers->verifysession($_COOKIE["UId"]);
-
-            if ($teilnehmer == false) {
-                echo json_encode(["Status" => "ERROR", "Message" => "Sie sind nicht angemeldet, daher wird diese anfrage nicht bearbeitet."]);
-                exit;
-            }
-
-            $dbTickets = new DatabaseTickets($Security, $dbwrite, $dbreade);
-
-            $SitzHandling = new Tickets($dbTickets, $Security);
-
-            $paypal = new PaypalCheckout;
+            $paypal = new PaypalCheckout($Security);
 
             $response = array('status' => 0, 'msg' => 'Transaction Failed!');
-
+            
             if (!empty($_POST['paypal_order_check']) && !empty($_POST['order_id'])) {
                 // Validate and get order details with PayPal API 
                 try {
@@ -208,119 +228,128 @@ if ((isset($_COOKIE["UId"])) || ($parts[1] == "Login")) {
             echo json_encode($response);
             break;
 
-        case "Abstimmung":
-            require_once "src/User/DatabaseUsers.php";
-            require_once "src/Security.php";
-            require_once "src/config.php";
-            require_once "src/ErrorHandler.php";
+            case "Abstimmung":
+                require_once "src/User/DatabaseUsers.php";
+                require_once "src/Security.php";
+                require_once "src/config.php";
+                require_once "src/ErrorHandler.php";
 
-            //Setzen der Selbsterstellten Fehlerhandhabungstools
-            set_error_handler("ErrorHandler::handleError");
-            set_exception_handler("ErrorHandler::handleException");
+                //Setzen der Selbsterstellten Fehlerhandhabungstools
+                set_error_handler("ErrorHandler::handleError");
+                set_exception_handler("ErrorHandler::handleException");
 
-            $Security = new Security();
+                $Security = new Security();
+                
+                $dsnW = "mysql:host=" . $Security->decrypt(SQL_SERVER_NAME_W) . ";dbname=" . $Security->decrypt(SQL_DB_NAME_W) . ";charset=utf8";
+                $dbwrite = new PDO($dsnW, $Security->decrypt(SQL_DB_USER_W), $Security->decrypt(SQL_DB_PSW_W), [
+                    PDO::ATTR_EMULATE_PREPARES => false,
+                    PDO::ATTR_STRINGIFY_FETCHES => false
+                ]);
 
-            $dsnW = "mysql:host=" . SQL_SERVER_NAME_W . ";dbname=" . SQL_DB_NAME_W . ";charset=utf8";
-            $dbwrite = new PDO($dsnW, SQL_DB_USER_W, SQL_DB_PSW_W, [
-                PDO::ATTR_EMULATE_PREPARES => false,
-                PDO::ATTR_STRINGIFY_FETCHES => false
-            ]);
 
-            $dsnR = "mysql:host=" . SQL_SERVER_NAME_R . ";dbname=" . SQL_DB_NAME_R . ";charset=utf8";
-            $dbreade = new PDO($dsnR, SQL_DB_USER_R, SQL_DB_PSW_R, [
-                PDO::ATTR_EMULATE_PREPARES => false,
-                PDO::ATTR_STRINGIFY_FETCHES => false
-            ]);
+                $dsnR = "mysql:host=" . $Security->decrypt(SQL_SERVER_NAME_R) . ";dbname=" . $Security->decrypt(SQL_DB_NAME_R) . ";charset=utf8";
+                $dbreade = new PDO($dsnR, $Security->decrypt(SQL_DB_USER_R), $Security->decrypt(SQL_DB_PSW_R), [
+                    PDO::ATTR_EMULATE_PREPARES => false,
+                    PDO::ATTR_STRINGIFY_FETCHES => false
+                ]);
+                
+                $dbUsers = new DatabaseUsers($Security, $dbwrite, $dbreade);
+                
+                $teilnehmer=$dbUsers->verifysession($_COOKIE["UId"]);
 
-            $dbUsers = new DatabaseUsers($Security, $dbwrite, $dbreade);
+                if($teilnehmer==false)
+                {
+                    echo json_encode(["Status" => "ERROR", "Message" => "Sie sind nicht angemeldet, daher wird diese anfrage nicht bearbeitet."]);
+                    exit;
+                }
 
-            $teilnehmer = $dbUsers->verifysession($_COOKIE["UId"]);
+                $data = (array)json_decode(file_get_contents("php://input"), true);
 
-            if ($teilnehmer == false) {
-                echo json_encode(["Status" => "ERROR", "Message" => "Sie sind nicht angemeldet, daher wird diese anfrage nicht bearbeitet."]);
-                exit;
-            }
-
-            $data = (array)json_decode(file_get_contents("php://input"), true);
-
-            $dbUsers->setAbstimmung($teilnehmer["Temail"], $data["location"]);
+                $dbUsers->setAbstimmung($teilnehmer["Temail"], $data["location"]);
             break;
+        }
     }
-} else {
-    require_once "src/ErrorHandler.php";
-    require_once "src/User/DatabaseUsers.php";
-    require_once "src/User/UserHandling.php";
-    require_once "src/Security.php";
-    require_once "src/config.php";
 
-    /*-------------------Erstellen aller Klassenobjeckte-------------*/
+    else 
+    {
+        require_once "src/ErrorHandler.php";
+        set_error_handler("ErrorHandler::handleError");
+        set_exception_handler("ErrorHandler::handleException");
+        require_once "src/User/DatabaseUsers.php";
+        require_once "src/User/UserHandling.php";
+        require_once "src/Security.php";
+        require_once "src/config.php";
+        require_once "src/Tickets/Tickets.php";
+        require_once "src/Tickets/DatabaseTickets.php";
 
-    $Security = new Security();
+        //Setzen der Selbsterstellten Fehlerhandhabungstools
+        
+        /*-------------------Erstellen aller Klassenobjeckte-------------*/
 
-    $dsnW = "mysql:host=" . SQL_SERVER_NAME_W . ";dbname=" . SQL_DB_NAME_W . ";charset=utf8";
-    $dbwrite = new PDO($dsnW, SQL_DB_USER_W, SQL_DB_PSW_W, [
-        PDO::ATTR_EMULATE_PREPARES => false,
-        PDO::ATTR_STRINGIFY_FETCHES => false
-    ]);
+        $Security = new Security();
 
-    $dsnR = "mysql:host=" . SQL_SERVER_NAME_R . ";dbname=" . SQL_DB_NAME_R . ";charset=utf8";
-    $dbreade = new PDO($dsnR, SQL_DB_USER_R, SQL_DB_PSW_R, [
-        PDO::ATTR_EMULATE_PREPARES => false,
-        PDO::ATTR_STRINGIFY_FETCHES => false
-    ]);
-
-    $dbUsers = new DatabaseUsers($Security, $dbwrite, $dbreade);
-
-    $UserHandling = new UserHandling($dbUsers, $Security);
+        $dsnW = "mysql:host=" . $Security->decrypt(SQL_SERVER_NAME_W) . ";dbname=" . $Security->decrypt(SQL_DB_NAME_W) . ";charset=utf8";
+                $dbwrite = new PDO($dsnW, $Security->decrypt(SQL_DB_USER_W), $Security->decrypt(SQL_DB_PSW_W), [
+                    PDO::ATTR_EMULATE_PREPARES => false,
+                    PDO::ATTR_STRINGIFY_FETCHES => false
+                ]);
 
 
+                $dsnR = "mysql:host=" . $Security->decrypt(SQL_SERVER_NAME_R) . ";dbname=" . $Security->decrypt(SQL_DB_NAME_R) . ";charset=utf8";
+                $dbreade = new PDO($dsnR, $Security->decrypt(SQL_DB_USER_R), $Security->decrypt(SQL_DB_PSW_R), [
+                    PDO::ATTR_EMULATE_PREPARES => false,
+                    PDO::ATTR_STRINGIFY_FETCHES => false
+                ]);
 
-    /*-------------------Bearabeiten der Anfrage-------------*/
+        $dbUsers = new DatabaseUsers($Security, $dbwrite, $dbreade);
+        
+        $UserHandling = new UserHandling($dbUsers, $Security);
 
-    header("Access-Control-Allow-Origin: https://abi24bws.de");
-    header("Access-Control-Allow-Methods: POST, GET");
+        $dbTickets = new DatabaseTickets($Security, $dbwrite, $dbreade);
 
-    //Setzen der Selbsterstellten Fehlerhandhabungstools
-    set_error_handler("ErrorHandler::handleError");
-    set_exception_handler("ErrorHandler::handleException");
+        $SitzHandling = new Tickets($dbTickets, $Security);
 
-    require_once "src/Tickets/Tickets.php";
-    require_once "src/Tickets/DatabaseTickets.php";
+        /*-------------------Bearabeiten der Anfrage-------------*/
 
-    $dbTickets = new DatabaseTickets($Security, $dbwrite, $dbreade);
-    $SitzHandling = new Tickets($dbTickets, $Security);
+       // header("Access-Control-Allow-Origin: https://abi24bws.de");
+       // header("Access-Control-Allow-Methods: POST, GET");
 
-    switch ($parts[1]) {
-        case "Register":
-            $UserHandling->createAcc();
-            break;
-        case "bestaetigung":
-            $dbUsers->bestaetigen();
-            break;
-        case "RequestEmail":
-            $UserHandling->resetingEmail();
-            break;
-        case "Reseting":
-            $UserHandling->resetPSW();
-            break;
-        case "Freischalten":
-            echo $UserHandling->FreischaltenTabelle();
-            break;
-        case "Freigeschaltet":
-            $UserHandling->UserFreischalten();
-            break;
-        case "clear":
-            try {
-                $dbUsers->deleteRegistrierung("widawski.nico@gmail.com");
-            } catch (PDOException $e) {
-                echo "Error deleting entry: \n" . $e->getMessage();
-            }
-            echo "succes";
-            break;
-        default:
+        switch ($parts[1]) 
+        {
+            case "Register":
+                $UserHandling->createAcc();
+                break;
+            case "bestaetigung":
+                $dbUsers->bestaetigen();
+                break;
+            case "RequestEmail":
+                $UserHandling->resetingEmail();
+                break;
+            case "Reseting":
+                $UserHandling->resetPSW();
+                break;
+            case "Freischalten":
+                echo $UserHandling->FreischaltenTabelle();
+                break;
+            case "Freigeschaltet":
+                $UserHandling->UserFreischalten();
+                break;
+            case "clear":
+                try {
+                    $dbUsers->deleteRegistrierung("widawski.nico@gmail.com");
+                } catch (PDOException $e) {
+                    echo "Error deleting entry: \n" . $e->getMessage();
+                }
+                echo "succes";
+                break;
+
+                case "EN":
+                    echo $Security->encrypt(Pfeffer);
+
+            default:
             //Da keine bekannte aktion getetigt werden soll
-            http_response_code(404);
-            exit;
-            break;
+                http_response_code(404);
+                exit;
+                break;
+        }
     }
-}

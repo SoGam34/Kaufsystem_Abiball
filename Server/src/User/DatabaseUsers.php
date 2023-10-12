@@ -57,8 +57,9 @@ class DatabaseUsers
     public function bestaetigen()
     {
         $data = (array)json_decode(file_get_contents("php://input"), true);
+        $id = $this->sicher->decrypt($data["id"]);
 
-        if($this->sicher->check_id($data["id"]))
+        if($this->sicher->check_id($id))
         {
             $stmt = $this->dbwrite->prepare(
                 "UPDATE registrierung
@@ -66,11 +67,11 @@ class DatabaseUsers
                  WHERE registrierungs_id = :id;");
 
             $stmt->bindValue(":zustand",  true, PDO::PARAM_BOOL);
-            $stmt->bindValue(":id",  $data["id"], PDO::PARAM_INT);
+            $stmt->bindValue(":id",  $id, PDO::PARAM_INT);
 
             $stmt->execute();
             
-            echo json_encode(["Status" => "OK"]);
+            echo json_encode(["Status" => "OK"]); 
             exit;
         }
 

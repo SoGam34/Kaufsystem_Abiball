@@ -10,11 +10,13 @@
  */  
  
  
-class PaypalCheckout{  
+class PaypalCheckout{ 
+    public function __construct(private Security $sicher) {
+    } 
     public $paypalAuthAPI   = 'https://api-m.sandbox.paypal.com/v1/oauth2/token';//:'https://api-m.paypal.com/v1/oauth2/token'; 
-    public $paypalAPI    = 'https://api-m.sandbox.paypal.com/v2/checkout/orders/';//:'https://api-m.paypal.com/v2/checkout'; 
-    public $paypalClientID  = Client_ID;  
-    private $paypalSecret   = Client_secret;  
+    public $paypalAPI    = 'https://api-m.sandbox.paypal.com/v2/checkout';//:'https://api-m.paypal.com/v2/checkout'; 
+    public $paypalClientID  = $this->sicher->decrypt(Client_ID);  
+    private $paypalSecret   = $this->sicher->decrypt(Client_secret);  
      
     public function validate($order_id){ 
         $ch = curl_init();  
@@ -38,7 +40,7 @@ class PaypalCheckout{
         }else{ 
             if(!empty($auth_response->access_token)){ 
                 $ch = curl_init(); 
-                curl_setopt($ch, CURLOPT_URL, $this->paypalAPI . $order_id); 
+                curl_setopt($ch, CURLOPT_URL, $this->paypalAPI.'/orders/'.$order_id); 
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
                 curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);  
                 curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', 'Authorization: Bearer '. $auth_response->access_token));  
