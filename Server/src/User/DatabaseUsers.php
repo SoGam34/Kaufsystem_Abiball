@@ -266,4 +266,35 @@ class DatabaseUsers
             exit;
         }
     }
+
+    public function exist_COOCKIE(string $email) {
+        try{
+            $stmt = $this->dbreade->prepare(
+                "SELECT Uid
+                 FROM loginsession
+                 WHERE email = :email;");
+    
+            $stmt->bindValue(":email", $email, PDO::PARAM_STR);
+    
+            $stmt->execute();
+    
+            if($stmt->rowCount() == 1) 
+            {
+                $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+                return $row;
+            } 
+            else if($stmt->rowCount() > 1){
+                echo json_encode(["Status" => "ERROR", "Message" => "011"]);
+                exit;
+            }
+    
+            else if($stmt->rowCount() == 0){
+                return false;
+            }
+        } catch (PDOException $e) {
+            echo json_encode(["Status" => "ERROR", "Message" =>  $e->getMessage()]);
+            exit;
+        }
+    }
 }

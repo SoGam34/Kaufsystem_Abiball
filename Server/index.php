@@ -33,8 +33,36 @@
 
                 $state = $UserHandling->checkLogin();
 
-                if($state!=false)
+                if($state==false)
                 {
+                    exit;
+                }
+
+                $cookie = $dbUser->exist_COOCKIE($state);
+
+                if($cookie!=false)
+                {
+                    /*$sid = setcookie(
+                        "UId",
+                        $coockie,
+                        [
+                            'expires' => 0, 
+                            'path' => '/', 
+                            'domain' => '.abi24bws.de', // leading dot for compatibility or use subdomain
+                            'secure' => true,     // or false
+                            'httponly' => false,    // or false
+                            'samesite' => 'Strict' // None || Lax  || Strict
+                        ]
+                    )*/
+
+                    $sid = session_id($cookie);
+
+                    if($sid==false)
+                    {
+                        echo json_encode(["Status" => "ERROR", "Message" => "Schwerwiegender interner Systemfehler, bitte kontaktieren Sie den Support mit dem Fehlercode 006."]);
+                        exit;
+                    }
+
                     $session=session_start([
                         'name'=>"UId",
                         'cookie_secure'=>true,
@@ -47,21 +75,6 @@
                     
                     if($session==true)
                     {
-                        $UId = session_id();
-                    
-                        if($UId==false)
-                        {
-                            echo json_encode(["Status" => "ERROR", "Message" => "Schwerwiegender interner Systemfehler, bitte kontaktieren Sie den Support mit dem Fehlercode 007."]);
-                            exit;
-                        }
-                        
-                        else if($UId=="")
-                        {
-                            echo json_encode(["Status" => "ERROR", "Message" => "Schwerwiegender interner Systemfehler, bitte kontaktieren Sie den Support mit dem Fehlercode 008."]);
-                            exit;
-                        }
-                        
-                        $dbUsers->addsession($UId, $state);
                         echo json_encode(["Status" => "OK", "Erfolgreich"=>true]);
                         exit;
                     }
@@ -71,7 +84,42 @@
                         echo json_encode(["Status" => "ERROR", "Message" => "Schwerwiegender interner Systemfehler, bitte kontaktieren Sie den Support mit dem Fehlercode 006."]);
                         exit;
                     }
+
+                    /* echo json_encode(["Status" => "OK", "Erfolgreich"=>true]);
+                        exit;*/
                 }
+
+                $session=session_start([
+                    'name'=>"UId",
+                    'cookie_secure'=>true,
+                    'cookie_httponly'=>"false", 
+                    'cookie_samesite'=>"Strict"
+                ]);
+            
+                header("Access-Control-Allow-Origin: https://abi24bws.de");
+                header("Access-Control-Allow-Methods: POST, GET");
+                
+                if($session==true)
+                {
+                    $UId = session_id();
+                
+                    if(($UId==false)||($UId==""))
+                    {
+                        echo json_encode(["Status" => "ERROR", "Message" => "Schwerwiegender interner Systemfehler, bitte kontaktieren Sie den Support mit dem Fehlercode 007."]);
+                        exit;
+                    }
+                    
+                    $dbUsers->addsession($UId, $state);
+                    echo json_encode(["Status" => "OK", "Erfolgreich"=>true]);
+                    exit;
+                }
+
+                else
+                {
+                    echo json_encode(["Status" => "ERROR", "Message" => "Schwerwiegender interner Systemfehler, bitte kontaktieren Sie den Support mit dem Fehlercode 006."]);
+                    exit;
+                }
+                
             break;
 
             case "Logout":
