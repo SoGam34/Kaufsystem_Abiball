@@ -9,6 +9,12 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" type="image/x-icon" href="bws.png">
     <script src='https://www.paypal.com/sdk/js?client-id=AWGRHS9BmRSS27GZY1mwIywoVoKeC3XSmhCyYtaL1VTHf0SUItDcIXdAj281tsrbr5Tlg0wiznVi9UgS&currency=EUR'></script>
+    <script>
+        function TicketAnzahl() {
+            document.getElementById("PAY").style.visibility = "visible";
+            document.getElementById("auswahl").style.visibility = "hidden";
+        }
+    </script>
 </head>
 
 <body>
@@ -35,14 +41,26 @@
                 <a href="login.html">Hier zum Login</a>
 
             </div>';
+        } else {
+            echo '
+
+            <div id="auswahl">
+                <h3 >50€ pro Ticket</h3>
+                <label for="ticket">Ticket anzahl auswaehlen:</label></td>
+				<select name="ticket" id="ticket">
+					<option value="1">1</option>
+					<option value="2">2</option>
+					<option value="3">3</option>
+					<option value="4">4</option>
+				</select>
+                <button onclick="TicketAnzahl()">Besteatigen</button>
+            </div>
         
-        } else { echo '
-        
-            <div class="panel">
+            
+            <div class="panel" id="PAY" style="visibility: hidden;">
 
                 <div class="panel-heading">
-                    <h3 class="panel-title">50€ pro Ticket</h3>
-                    <label for="ticket">Anzahl der Tickets: </label><input type="number" min="1" max="4" value="1" id="ticket">
+                    
 
                 </div>
                 <div class="panel-body">
@@ -50,7 +68,7 @@
                     <div id="paymentResponse" class="hidden"></div>
 
                     <!-- Set up a container element for the button -->
-                    <div id="paypal-button-container"></div>
+                    <div id="paypal-button-container" ></div>
                 </div>
                 <script>
                     paypal.Buttons({
@@ -60,15 +78,15 @@
 
                                 "intent": "CAPTURE",
                                 "purchase_units": [{
-                                    "reference_id": <?php echo $_COOKIE["UId"]; ?>,
+                                    "reference_id": ' . '"' . $_COOKIE["UId"] . '"' . ',
                                     "description": "Ticket",
                                     "amount": {
                                         "currency_code": "EUR",
-                                        "value": document.getElementById("ticket").value * 1.00,
+                                        "value": document.getElementById("ticket").value * 50.00,
                                         "breakdown": {
                                             "item_total": {
                                                 "currency_code": "EUR",
-                                                "value": document.getElementById("ticket").value * 1.00
+                                                "value": document.getElementById("ticket").value * 50.00
                                             }
                                         }
                                     }
@@ -81,8 +99,8 @@
                                             "locale": "de-DE",
                                             "landing_page": "LOGIN",
                                             "user_action": "PAY_NOW",
-                                            "return_url": "https://abi24bws.de/Tickets.html",
-                                            "cancel_url": "https://abi24bws.de/homepage.html"
+                                            "return_url": "https://abi24bws.de/KaufERFOLGREICH.html",
+                                            "cancel_url": "https://abi24bws.de/KaufFEHLER.html"
                                         }
                                     }
                                 }
@@ -91,8 +109,7 @@
                         // Finalize the transaction after payer approval
                         onApprove: (data, actions) => {
                             return actions.order.capture().then(function(orderData) {
-                                setProcessing(true);
-
+                                
                                 var postData = {
                                     paypal_order_check: 1,
                                     order_id: orderData.id,
@@ -119,10 +136,8 @@
 
                                             setTimeout(function() {
                                                 messageContainer.classList.add("hidden");
-                                                messageText.textContent = "";
                                             }, 5000);
                                         }
-                                        setProcessing(false);
                                     })
                                     .catch(error => console.log(error));
                             });
@@ -137,17 +152,9 @@
                         }
                         return form_data;
                     }
-
-                    // Show a loader on payment form processing
-                    const setProcessing = (isProcessing) => {
-                        if (isProcessing) {
-                            document.querySelector(".overlay").classList.remove("hidden");
-                        } else {
-                            document.querySelector(".overlay").classList.add("hidden");
-                        }
-                    }
                 </script>
-            </div>';}?>
+            </div>';
+        } ?>
 
     </section>
     <script>

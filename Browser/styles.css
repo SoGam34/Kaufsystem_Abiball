@@ -1,6 +1,6 @@
 body {
-  background-color: rgb(255, 255, 255);
-  background: linear-gradient(to right ,rgb(56, 248, 255) 0px,#1b98ff);
+  /*background-color: rgb(191, 225, 228);*/
+  background: radial-gradient(rgb(255, 255, 255),rgb(204, 249, 255));
   margin: 0%;
 }
 
@@ -90,9 +90,8 @@ h1 {
   flex-wrap: nowrap;
   justify-content: space-between;
   position: relative;
-  background-color: rgb(255, 255, 255);
-  background: linear-gradient(to right ,rgb(56, 248, 255) 0px,#1b98ff);
-  /*background-color: rgb(77, 187, 230);*/
+  background: linear-gradient(to top, rgba(255, 255, 255, 0),rgb(74, 255, 255));
+  /*background: linear-gradient(to right ,rgb(56, 248, 255) 0px,#1b98ff);*/
   top: 0;
   width: 100%;
   overflow: hidden;
@@ -124,6 +123,6 @@ h1 {
 }
 
 .navbar a:hover {
-  background-color: rgb(150,255,255);
+  background: linear-gradient(to top, rgba(255, 255, 255, 0),rgb(15, 97, 97));
   font-weight: 900;
 }
