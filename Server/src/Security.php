@@ -38,7 +38,7 @@ class Security
         return false;
       }
 
-      public function PSW_is_safe($data) : bool 
+      public function ($data) : bool 
       {
          settype($data, "string");
          
