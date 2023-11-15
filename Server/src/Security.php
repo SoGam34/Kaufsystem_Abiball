@@ -122,6 +122,19 @@ class Security
             case "X": $buchstabe = true;break;
             case "Y": $buchstabe = true;break;
             case "Z": $buchstabe = true;break;
+
+            case "ö": $buchstabe = true;break;
+            case "ü": $buchstabe = true;break;
+            case "ä": $buchstabe = true;break;
+
+            case "Ö": $buchstabe = true;break;
+            case "Ü": $buchstabe = true;break;
+            case "Ä": $buchstabe = true;break;
+
+            case "+": $buchstabe = true;break;
+            case "-": $buchstabe = true;break;
+            case "*": $buchstabe = true;break;
+            case "/": $buchstabe = true;break;
          }
       }
 
@@ -157,17 +170,12 @@ class Security
       header("Access-Control-Allow-Methods: POST, GET");
 
       echo json_encode(["Status" => "ERROR", "Message"=>"Die Email ist ungültig, bitte verwenden Sie gueltige Email-Adressen"]);
-      exit;
+      return false;
    }
 
-   public function check_id(&$data) : bool
+   public function check_id($data) : bool
    {
-      if(is_integer($data))
-      {
-         return true;
-      }
-
-      if(settype($data, "int") === true)
+      if(settype($data, "int") == true)
       {
          return true;
       }
