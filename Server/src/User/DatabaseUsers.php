@@ -3,10 +3,10 @@
 class DatabaseUsers
 {
     public function __construct(private Security $sicher, private PDO $dbwrite, private PDO $dbreade)
-    { 
+    {
     }
 
-    public function insertRegister(string $vorname, string $nachname, string $klasse, string $email, string $passwort, string $salt) : int
+    public function insertRegister(string $vorname, string $nachname, string $klasse, string $email, string $passwort, string $salt): int
     {
         $stmt = $this->dbwrite->prepare(
             "INSERT INTO registrierung (email, passwort, vorname, nachname, klasse)
@@ -27,7 +27,7 @@ class DatabaseUsers
             "INSERT INTO salt (salt_id, salt)
              VALUES (:salt_id, :salt);"
         );
-            
+
         $stmt->bindValue(":salt_id",  intval($id), PDO::PARAM_INT);
         $stmt->bindValue(":salt",  $salt, PDO::PARAM_STR);
 
@@ -36,7 +36,7 @@ class DatabaseUsers
         return intval($id);
     }
 
-    public function insertTeilnehmer(string $vorname, string $nachname, string $email, string $passwort, int $salt_id) : int
+    public function insertTeilnehmer(string $vorname, string $nachname, string $email, string $passwort, int $salt_id): int
     {
         $stmt = $this->dbwrite->prepare(
             "INSERT INTO teilnehmer (vorname, nachname, email, passwort, salt_id)
@@ -59,27 +59,25 @@ class DatabaseUsers
         $data = (array)json_decode(file_get_contents("php://input"), true);
         $id = $this->sicher->decrypt($data["id"]);
 
-        if($this->sicher->check_id($id))
-        {
-            $stmt = $this->dbwrite->prepare(
-                "UPDATE registrierung
-                 SET bearbeitungsstatus = :zustand
-                 WHERE registrierungs_id = :id;");
-
-            $stmt->bindValue(":zustand",  true, PDO::PARAM_BOOL);
-            $stmt->bindValue(":id",  $id, PDO::PARAM_INT);
-
-            $stmt->execute();
-            
-            echo json_encode(["Status" => "OK"]); 
-            exit;
-        }
-
-        else 
+        if (!$this->sicher->check_id($id))
         {
             echo json_encode(["Status" => "ERROR", "Message" => "Ungultige Eingabe, bitte kontaktieren Sie den Support"]);
-           exit;
+            exit;
         }
+        
+        $stmt = $this->dbwrite->prepare(
+            "UPDATE registrierung
+             SET bearbeitungsstatus = :zustand
+             WHERE registrierungs_id = :id;"
+        );
+
+        $stmt->bindValue(":zustand",  true, PDO::PARAM_BOOL);
+        $stmt->bindValue(":id",  $id, PDO::PARAM_INT);
+
+        $stmt->execute();
+
+        echo json_encode(["Status" => "OK"]);
+        exit;
     }
 
     public function getFreischaltungsUebersicht()
@@ -87,14 +85,15 @@ class DatabaseUsers
         $stmt = $this->dbreade->prepare(
             "SELECT vorname, nachname, klasse, email, registrierungs_id
              FROM registrierung
-             WHERE bearbeitungsstatus = :zustand;");
+             WHERE bearbeitungsstatus = :zustand;"
+        );
 
         $stmt->bindValue(":zustand",  true, PDO::PARAM_BOOL);
-        
+
         $stmt->execute();
 
         $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        
+
         return $row;
     }
 
@@ -103,25 +102,22 @@ class DatabaseUsers
         $stmt = $this->dbreade->prepare(
             "SELECT vorname, nachname, email, passwort
              FROM registrierung
-             WHERE registrierungs_id = :registrierungs_id;");
+             WHERE registrierungs_id = :registrierungs_id;"
+        );
 
         $stmt->bindValue(":registrierungs_id",  $data, PDO::PARAM_INT);
 
         $stmt->execute();
 
-        if($stmt->rowCount() == 1) 
-        {
+        if ($stmt->rowCount() == 1) {
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
             return $row;
-        } 
-        else if($stmt->rowCount() > 1){
-            echo json_encode(["Status" => "ERROR", "Message"=>"001"]);
+        } else if ($stmt->rowCount() > 1) {
+            echo json_encode(["Status" => "ERROR", "Message" => "001"]);
             exit;
-        }
-
-        else if($stmt->rowCount() == 0){
-            echo json_encode(["Status" => "ERROR", "Message"=>"002"]);
+        } else if ($stmt->rowCount() == 0) {
+            echo json_encode(["Status" => "ERROR", "Message" => "002"]);
             exit;
         }
 
@@ -133,10 +129,11 @@ class DatabaseUsers
         $stmt = $this->dbreade->prepare(
             "SELECT salt
              FROM salt
-             WHERE salt_id = :id;");
+             WHERE salt_id = :id;"
+        );
 
         $stmt->bindValue(":id",  $id, PDO::PARAM_INT);
-        
+
         $stmt->execute();
 
         $data = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -148,10 +145,11 @@ class DatabaseUsers
         $stmt = $this->dbreade->prepare(
             "SELECT passwort, salt_id
              FROM teilnehmer
-             WHERE email = :email;");
+             WHERE email = :email;"
+        );
 
         $stmt->bindValue(":email",  $email, PDO::PARAM_STR);
-       
+
         $stmt->execute();
 
         $data = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -164,7 +162,8 @@ class DatabaseUsers
         $stmt = $this->dbwrite->prepare(
             "UPDATE teilnehmer
              SET passwort = :passwort
-             WHERE email = :email;");
+             WHERE email = :email;"
+        );
 
         $stmt->bindValue(":email", $email, PDO::PARAM_STR);
         $stmt->bindValue(":passwort", $newPasswort, PDO::PARAM_STR);
@@ -176,90 +175,122 @@ class DatabaseUsers
     {
         $stmt = $this->dbwrite->prepare(
             "DELETE FROM registrierung
-             WHERE email = :email;");
+             WHERE email = :email;"
+        );
 
         $stmt->bindValue(":email", $email, PDO::PARAM_STR);
 
         $stmt->execute();
     }
+    public function verifysession2222(string $ID)
+    {
+        try {
+            $stmt = $this->dbreade->prepare(
+                "SELECT session_id
+             FROM loginsession
+             WHERE Temail = :Temail;"
+            );
+
+            $stmt->bindValue(":Temail", $ID, PDO::PARAM_STR);
+
+            $stmt->execute();
+
+            if ($stmt->rowCount() == 1) {
+                $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                return $row;
+            } else if ($stmt->rowCount() > 1) {
+                echo json_encode(["Status" => "ERROR", "Message" => "011"]);
+                exit;
+            } else if ($stmt->rowCount() == 0) {
+                return false;
+            }
+        } catch (PDOException $e) {
+            echo json_encode(["Status" => "ERROR", "Message" =>  $e->getMessage()]);
+            exit;
+        }
+    }
 
     public function addsession(string $ID, string $temail)
     {
-        try{
-        $stmt = $this->dbwrite->prepare(
-            "INSERT INTO loginsession (Temail, session_id)
-             VALUES (:Temail, :ID);");
-
-        $stmt->bindValue(":ID", $ID, PDO::PARAM_STR);
-
-        $stmt->bindValue(":Temail", $temail, PDO::PARAM_STR);
-
-        $stmt->execute();
-    } catch (PDOException $e) {
-        echo json_encode(["Status" => "ERROR", "Message" =>  $e->getMessage()]);
-        exit;
-    }
-    }
-
-    public function verifysession(string $ID) 
-    {
-        try{
-        $stmt = $this->dbreade->prepare(
-            "SELECT Temail
-             FROM loginsession
-             WHERE session_id = :session_id;");
-
-        $stmt->bindValue(":session_id", $ID, PDO::PARAM_STR);
-
-        $stmt->execute();
-
-        if($stmt->rowCount() == 1) 
+        if($this->verifysession2222($temail)==false)
         {
-            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        try {
+            $stmt = $this->dbwrite->prepare(
+                "INSERT INTO loginsession (Temail, session_id)
+             VALUES (:Temail, :ID);"
+            );
 
-            return $row;
-        } 
-        else if($stmt->rowCount() > 1){
-            echo json_encode(["Status" => "ERROR", "Message" => "011"]);
+            $stmt->bindValue(":ID", $ID, PDO::PARAM_STR);
+
+            $stmt->bindValue(":Temail", $temail, PDO::PARAM_STR);
+
+            $stmt->execute();
+        } catch (PDOException $e) {
+            echo json_encode(["Status" => "ERROR", "Message" =>  $e->getMessage()]);
             exit;
         }
-
-        else if($stmt->rowCount() == 0){
-            return false;
         }
-    } catch (PDOException $e) {
-        echo json_encode(["Status" => "ERROR", "Message" =>  $e->getMessage()]);
-        exit;
-    }
+
+        else
+        {
+            try {
+                $stmt = $this->dbwrite->prepare(
+                    "UPDATE loginsession
+                     SET session_id = :session_id
+                     WHERE Temail = :Temail;"
+                );
+    
+                $stmt->bindValue(":Temail", $temail, PDO::PARAM_STR);
+                $stmt->bindValue(":session_id", $ID, PDO::PARAM_STR);
+    
+                $stmt->execute();
+            } catch (PDOException $e) {
+                echo json_encode(["Status" => "ERROR", "Message" =>  $e->getMessage()]);
+                exit;
+            }
+        }
     }
 
-    public function EndSession(string $ID) 
+    public function verifysession(string $ID)
     {
-        try{
-        $stmt = $this->dbwrite->prepare(
-            "DELETE FROM loginsession
-             WHERE session_id = :session_id;");
+        try {
+            $stmt = $this->dbreade->prepare(
+                "SELECT Temail
+             FROM loginsession
+             WHERE session_id = :session_id;"
+            );
 
-        $stmt->bindValue(":session_id", $ID, PDO::PARAM_STR);
+            $stmt->bindValue(":session_id", $ID, PDO::PARAM_STR);
 
-        $stmt->execute();
-    } catch (PDOException $e) {
-        echo json_encode(["Status" => "ERROR", "Message" =>  $e->getMessage()]);
-        exit;
+            $stmt->execute();
+
+            if ($stmt->rowCount() == 1) {
+                $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                return $row;
+            } else if ($stmt->rowCount() > 1) {
+                echo json_encode(["Status" => "ERROR", "Message" => "011"]);
+                exit;
+            } else if ($stmt->rowCount() == 0) {
+                return false;
+            }
+        } catch (PDOException $e) {
+            echo json_encode(["Status" => "ERROR", "Message" =>  $e->getMessage()]);
+            exit;
+        }
     }
-    }
 
-    public function setAbstimmung($email, $location)
+    public function EndSession(string $ID)
     {
-        try{
+        try {
             $stmt = $this->dbwrite->prepare(
-                "UPDATE teilnehmer
-                 SET abstimung = :abstimung
-                 WHERE email = :email;");
-    
-            $stmt->bindValue(":email", $email, PDO::PARAM_STR);
-            $stmt->bindValue(":abstimung", $location, PDO::PARAM_STR);
-    
+                "DELETE FROM loginsession
+             WHERE session_id = :session_id;"
+            );
+
+            $stmt->bindValue(":session_id", $ID, PDO::PARAM_STR);
+
             $stmt->execute();
         } catch (PDOException $e) {
             echo json_encode(["Status" => "ERROR", "Message" =>  $e->getMessage()]);
@@ -267,31 +298,19 @@ class DatabaseUsers
         }
     }
 
-    public function exist_COOCKIE(string $email) {
-        try{
-            $stmt = $this->dbreade->prepare(
-                "SELECT Uid
-                 FROM loginsession
-                 WHERE email = :email;");
-    
+    public function setAbstimmung($email, $location)
+    {
+        try {
+            $stmt = $this->dbwrite->prepare(
+                "UPDATE teilnehmer
+                 SET abstimung = :abstimung
+                 WHERE email = :email;"
+            );
+
             $stmt->bindValue(":email", $email, PDO::PARAM_STR);
-    
+            $stmt->bindValue(":abstimung", $location, PDO::PARAM_STR);
+
             $stmt->execute();
-    
-            if($stmt->rowCount() == 1) 
-            {
-                $row = $stmt->fetch(PDO::FETCH_ASSOC);
-    
-                return $row;
-            } 
-            else if($stmt->rowCount() > 1){
-                echo json_encode(["Status" => "ERROR", "Message" => "011"]);
-                exit;
-            }
-    
-            else if($stmt->rowCount() == 0){
-                return false;
-            }
         } catch (PDOException $e) {
             echo json_encode(["Status" => "ERROR", "Message" =>  $e->getMessage()]);
             exit;
