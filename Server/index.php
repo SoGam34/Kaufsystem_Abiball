@@ -310,13 +310,9 @@ else
             echo "succes";
             break;
 
-        case "EN":
-            echo $Security->encrypt(Pfeffer);
-
         default:
             //Da keine bekannte aktion getetigt werden soll
             http_response_code(404);
             exit;
-            break;
     }
 }

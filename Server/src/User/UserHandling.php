@@ -26,16 +26,15 @@ class UserHandling
         
         $id=$this->database->insertRegister($this->sicher->encrypt($data["vorname"]), $this->sicher->encrypt($data["nachname"]), $this->sicher->encrypt($data["klasse"]), $data["email"], password_hash($this->sicher->decrypt(Pfeffer) . $data["passwort"] . $salt, PASSWORD_DEFAULT), $salt);
         
-        $name = $data["vorname"] . " "  . $data["nachname"];
 
         $header = "MIME-Version: 1.0\r\n";
         $header .= "Content-type: text/html; charset=utf-8\r\n";
         $header .= "From: noreply@abi24bws.de";
 
-        mail($data["email"], "Verifizierung deiner Email-Adresse bei Abi24bws.de",
+        mail($data["email"], "Verifizierung deiner Email-Adresse",
                 
         "<html>
-        <html lang='en'>
+        <html lang='de'>
         <head>
             <meta charset='UTF-8'>
             <title>Mail Adresse Bestätigen</title>
@@ -47,27 +46,25 @@ class UserHandling
             
             <body> 
                     <font color='black'>
-                    <font size='5'><B>Verifizierung deiner Email-Adresse</B></font><br />
-        <br /> 
-        <br />        
-                    Guten Tag {$name},<br />
-        <br /> 
-        <br />        
+                    Hallo " . $data["vorname"] . " "  . $data["nachname"] . ",<br />
+					<br />       
                     bitte bestätige <a href='https://abi24bws.de/Bestaetigung.html?id={$this->sicher->encrypt($id)}'>hier</a> deine Email-Adresse.<br />
-        <br />
+					<br />
                     Nachdem du deine Email bestätigt hast, bitten<br />
                     wir dich um ein wenig Geduld, bis du von unserem<br />
                     Admin-Team freigeschaltet wirst.<br />
-                    Sobald dies erfolgt ist, erhalst du Zugriff auf<br />
+					<br />
+                    Sobald wir dich freigeschaltet haben, erhälst du<br />
+					eine Bestätigungs-Mail und vollen Zugriff auf<br />
                     alle Dienste.<br />
-        <br />
+					<br />
                     Wenn du dich nicht bei Abi24bws registriert hast,<br />
                     kannst du diese Email ignorieren und wir<br />
                     entschuldigen uns für die Störung.<br />
-        <br />
+					<br />
                     Mit freundlichen Grüßen<br />
-        <br />
-                    Euer Abi24bws Team<br />
+					<br />
+                    Dein Abi24bws Team<br />
                     </font>
             </body>
             </html>",
@@ -84,7 +81,7 @@ class UserHandling
 
         if(!$this->sicher->check_id($data["registrierungs_id"]))
         {
-            echo (["Status" => "ERROR", "Message"=>"Ungultige Eingabe, bitte kontaktieren Sie den Supprt"]);
+            echo json_encode(["Status" => "ERROR", "Message"=>"Ungultige Eingabe, bitte kontaktieren Sie den Supprt"]);
             exit;
         }
        
@@ -92,7 +89,7 @@ class UserHandling
 
         if($users==false)
         {
-            echo (["Status"=> "ERROR", "Message"=>"Schwerwiegender interner System fehler, bitte kontaktieren Sie den Support mit dem Fehlercode 005."]);
+            echo json_encode(["Status"=> "ERROR", "Message"=>"Schwerwiegender interner System fehler, bitte kontaktieren Sie den Support mit dem Fehlercode 005."]);
             exit;
         }
 
@@ -103,9 +100,9 @@ class UserHandling
         $header .= "Content-type: text/html; charset=utf-8\r\n";
         $header .= "From: noreply@abi24bws.de";
 
-        mail($users["email"], "Du wurdest vom abi24bws.de Team freigeschaltet!",
+        mail($users["email"], "Du wurdest vom Abi24bws Team freigeschaltet!",
         "<html>
-         <html lang='en'>
+         <html lang='de'>
          <head>
 	     <meta charset='UTF-8'>
 	     <title>Freigeschaltet</title>
@@ -117,13 +114,12 @@ class UserHandling
                      
          <body>
             <font color='black'>
-            <font size='5'><B>Du wurdest vom Abi24bws Team freigeschaltet</B></font><br />
-            <br />  
-            <br />  
-            Es freut uns dir mitteilen zu können, dass du nun vollen <br />
+			Hallo " . $data["vorname"] . " "  . $data["nachname"] . ",<br />  
+			<br />  
+            es freut uns dir mitteilen zu können, dass du nun vollen <br />
             Zugriff auf unsere Abi-Webseite hast.<br />
             <br />  
-            Das bedeutet für dich, dass du bis zu vier Tickets an <br />
+            Das bedeutet für dich, dass du bis zu 5 Tickets an <br />
             einem frei wählbaren Ort kaufen kannst.<br /> 
             Zusätzlich kannst du Bilder und Videos vom Abiball <br />
             hoch- bzw. runterladen.<br />
@@ -131,7 +127,6 @@ class UserHandling
             Falls du noch Ideen, Verbesserungsvorschläge oder <br />
             Probleme hast, sag uns bitte bescheid, damit wir uns <br />
             schnellstmöglich darum kümmern können.<br />
-            <br />
             <br />
             Mit freundlichen Grüßen<br />
             <br />
@@ -147,68 +142,7 @@ class UserHandling
 
     public function FreischaltenTabelle()
     {        
-        if(isset($_POST["Admin"]))
-        {
-            if($_POST["Admin"]==$this->sicher->decrypt(AdminID) && $_POST["AdminPSW"]==$this->sicher->decrypt(AdminPSW))
-            {
-                $data=$this->database->getFreischaltungsUebersicht();
-
-                //echo $data;
-                if($data!="")
-                {
-                
-                    $tabelle = "
-                    <!DOCTYPE html>
-                    <html lang='de'>
-                    <head>
-                        <meta charset='UTF-8'>
-                        <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-                        <title>Document</title>
-                        <script type='text/javascript' src='Browser/Johannes.js'></script>
-                    </head>
-                    <body>
-                    <table>
-                      <tr>
-                          <th>Vorname</th>
-                          <th>Nachname</th>
-                          <th>Klasse</th>
-                          <th>email</th>
-                          <th>Bestätigen</th>
-                      </tr>";
-                    foreach ($data as $value) 
-                    {
-                        $tabelle .=
-                        "<tr>
-                        <td>" . $this->sicher->decrypt($value["vorname"] ). "</td>
-                        <td>" . $this->sicher->decrypt($value["nachname"]) . "</td>
-                        <td>" . $this->sicher->decrypt($value["klasse"]) . "</td>
-                        <td>" . $value["email"] . "</td>
-                        <td>" . '<input type="button" value="Identitaet Bestaetigen" onclick="Identitaet_bestaetigt(' . $value["registrierungs_id"] . ')"></td>
-                        </tr>';
-                    }
-
-                    $tabelle .= "</table> </body>
-                    </html>";
-                    unset($value); 
-                
-                   // echo json_encode(["Status"=>"OK", "Message"=>$tabelle]);exit;
-                    return $tabelle;
-                }
-                else
-                {
-                    return "0 rows affected";
-                }
-                   
-            }
-
-            else
-            {
-                echo "Wrong Input";
-            }
-
-        }
-
-        else
+        if(!isset($_POST["Admin"]))
         {
             return
                 "<!DOCTYPE html>
@@ -227,6 +161,55 @@ class UserHandling
                 <input type='submit' value='Submit'>
             </form> ";
         }
+
+        if($_POST["Admin"]==$this->sicher->decrypt(AdminID) && $_POST["AdminPSW"]==$this->sicher->decrypt(AdminPSW))
+        {
+            return "Wrong Input";
+        }
+            
+        $data=$this->database->getFreischaltungsUebersicht();
+
+        //echo $data;
+        if($data!="")
+        {
+            return "0 rows affected";
+        }
+        
+        $tabelle = "
+        <!DOCTYPE html>
+        <html lang='de'>
+        <head>
+            <meta charset='UTF-8'>
+            <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+            <title>Document</title>
+            <script type='text/javascript' src='Browser/Johannes.js'></script>
+        </head>
+        <body>
+        <table>
+          <tr>
+              <th>Vorname</th>
+              <th>Nachname</th>
+              <th>Klasse</th>
+              <th>email</th>
+              <th>Bestätigen</th>
+          </tr>";
+        foreach ($data as $value) 
+        {
+            $tabelle .=
+            "<tr>
+            <td>" . $this->sicher->decrypt($value["vorname"] ). "</td>
+            <td>" . $this->sicher->decrypt($value["nachname"]) . "</td>
+            <td>" . $this->sicher->decrypt($value["klasse"]) . "</td>
+            <td>" . $value["email"] . "</td>
+            <td>" . '<input type="button" value="Identitaet Bestaetigen" onclick="Identitaet_bestaetigt(' . $value["registrierungs_id"] . ')"></td>
+            </tr>';
+        }
+
+        $tabelle .= "</table></body></html>";
+            
+        unset($value); 
+            
+        return $tabelle;
     }
          
 
@@ -241,10 +224,10 @@ class UserHandling
         $header = "MIME-Version: 1.0\r\n";
         $header .= "Content-type: text/html; charset=utf-8\r\n";
         $header .= "From: noreply@abi24bws.de";
-        mail($data["email"], "Zurücksetzen ihres Passwords bei Abi24bws.de",
+        mail($data["email"], "Passwort zurücksetzen",
         
         "<!DOCTYPE html>
-        <html lang='en'>
+        <html lang='de'>
         <head>
             <meta charset='UTF-8'>
             <title>Passwort Zurücksetzen</title>
@@ -254,15 +237,13 @@ class UserHandling
             <body bgcolor='FFFFFF'></body>
             <body>
             <font color='black'>
-            <font size='5'><B>Passwort zurücksetzen</B></font><br />
-            <br />
-            <br />
-            Wenn du dein Passwort zurücksetzen möchtest, <br />
+			Hallo " . $data["vorname"] . " "  . $data["nachname"] . ",<br />
+			<br />
+            wenn du dein Passwort zurücksetzen möchtest, <br />
             kannst du dies <a href='https://abi24bws.de/passwortzuruck.html?{$this->sicher->encrypt($data['email'])}'>hier</a> tun.<br />
             <br />
             Nachdem du dein neues Passwort eingegeben hast, <br />
-            kannst du dich wie gewohnt anmelden.<br />
-            <br />
+            kannst du dich wieder wie gewohnt anmelden.<br />
             <br />
             Mit freundlichen Grüßen<br />
             <br />
@@ -343,7 +324,44 @@ class UserHandling
 
         else if($passVerfy)
         {
-            return $data["email"];
+            
+            $header = "MIME-Version: 1.0\r\n";
+            $header .= "Content-type: text/html; charset=utf-8\r\n";
+            $header .= "From: noreply@abi24bws.de";
+            mail($data["email"], "Ein neues Gerät hat sich angemeldet",
+            
+            "<html>
+            <html lang'en'>
+            <head>
+	        <meta charset='UTF-8'>
+	        <title>Neuer Gerätelogin</title>
+	        <meta name='description' content='Kurzbeschreibung'>
+	        <link href='design.css' rel='sytlesheet'>
+
+	        <body bgcolor='FFFFFF'></body>
+
+
+	        <body>
+	        		<font color='black'>
+	        		Hallo " . $data["vorname"] . " "  . $data["nachname"] . ",<br />
+	        		<br />
+	        		ein neues Gerät hat sich bei deinem<br />
+	        		Abi24bws Konto angemeldet.
+	        	<br />	
+	        		Wenn du dich nicht eingeloggt hast,<br />
+	        		kannst du dein Passwort <a href='https://abi24bws.de/passwortzuruckemail.html?id={$this->sicher->encrypt($id)}' >hier zurücksetzen</a>.<br />
+	        		Dabei werden alle aktuell angemeldeten<br />
+	        		Geräte automatisch ausgeloggt.<br />	
+	        	<br />
+	        		Mit freundlichen Grüßen<br />
+	        	<br />
+	        		Dein Abi24bwsTeam<br />
+	        		</font>
+	        	</body>
+	        	</html>",
+            $header);
+
+        return $data["email"];
         }
             
         header("Access-Control-Allow-Origin: https://abi24bws.de");
