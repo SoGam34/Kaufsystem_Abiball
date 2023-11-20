@@ -1,7 +1,13 @@
-body {
-  /*background-color: rgb(191, 225, 228);*/
+.bodydesign{
   background: radial-gradient(rgb(255, 255, 255),rgb(204, 249, 255));
   margin: 0%;
+  min-height: 1080px;
+}
+
+.bodydesigndark{
+  background: radial-gradient(rgb(78, 158, 223),rgb(69, 12, 160));
+  margin: 0%;
+  min-height: 1080px;
 }
 
 h1 {
@@ -66,7 +72,7 @@ h1 {
 }
 
 .logoutButton:hover{
-	background-color: rgb(0, 0, 0);
+	background-color: rgba(0, 0, 0, 0.226);
   font-weight: 900;
 }
 
@@ -90,8 +96,8 @@ h1 {
   flex-wrap: nowrap;
   justify-content: space-between;
   position: relative;
-  background: linear-gradient(to top, rgba(255, 255, 255, 0),rgb(74, 255, 255));
-  /*background: linear-gradient(to right ,rgb(56, 248, 255) 0px,#1b98ff);*/
+  background: linear-gradient(to top, rgba(255, 255, 255, 0),rgb(112, 226, 226));
+  /*linear-gradient(to top, rgba(255, 255, 255, 0),rgb(74, 255, 255));*/
   top: 0;
   width: 100%;
   overflow: hidden;

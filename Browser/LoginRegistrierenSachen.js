@@ -151,8 +151,34 @@ async function Passwortzurucksetzen()
   }
 }
 
+async function designwechsler()
+{
+  switch (localStorage.getItem("designmode")) {
+    case null:
+      localStorage.setItem("designmode", "light");
+    break;
+    case "light":
+      localStorage.setItem("designmode", "dark");
+    break;
+    case "dark":
+      localStorage.setItem("designmode", "light");
+    break;
+    default:
+      break;
+  }
+  window.location.reload();
+}
+
 async function cookieverarbeiter()
 {
+  switch (localStorage.getItem("designmode")) {
+    case "dark":
+      document.getElementById('torso').className = 'bodydesigndark';
+      break;
+    default:
+      document.getElementById('torso').className = 'bodydesign';
+      break;
+  }
   console.log(document.cookie);
   if (document.cookie.length>3) {
     var hatcookie = true;
