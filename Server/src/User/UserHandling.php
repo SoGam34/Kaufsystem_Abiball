@@ -10,9 +10,15 @@ class UserHandling
         //Ziehn aller benötigten daten 
         $data = (array)json_decode(file_get_contents("php://input"),true);
         
-        $this->sicher->PSW_is_safe($data["passwort"]);
+        if($this->sicher->PSW_is_safe($data["passwort"]) == false)
+        {
+            return false;
+        }
         
-        $this->sicher->EMail_is_safe($data["email"]);
+        if($this->sicher->EMail_is_safe($data["email"]) == false)
+        {
+            return false;
+        }
         
         //Erstellen aller benötigten Variablen für das generieren des Salts
         $salt = "";
@@ -48,7 +54,7 @@ class UserHandling
                     <font color='black'>
                     Hallo " . $data["vorname"] . " "  . $data["nachname"] . ",<br />
 					<br />       
-                    bitte bestätige <a href='https://abi24bws.de/Bestaetigung.html?id={$this->sicher->encrypt($id)}'>hier</a> deine Email-Adresse.<br />
+                    bitte bestätige <a href='https://abi24bws.de/Bestaetigung.html?id=" . $this->sicher->encrypt($id) . "'>hier</a> deine Email-Adresse.<br />
 					<br />
                     Nachdem du deine Email bestätigt hast, bitten<br />
                     wir dich um ein wenig Geduld, bis du von unserem<br />
@@ -71,7 +77,7 @@ class UserHandling
         $header);
         //Bestätigen das alles erfolgreich war 
         echo json_encode(["Status" => "OK"]);
-        exit;
+        return true;
     }
 
 
@@ -79,10 +85,10 @@ class UserHandling
     {
         $data = (array)json_decode(file_get_contents("php://input"), true);
 
-        if(!$this->sicher->check_id($data["registrierungs_id"]))
+        if($this->sicher->check_id($data["registrierungs_id"]) == false)
         {
             echo json_encode(["Status" => "ERROR", "Message"=>"Ungultige Eingabe, bitte kontaktieren Sie den Supprt"]);
-            exit;
+            return false;
         }
        
         $users = $this->database->getFreischalten($data["registrierungs_id"]);
@@ -90,7 +96,7 @@ class UserHandling
         if($users==false)
         {
             echo json_encode(["Status"=> "ERROR", "Message"=>"Schwerwiegender interner System fehler, bitte kontaktieren Sie den Support mit dem Fehlercode 005."]);
-            exit;
+            return false;
         }
 
         $this->database->insertTeilnehmer($users["vorname"], $users["nachname"], $users["email"], $users["passwort"], $data["registrierungs_id"]);
@@ -114,7 +120,7 @@ class UserHandling
                      
          <body>
             <font color='black'>
-			Hallo " . $data["vorname"] . " "  . $data["nachname"] . ",<br />  
+			Hallo " . $this->sicher->decrypt($users["vorname"]) . " "  . $this->sicher->decrypt($users["nachname"]) . ",<br />  
 			<br />  
             es freut uns dir mitteilen zu können, dass du nun vollen <br />
             Zugriff auf unsere Abi-Webseite hast.<br />
@@ -137,7 +143,7 @@ class UserHandling
         $header);
 
         echo json_encode(["Status" => "OK"]);
-        exit;
+        return true;
     }
 
     public function FreischaltenTabelle()
@@ -218,7 +224,12 @@ class UserHandling
         //Ziehn aller benötigten daten 
         $data = (array)json_decode(file_get_contents("php://input"),true);
 
-        $this->sicher->EMail_is_safe($data["email"]);
+        if($this->sicher->EMail_is_safe($data["email"]) == false)
+        {
+            return false;
+        }
+
+        $data = $this->database->getName($data["email"]);
 
         //$key = $this->sicher->encrypt($data["email"]);
         $header = "MIME-Version: 1.0\r\n";
@@ -237,10 +248,10 @@ class UserHandling
             <body bgcolor='FFFFFF'></body>
             <body>
             <font color='black'>
-			Hallo " . $data["vorname"] . " "  . $data["nachname"] . ",<br />
+			Hallo " . $this->sicher->decrypt($data["vorname"]) . " " . $this->sicher->decrypt($data["nachname"]) . ",<br />
 			<br />
             wenn du dein Passwort zurücksetzen möchtest, <br />
-            kannst du dies <a href='https://abi24bws.de/passwortzuruck.html?{$this->sicher->encrypt($data['email'])}'>hier</a> tun.<br />
+            kannst du dies <a href='https://abi24bws.de/passwortzuruck.html?" . $this->sicher->encrypt($data["email"]) . "'>hier</a> tun.<br />
             <br />
             Nachdem du dein neues Passwort eingegeben hast, <br />
             kannst du dich wieder wie gewohnt anmelden.<br />
@@ -255,7 +266,7 @@ class UserHandling
 
         //Bestätigen das alles erfolgreich war 
         echo json_encode(["Status" => "OK"]);
-        exit;
+        return true;
     }
 
     public function resetPSW()
@@ -263,18 +274,24 @@ class UserHandling
         //Ziehn aller benötigten daten 
         $data = (array)json_decode(file_get_contents("php://input"),true);
         
-        $this->sicher->PSW_is_safe($data["passwort"]);
+        if($this->sicher->PSW_is_safe($data["passwort"]) == false)
+        {
+            return false;
+        }
         
         $email = $this->sicher->decrypt($data["email"]);
 
-        $this->sicher->EMail_is_safe($email);
+        if($this->sicher->EMail_is_safe($email) == false)
+        {
+            return false;
+        }
        
         $user = $this->database->getUser($email);
 
         if($user=="")
         {
             echo json_encode(["Status" => "OK", "Erfolgreich"=>false]);
-            exit;
+            return false;
         }
         
         $salt = $this->database->getSalt($user["salt_id"]);
@@ -284,7 +301,7 @@ class UserHandling
         
         //Bestätigen das alles erfolgreich war 
         echo json_encode(["Status" => "OK", "Erfolgreich"=>true]);
-        exit;
+        return true;
     }
 
     public function checkLogin()
@@ -292,13 +309,19 @@ class UserHandling
         //Ziehn aller benötigten daten 
         $data = (array)json_decode(file_get_contents("php://input"),true);
         
-        $this->sicher->PSW_is_safe($data["passwort"]);
+        if($this->sicher->PSW_is_safe($data["passwort"]) == false)
+        {
+            return false;
+        }
         
-        $this->sicher->EMail_is_safe($data["email"]);
+        if($this->sicher->EMail_is_safe($email) == false)
+        {
+            return false;
+        }
         
         $user = $this->database->getUser($data["email"]);
 
-        if($user!="")
+        if($user=="")
         {
             header("Access-Control-Allow-Origin: https://abi24bws.de");
             header("Access-Control-Allow-Methods: POST, GET");
@@ -324,6 +347,8 @@ class UserHandling
 
         else if($passVerfy)
         {
+            $data = $this->database->getName($data["email"]);
+            $id = $this->database->getID($data["email"]);
             
             $header = "MIME-Version: 1.0\r\n";
             $header .= "Content-type: text/html; charset=utf-8\r\n";
@@ -343,13 +368,13 @@ class UserHandling
 
 	        <body>
 	        		<font color='black'>
-	        		Hallo " . $data["vorname"] . " "  . $data["nachname"] . ",<br />
+	        		Hallo " . $this->sicher->decrypt($data["vorname"]) . " " . $this->sicher->decrypt($data["nachname"]) . ",<br />
 	        		<br />
 	        		ein neues Gerät hat sich bei deinem<br />
 	        		Abi24bws Konto angemeldet.
 	        	<br />	
 	        		Wenn du dich nicht eingeloggt hast,<br />
-	        		kannst du dein Passwort <a href='https://abi24bws.de/passwortzuruckemail.html?id={$this->sicher->encrypt($id)}' >hier zurücksetzen</a>.<br />
+	        		kannst du dein Passwort <a href='https://abi24bws.de/passwortzuruckemail.html?id=" . $this->sicher->encrypt($id) . "' >hier zurücksetzen</a>.<br />
 	        		Dabei werden alle aktuell angemeldeten<br />
 	        		Geräte automatisch ausgeloggt.<br />	
 	        	<br />

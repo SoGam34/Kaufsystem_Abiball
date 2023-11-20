@@ -93,7 +93,7 @@ if ((isset($_COOKIE["UId"])) || ($parts[1] == "Login"))
 
             $state = setcookie("UId");
 
-            if ($state == true) {
+            if ($state == false) {
                 echo json_encode(["Status" => "ERROR", "Message" => "Schwerwiegender interner Systemfehler, bitte kontaktieren Sie den Support mit dem Fehlercode 020."]);
                 exit;
             }
@@ -301,15 +301,6 @@ else
         case "Freigeschaltet":
             $UserHandling->UserFreischalten();
             break;
-        case "clear":
-            try {
-                $dbUsers->deleteRegistrierung("widawski.nico@gmail.com");
-            } catch (PDOException $e) {
-                echo "Error deleting entry: \n" . $e->getMessage();
-            }
-            echo "succes";
-            break;
-
         default:
             //Da keine bekannte aktion getetigt werden soll
             http_response_code(404);

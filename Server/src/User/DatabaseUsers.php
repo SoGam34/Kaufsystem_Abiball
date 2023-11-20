@@ -97,6 +97,23 @@ class DatabaseUsers
         return $row;
     }
 
+    public function getName(string $email)
+    {
+        $stmt = $this->dbreade->prepare(
+            "SELECT vorname, nachname
+             FROM teilnehmer
+             WHERE email = :email;"
+        );
+
+        $stmt->bindValue(":email",  $email, PDO::PARAM_STR);
+
+        $stmt->execute();
+
+        $data = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $data;
+    }
+
     public function getFreischalten(int $data)
     {
         $stmt = $this->dbreade->prepare(
@@ -115,10 +132,10 @@ class DatabaseUsers
             return $row;
         } else if ($stmt->rowCount() > 1) {
             echo json_encode(["Status" => "ERROR", "Message" => "001"]);
-            exit;
+            return false;
         } else if ($stmt->rowCount() == 0) {
             echo json_encode(["Status" => "ERROR", "Message" => "002"]);
-            exit;
+            return false;
         }
 
         return false;
@@ -144,6 +161,23 @@ class DatabaseUsers
     {
         $stmt = $this->dbreade->prepare(
             "SELECT passwort, salt_id
+             FROM teilnehmer
+             WHERE email = :email;"
+        );
+
+        $stmt->bindValue(":email",  $email, PDO::PARAM_STR);
+
+        $stmt->execute();
+
+        $data = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $data;
+    }
+
+    public function getID(string $email)
+    {
+        $stmt = $this->dbreade->prepare(
+            "SELECT teilnehmer_id
              FROM teilnehmer
              WHERE email = :email;"
         );
