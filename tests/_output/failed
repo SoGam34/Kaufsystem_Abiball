@@ -1,0 +1,3 @@
+tests\Unit\UserHandlingTest.php:testcreateAcc
+tests\Unit\UserHandlingTest.php:testresetingEmail
+tests\Unit\UserHandlingTest.php:testresetPSW

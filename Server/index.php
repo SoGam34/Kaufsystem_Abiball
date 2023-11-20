@@ -1,5 +1,6 @@
 <?php
 
+
 $parts = explode("/", $_SERVER["REQUEST_URI"]);
 
 if ((isset($_COOKIE["UId"])) || ($parts[1] == "Login")) 
@@ -7,6 +8,7 @@ if ((isset($_COOKIE["UId"])) || ($parts[1] == "Login"))
     switch ($parts[1]) 
     {
         case "Login":
+            
             require_once "src/User/DatabaseUsers.php";
             require_once "src/User/UserHandling.php";
             require_once "src/Security.php";
@@ -31,7 +33,9 @@ if ((isset($_COOKIE["UId"])) || ($parts[1] == "Login"))
 
             $UserHandling = new UserHandling($dbUsers, $Security);
 
-            $state = $UserHandling->checkLogin();
+            $input = (array)json_decode(file_get_contents("php://input"),true);
+
+            $state = $UserHandling->checkLogin($input);
 
             if ($state == false) 
             {
@@ -282,24 +286,26 @@ else
     // header("Access-Control-Allow-Origin: https://abi24bws.de");
     // header("Access-Control-Allow-Methods: POST, GET");
 
+    $input = (array)json_decode(file_get_contents("php://input"),true);
+
     switch ($parts[1]) {
         case "Register":
-            $UserHandling->createAcc();
+            $UserHandling->createAcc($input);
             break;
         case "bestaetigung":
-            $dbUsers->bestaetigen();
+            $dbUsers->bestaetigen($input);
             break;
         case "RequestEmail":
-            $UserHandling->resetingEmail();
+            $UserHandling->resetingEmail($input);
             break;
         case "Reseting":
-            $UserHandling->resetPSW();
+            $UserHandling->resetPSW($input);
             break;
         case "Freischalten":
             echo $UserHandling->FreischaltenTabelle();
             break;
         case "Freigeschaltet":
-            $UserHandling->UserFreischalten();
+            $UserHandling->UserFreischalten($input);
             break;
         default:
             //Da keine bekannte aktion getetigt werden soll

@@ -5,10 +5,10 @@ class UserHandling
     {
     }
 
-    public function createAcc()
+    public function createAcc($input)
     {
         //Ziehn aller benötigten daten 
-        $data = (array)json_decode(file_get_contents("php://input"),true);
+        $data = $input; 
         
         if($this->sicher->PSW_is_safe($data["passwort"]) == false)
         {
@@ -81,9 +81,9 @@ class UserHandling
     }
 
 
-    public function UserFreischalten() 
+    public function UserFreischalten($input) 
     {
-        $data = (array)json_decode(file_get_contents("php://input"), true);
+        $data = $input;
 
         if($this->sicher->check_id($data["registrierungs_id"]) == false)
         {
@@ -219,17 +219,17 @@ class UserHandling
     }
          
 
-    public function resetingEmail(): void 
+    public function resetingEmail($input) 
     {
         //Ziehn aller benötigten daten 
-        $data = (array)json_decode(file_get_contents("php://input"),true);
+        $data = $input;
 
         if($this->sicher->EMail_is_safe($data["email"]) == false)
         {
             return false;
         }
 
-        $data = $this->database->getName($data["email"]);
+        $name = $this->database->getName($data["email"]);
 
         //$key = $this->sicher->encrypt($data["email"]);
         $header = "MIME-Version: 1.0\r\n";
@@ -248,7 +248,7 @@ class UserHandling
             <body bgcolor='FFFFFF'></body>
             <body>
             <font color='black'>
-			Hallo " . $this->sicher->decrypt($data["vorname"]) . " " . $this->sicher->decrypt($data["nachname"]) . ",<br />
+			Hallo " . $this->sicher->decrypt($name["vorname"]) . " " . $this->sicher->decrypt($name["nachname"]) . ",<br />
 			<br />
             wenn du dein Passwort zurücksetzen möchtest, <br />
             kannst du dies <a href='https://abi24bws.de/passwortzuruck.html?" . $this->sicher->encrypt($data["email"]) . "'>hier</a> tun.<br />
@@ -269,10 +269,10 @@ class UserHandling
         return true;
     }
 
-    public function resetPSW()
+    public function resetPSW($input)
     {   
         //Ziehn aller benötigten daten 
-        $data = (array)json_decode(file_get_contents("php://input"),true);
+        $data = $input;
         
         if($this->sicher->PSW_is_safe($data["passwort"]) == false)
         {
@@ -297,24 +297,24 @@ class UserHandling
         $salt = $this->database->getSalt($user["salt_id"]);
         
         //Das eigentliche zurücksetzen
-        $this->database->ResetPasswort($email, password_hash("AcFgP" . $data["passwort"] . $salt["salt"], PASSWORD_DEFAULT));
+        $this->database->ResetPasswort($email, password_hash($this->sicher->decrypt(Pfeffer) . $data["passwort"] . $salt["salt"], PASSWORD_DEFAULT));
         
         //Bestätigen das alles erfolgreich war 
         echo json_encode(["Status" => "OK", "Erfolgreich"=>true]);
         return true;
     }
 
-    public function checkLogin()
+    public function checkLogin($input)
     {
         //Ziehn aller benötigten daten 
-        $data = (array)json_decode(file_get_contents("php://input"),true);
+        $data = $input;
         
         if($this->sicher->PSW_is_safe($data["passwort"]) == false)
         {
             return false;
         }
         
-        if($this->sicher->EMail_is_safe($email) == false)
+        if($this->sicher->EMail_is_safe($data["email"]) == false)
         {
             return false;
         }
@@ -347,7 +347,7 @@ class UserHandling
 
         else if($passVerfy)
         {
-            $data = $this->database->getName($data["email"]);
+            $name = $this->database->getName($data["email"]);
             $id = $this->database->getID($data["email"]);
             
             $header = "MIME-Version: 1.0\r\n";
@@ -368,13 +368,13 @@ class UserHandling
 
 	        <body>
 	        		<font color='black'>
-	        		Hallo " . $this->sicher->decrypt($data["vorname"]) . " " . $this->sicher->decrypt($data["nachname"]) . ",<br />
+	        		Hallo " . $this->sicher->decrypt($name["vorname"]) . " " . $this->sicher->decrypt($name["nachname"]) . ",<br />
 	        		<br />
 	        		ein neues Gerät hat sich bei deinem<br />
 	        		Abi24bws Konto angemeldet.
 	        	<br />	
 	        		Wenn du dich nicht eingeloggt hast,<br />
-	        		kannst du dein Passwort <a href='https://abi24bws.de/passwortzuruckemail.html?id=" . $this->sicher->encrypt($id) . "' >hier zurücksetzen</a>.<br />
+	        		kannst du dein Passwort <a href='https://abi24bws.de/passwortzuruckemail.html?id=" . $this->sicher->encrypt($id["teilnehmer_id"]) . "' >hier zurücksetzen</a>.<br />
 	        		Dabei werden alle aktuell angemeldeten<br />
 	        		Geräte automatisch ausgeloggt.<br />	
 	        	<br />
