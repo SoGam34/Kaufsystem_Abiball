@@ -85,7 +85,7 @@ h1 {
 
 .loginregisterstyle { /*id="loginregisterstyleid" oder id="textfeld"*/
   transform: translateX(-50%) translateY(-50%);
-  top: 380px;
+  top: 400px;
   left: 50%;
   position: relative;
   padding: 1%;
@@ -128,12 +128,12 @@ h1 {
 .navbar a {
   display: block;
   color: #000000;
-  width: 80px;
+  width: 8px;
   text-align: center;
   padding: 16px;
   line-height: 20px;
   text-decoration: none;
-  font-size: 17px;
+  font-size: 16px;
   margin: auto;
   width: 100%;
 }
@@ -223,7 +223,7 @@ h1 {
 
 .loginregisterstyledark { /*id="loginregisterstyleid" oder id="textfeld"*/
   transform: translateX(-50%) translateY(-50%);
-  top: 300px;
+  top: 400px;
   left: 50%;
   position: relative;
   padding: 1%;
@@ -237,7 +237,7 @@ h1 {
 }
 
 .navbardark {
-  display: flex;
+  /*display: flex;*/
   flex-wrap: nowrap;
   justify-content: space-between;
   position: relative;
@@ -253,6 +253,8 @@ h1 {
   display: flex;
   flex-wrap: nowrap;
   line-height: 30px;
+  margin: auto;
+  width: 100%;
 }
 
 .navbarunterHomepagedark{
@@ -260,9 +262,10 @@ h1 {
   display: flex;
   flex-wrap: nowrap;
   line-height: 30px;
+  margin: auto;
+  width: 100%;
 }
 .navbardark a {
-  float: right;
   display: block;
   color: #000000;
   width: 80px;
@@ -270,11 +273,13 @@ h1 {
   padding: 16px;
   line-height: 20px;
   text-decoration: none;
-  font-size: 17px;
+  font-size: 16px;
+  margin: auto;
+  width: 100%;
 }
 
 .navbardark a:hover {
-  background: linear-gradient(to top, rgba(0, 0, 0, 0),rgb(125, 225, 255));
+  background: radial-gradient(rgb(125, 225, 255),rgb(125, 225, 255),rgba(0, 0, 0, 0),rgba(0, 0, 0, 0));
   font-weight: 900;
 }
 
@@ -359,7 +364,7 @@ h1 {
 
 .loginregisterstylecreamy { /*id="loginregisterstyleid" oder id="textfeld"*/
   transform: translateX(-50%) translateY(-50%);
-  top: 300px;
+  top: 400px;
   left: 50%;
   position: relative;
   padding: 1%;
@@ -373,7 +378,7 @@ h1 {
 }
 
 .navbarcreamy {
-  display: flex;
+  /*display: flex;*/
   flex-wrap: nowrap;
   justify-content: space-between;
   position: relative;
@@ -389,6 +394,8 @@ h1 {
   display: flex;
   flex-wrap: nowrap;
   line-height: 30px;
+  margin: auto;
+  width: 100%;
 }
 
 .navbarunterHomepagecreamy{
@@ -396,9 +403,10 @@ h1 {
   display: flex;
   flex-wrap: nowrap;
   line-height: 30px;
+  margin: auto;
+  width: 100%;
 }
 .navbarcreamy a {
-  float: right;
   display: block;
   color: #000000;
   width: 80px;
@@ -406,10 +414,12 @@ h1 {
   padding: 16px;
   line-height: 20px;
   text-decoration: none;
-  font-size: 17px;
+  font-size: 16px;
+  margin: auto;
+  width: 100%;
 }
 
 .navbarcreamy a:hover {
-  background: linear-gradient(to top, rgba(255, 255, 255, 0),rgb(15, 97, 97));
+  background: radial-gradient(rgb(104, 252, 252),rgba(104, 252, 252,0.5),rgba(0, 0, 0, 0),rgba(0, 0, 0, 0));
   font-weight: 900;
 }

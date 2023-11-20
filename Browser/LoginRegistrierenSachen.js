@@ -186,7 +186,9 @@ async function cookieverarbeiter()
       } catch (nichts) {
         document.getElementById('textfeld').className = 'loginregisterstyledark';
       }
-      document.getElementById('registrierenButtonid').className = 'registrierenButtondark';
+      try {
+        document.getElementById('registrierenButtonid').className = 'registrierenButtondark';
+      } catch (nichts) {}
     break;
     case "creamy":
       document.getElementById('torso').className = 'bodydesigncreamy';
@@ -198,7 +200,9 @@ async function cookieverarbeiter()
       } catch (nichts) {
         document.getElementById('textfeld').className = 'loginregisterstylecreamy';
       }
-      document.getElementById('registrierenButtonid').className = 'registrierenButtoncreamy';
+      try {
+        document.getElementById('registrierenButtonid').className = 'registrierenButtoncreamy';
+      } catch (nichts) {}
     break;
     default:
       document.getElementById('torso').className = 'bodydesign';
@@ -210,7 +214,10 @@ async function cookieverarbeiter()
       } catch (nichts) {
         document.getElementById('textfeld').className = 'loginregisterstyle';
       }
-      document.getElementById('registrierenButtonid').className = 'registrierenButton';
+      try {
+        document.getElementById('registrierenButtonid').className = 'registrierenButton';
+      } catch (nichts) {}
+      
     break;
   }
   console.log(document.cookie);
@@ -218,7 +225,7 @@ async function cookieverarbeiter()
     var hatcookie = true;
   }
   else {
-    var hatcookie = false;S
+    var hatcookie = false;
   }
   console.log("Hat Cookie? " + hatcookie);
   console.log(wo);
