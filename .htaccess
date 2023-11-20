@@ -5,6 +5,7 @@ RewriteRule ^homepage.html$ Browser/homepage.html
 RewriteRule ^login.html$ Browser/Login.html
 RewriteRule ^registrieren.html$ Browser/registrieren.html
 RewriteRule ^styles.css$ Browser/styles.css
+RewriteRule ^stylesHandy.css$ Browser/stylesHandy.css
 RewriteRule ^bws.png$ Bilder/bws.png
 RewriteRule ^support.html$ Browser/support.html 
 RewriteRule ^tickets.html$ Browser/tickets.html
