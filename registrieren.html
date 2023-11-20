@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <meta NAME="Author" CONTENT="Yannick Leitzbach">
+   <title>Registrieren</title>
+   <link rel="stylesheet" media="screen and (min-width: 400px)" href="styles.css">
+   <link rel="stylesheet" media="screen and (max-width: 399px)" href="stylesHandy.css">
+   <link rel="icon" type="image/x-icon" href="bws.png">
+   <script src="LoginRegistrierenSachen.js"></script>
+</head>
+<body id="torso" class="bodydesign" onload="cookieverarbeiter()">
+    <div id="navbarid" class="navbar">
+        <div class="navbarunterLoginRegister" id="navbarLRAlternative">
+           <a href="login.html">Login</a>
+           <a href="registrieren.html">Registrieren</a>
+        </div>
+        <div class="navbarunterHomepage" id="navbarunterHomepageid">
+           <a href="bilder.html">Bilder</a>
+           <a href="homepage.html">Homepage</a>
+           <a href="tickets.html">Tickets</a>
+           <a href="program.html">Programm</a>
+           </div>
+        <a href="support.html">Support</a>
+     </div>
+    <h1 style="text-align:center;margin-top: 55px;position: relative;">Registrieren</h1>
+    <section id="loginregisterstyleid" class="loginregisterstyle">
+		<table class="mittig">
+			<tr hidden>
+				<th><input type="text" name="anfrageTyp" id="angefragt" value="Register" readonly></th>
+				<th></th>
+			</tr>
+			<tr>
+				<td><label for="userVorname">Vorname:</label></td>
+				<td><input type="text" id="UserVorname" name="vorname"></td>
+			</tr>
+			<tr>
+				<td><label for="userNachname">Nachname:</label></td>
+				<td><input type="text" id="UserNachname" name="nachname"></td>
+			</tr>
+			<tr>
+				<td><label for="klasse">Klasse ausw&aumlhlen:</label></td>
+				<td><select name="Klasse" id="klasse">
+						<option value="13BGa">13BGa</option>
+						<option value="13BGb">13BGb</option>
+						<option value="13BGc">13BGc</option>
+						<option value="13BGd">13BGd</option>
+						<option value="13BGe">13BGe</option>
+						<option value="13BGf">13BGf</option>
+						<option value="13BGg">13BGg</option>
+						<option value="13BGg">13BGh</option>
+						<option value="13BGg">13BGi</option>
+						<option value="13BGg">13BGj</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td><label for="e-mail">E-Mail:</label></td>
+				<td><input type="email" id="e-mail" name="email"></td>
+			</tr>
+			<tr>
+				<td><label for="e-mailpruefen">E-Mail best&aumltigen:</label></td>
+				<td><input type="email" id="e-mailpruefen" name="emailprufen"></td>
+			</tr>
+			<tr>
+				<td><label for="passwort">Password (mindestens 10 Zeichen Lang):</label></td>
+				<td><input type="password" minlength="10" id="passwort" name="pwd"></td>
+			</tr>
+			<tr>
+				<td><label for="passwortpruefen">Password best&aumltigen:</label></td>
+				<td><input type="password" minlength="10" id="passwortpruefen" name="pwd"></td>
+			</tr>
+			<tr>
+				<td><button  type="button" id="registrierenButtonid" class="registrierenButton" onclick="UeberpruefenPasswortUndEmailBestaetigen()">Registrieren</button><br></td>
+				<td><a href="login.html">Bereits Registriert?</a></td>
+			</tr>
+		</table>
+    </section>
+	<section class="fehlerbox" id="textfeld"></section>
+	<script> const wo = "registrieren";
+	var input = document.getElementById("passwortpruefen");
+   	input.addEventListener("keypress", function(event) {
+   	if (event.key === "Enter") {
+  	event.preventDefault();
+   	document.getElementById("registrierenButtonid").click();
+   	}
+   	})
+   </script>
+</body>
+</html>

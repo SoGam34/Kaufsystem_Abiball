@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <meta NAME="Author" CONTENT="Yannick Leitzbach">
+   <title>Passwort Zur&uumlcksetzen</title>
+   <link rel="stylesheet" media="screen and (min-width: 400px)" href="styles.css">
+   <link rel="stylesheet" media="screen and (max-width: 399px)" href="stylesHandy.css">
+   <link rel="icon" type="image/x-icon" href="bws.png">
+   <script src="LoginRegistrierenSachen.js"></script>
+</head>
+<body id="torso" class="bodydesign" onload="cookieverarbeiter()">
+   <div id="navbarid" class="navbar">
+      <div class="navbarunterLoginRegister" id="navbarLRAlternative">
+         <a href="login.html">Login</a>
+         <a href="registrieren.html">Registrieren</a>
+      </div>
+      <div class="navbarunterHomepage" id="navbarunterHomepageid">
+         <a href="bilder.html">Bilder</a>
+         <a href="homepage.html">Homepage</a>
+         <a href="tickets.html">Tickets</a>
+         <a href="program.html">Programm</a>
+         </div>
+      <a href="support.html">Support</a>
+   </div>
+
+   <h1 style="text-align:center;margin-top: 55px;position: relative">Neues Password</h1>
+    <section class="loginregisterstyle" id="textfeld">
+		<table class="mittig">
+			<tr>
+				<td><label for="passwort">Passwort:</label></td>
+				<td><input type="password" id="passwort" name="pwd"></td>
+			</tr>
+         <tr>
+				<td><label for="passwortuberprufen">Passwort &uumlberpr&uumlfen:</label></td>
+				<td><input type="password" id="passwortuberprufen" name="pwduberprufen"></td>
+			</tr>
+			<tr>
+				<td><button type="button" id="registrierenButtonid" class="registrierenButton" onclick="Passwortzurucksetzen()">Login</button></td>
+				<td></td>
+			</tr>
+		</table>
+	</form>
+    </section>
+    <section class="fehlerbox" id="infofeld" style="top: 280px;"></section>
+    <script> const wo = "passwortzuruck";</script>
+   </body>
+   </html>

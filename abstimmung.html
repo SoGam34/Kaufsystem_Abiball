@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <meta NAME="Author" CONTENT="Yannick Leitzbach">
+   <title>Homepage</title>
+   <link rel="stylesheet" media="screen and (min-width: 400px)" href="styles.css">
+   <link rel="stylesheet" media="screen and (max-width: 399px)" href="stylesHandy.css">
+   <link rel="icon" type="image/x-icon" href="bws.png">
+   <script src="LoginRegistrierenSachen.js"></script>
+</head>
+<body id="torso" class="bodydesign" onload="cookieverarbeiter()">
+   <div id="navbarid" class="navbar">
+      <div class="navbarunterLoginRegister" id="navbarLRAlternative">
+         <a href="login.html">Login</a>
+         <a href="registrieren.html">Registrieren</a>
+      </div>
+      <div class="navbarunterHomepage" id="navbarunterHomepageid">
+         <a href="bilder.html">Bilder</a>
+         <a href="homepage.html">Homepage</a>
+         <a href="tickets.html">Tickets</a>
+         <a href="program.html">Programm</a>
+         </div>
+      <a href="support.html">Support</a>
+   </div>
+   <h1 style="text-align:center;margin-top: 55px;position: relative">Abstimmung &uumlber die Abiball-Lokation</h1>
+   <section class="loginregisterstyle" id="abstimmungfeld">
+      <table class="mittig">
+			<tr id="abstimmungNichtangemeldetNachricht">
+				<td>Sie k&oumlnnen nur abstimmen wenn Sie regstriert und angemeldet sind.<br>
+               <a href="login.html">Hier zum Login</a></td>
+			</tr>
+         <tr id="abstimmungAuswahl">
+            <td><label for="ortAbstimmung">Wo soll unser Abiball stattfinden?</label></td>
+            <td><select name="ortAbstimmung" id="ortAbstimmung">
+               <option value="Stadthalle Hofheim">Stadthalle Hofheim</option>
+               <option value="Pyramide in Mainz">Pyramide in Mainz</option>
+            </select></td>
+         </tr>
+         <tr id="abstimmungButton">
+            <td><button type="button" id="registrierenButtonid" class="registrierenButton" onclick="">Stimme abgeben</button></td>
+         </tr>
+		</table>
+   </section>
+   <script> const wo = "abstimmung";</script>
+</body>
+</html>
