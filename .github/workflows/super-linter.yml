@@ -7,10 +7,9 @@
 name: Lint Code Base
 
 on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+  schedule:
+  - cron: "5 4 * * 6"
+  
 jobs:
   run-lint:
     runs-on: ubuntu-latest
