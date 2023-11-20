@@ -10,12 +10,12 @@
    <script src="LoginRegistrierenSachen.js"></script>
 </head>
 <body id="torso" class="bodydesign" onload="cookieverarbeiter()">
-    <div class="navbar">
+    <div id="navbarid" class="navbar">
         <div class="navbarunterLoginRegister" id="navbarLRAlternative">
            <a href="login.html">Login</a>
            <a href="registrieren.html">Registrieren</a>
         </div>
-        <div class="navbarunterHomepage">
+        <div class="navbarunterHomepage" id="navbarunterHomepageid">
            <a href="bilder.html">Bilder</a>
            <a href="homepage.html">Homepage</a>
            <a href="tickets.html">Tickets</a>
@@ -24,7 +24,7 @@
         <a href="support.html">Support</a>
      </div>
     <h1 style="text-align:center;margin-top: 55px;position: relative">Login</h1>
-    <section class="loginregisterstyle">
+    <section id="loginregisterstyleid" class="loginregisterstyle">
 		<table class="mittig">
 			<tr hidden>
 				<th><input type="text" name="anfrageTyp" id="angefragt" value="Login" readonly></th>
@@ -39,7 +39,7 @@
 				<td><input type="password" id="passwort" name="pwd"></td>
 			</tr>
 			<tr>
-				<td><button type="button" class="registrierenButton" onclick="loginanfrage()">Login</button></td>
+				<td><button type="button" id="registrierenButtonid" class="registrierenButton" onclick="loginanfrage()">Login</button></td>
 				<td></td>
 			</tr>
 			<tr>
@@ -49,6 +49,14 @@
 		</table>
     </section>
 	<section class="fehlerbox" id="textfeld" style="top: 270px;"></section>
-   <script> const wo = "Login";</script>
+   <script> const wo = "Login";
+   var input = document.getElementById("passwort");
+   input.addEventListener("keypress", function(event) {
+   if (event.key === "Enter") {
+   event.preventDefault();
+   document.getElementById("registrierenButtonid").click();
+   }
+   })
+   </script>
 </body>
 </html>
