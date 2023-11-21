@@ -1,0 +1,38 @@
+"<html>
+        <html lang='en'>
+        <head>
+            <meta charset='UTF-8'>
+            <title>Mail Adresse Bestätigen</title>
+            <meta name='description' content='Kurzbeschreibung'>
+            <link href='design.css' rel='stylesheet'>
+        
+            <body bgcolor='FFFFFF'></body>
+            
+            
+            <body> 
+                    <font color='black'>
+                    <font size='5'><B>Verifizierung deiner Email-Adresse</B></font><br />
+					<br /> 
+					<br />        
+                    Hallo {$name},<br />
+					<br />       
+                    bitte bestätige <a href='https://abi24bws.de/Bestaetigung.html?id={$this->sicher->encrypt($id)}'>hier</a> deine Email-Adresse.<br />
+					<br />
+                    Nachdem du deine Email bestätigt hast, bitten<br />
+                    wir dich um ein wenig Geduld, bis du von unserem<br />
+                    Admin-Team freigeschaltet wirst.<br />
+					<br />
+                    Sobald wir dich freigeschaltet haben, erhälst du<br />
+					eine Bestätigungs-Mail und vollen Zugriff auf<br />
+                    alle Dienste.<br />
+					<br />
+                    Wenn du dich nicht bei Abi24bws registriert hast,<br />
+                    kannst du diese Email ignorieren und wir<br />
+                    entschuldigen uns für die Störung.<br />
+					<br />
+                    Mit freundlichen Grüßen<br />
+					<br />
+                    Dein Abi24bws Team<br />
+                    </font>
+            </body>
+            </html>"
