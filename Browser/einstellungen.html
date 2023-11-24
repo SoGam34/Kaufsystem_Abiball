@@ -4,7 +4,7 @@
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <meta NAME="Author" CONTENT="Yannick Leitzbach">
-   <title>Passwort Zur&uumlcksetzen</title>
+   <title>Einstellungen</title>
    <link rel="stylesheet" media="screen and (min-width: 900px)" href="styles.css">
    <link rel="stylesheet" media="screen and (max-width: 899px)" href="stylesHandy.css">
    <link rel="icon" type="image/x-icon" href="bws.png">
@@ -26,23 +26,19 @@
             <a href="support.html">Support</a>
             <a href="einstellungen.html">Einstellungen</a>
          </div>
+      
    </div>
-   <section id="popupfenster" class="popupstyle"></section>
-   <h1 style="text-align:center;margin-top: 55px;position: relative">Passwort zur&uumlcksetzen</h1>
-   <section class="loginregisterstyle" id="textfeld">
-   Um Ihren Passwort zur&uumlckzusetzen schicken wir eine Email an Ihren mit Email verbunden Account, in der Sie mit einem Link Ihren Passwort zur&uumlcksetzen k&oumlnnen.
-     <table class="mittig">
-         <tr>
-           <td><label for="e-mail">E-Mail:</label></td>
-           <td><input type="email" id="e-mail" name="email"></td>
-        </tr>
-        <tr>
-           <td></td>
-           <td><button type="button" id="registrierenButtonid" class="registrierenButton" onclick="emailfuerzuruck()">E-Mail abschicken</button></td>
-        </tr>
-     </table>
+   <section id="popupfenster" class="popupstyle" hidden></section>
+   <h1 style="text-align:center;margin-top: 55px;position: relative">Einstellungen</h1>
+   <section id="loginregisterstyleid" class="loginregisterstyle">
+      Hier gibt es ein paar verschiedene Designs 
+      <button type="button" id="registrierenButtonid" class="registrierenButton" onclick="designwechsler()">Farbpallete &aumlndern</button><br><br>
+      Cookie Eintellungen ändern:<br>
+      Wir benutzen nur technische Cookies, um zu erkennen ob sich jemand angemeldet. F&uumlr einen Account ben&oumltigen wir Ihren Namen, Vornamen, Klasse und E-Mailadresse. Nur Ihre E-Mail wird unverschl&uumlsselt gespeichert. Nach EU-Recht haben Sie hier auch dann hier die M&oumlglichkeit Ihre Daten jederzeit zu l&oumlschen<br>
+      <button type="button" id="registrierenButtonid" class="registrierenButton" onclick="cookiepopupakzeptieren()">Cookies akzeptieren</button>
+      <button type="button" id="registrierenButtonid" class="registrierenButton" onclick="cookiepopupablehnen()">Cookies ablehnen</button>
+      <div id="datenloeschenid"></div>
    </section>
-   <section class="fehlerbox" id="infofeld" style="top: 280px;"></section>
-   <script> const wo = "passwortzuruckemail";</script>
+   <script> const wo = "einstellungen";</script>
 </body>
 </html>

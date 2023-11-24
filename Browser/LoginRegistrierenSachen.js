@@ -1,7 +1,8 @@
 
 async function dieFuenfPersoenlicheDatenAnRegister(vorname, nachname, klasse, email, passwort)
 {
-  const response = await fetch("https://abi24bws.de/Register", {
+  if (localStorage.getItem("cookieszulassenabi24bws")=="true" || localStorage.getItem("cookieszulassenabi24bws") == null) {
+    const response = await fetch("https://abi24bws.de/Register", {
       method: "POST", // or 'PUT'
       headers: {
         "Content-Type": "application/json",
@@ -12,7 +13,13 @@ async function dieFuenfPersoenlicheDatenAnRegister(vorname, nachname, klasse, em
     .then((data) => {
       return data;
     });
-
+  }
+  if (localStorage.getItem("cookieszulassenabi24bws")=="false") {
+      document.getElementById('textfeld').style.visibility = "visible";
+      document.getElementById('textfeld').style.backgroundColor = "orange";
+      document.getElementById('textfeld').style.borderColor = "red";
+      document.getElementById('textfeld').innerHTML = "Sie m&uumlssen unsere Cookies akzeptieren, um ein Account erstellen zu können und zu verwenden.";
+  }
     if(response.Status=="ERROR"){            
       document.getElementById('textfeld').style.visibility = "visible";
       document.getElementById('textfeld').innerHTML = response.Message;
@@ -54,7 +61,7 @@ async function loginanfrage()
 {
   const emailvar = document.getElementById('e-mail').value;
   const passwortvar = document.getElementById('passwort').value;
-
+  if (localStorage.getItem("cookieszulassenabi24bws")=="true" || localStorage.getItem("cookieszulassenabi24bws") == null) {
   const response = await fetch("https://abi24bws.de/Login", {
       method: "POST", // or 'PUT'
       headers: {
@@ -66,7 +73,13 @@ async function loginanfrage()
     .then((data) => {
       return data;
     });
-    
+  }
+    if (localStorage.getItem("cookieszulassenabi24bws")=="false") {
+      document.getElementById('textfeld').style.visibility = "visible";
+      document.getElementById('textfeld').style.backgroundColor = "orange";
+      document.getElementById('textfeld').style.borderColor = "red";
+      document.getElementById('textfeld').innerHTML = "Sie m&uumlssen unsere Cookies akzeptieren, um ein Account erstellen zu können und zu verwenden";
+  }
     if(response.Status=="ERROR"){            
       document.getElementById('textfeld').style.visibility = "visible";
       document.getElementById('textfeld').innerHTML = response.Message;
@@ -173,6 +186,14 @@ async function designwechsler()
   window.location.reload();
 }
 
+async function cookiepopupakzeptieren() {
+  localStorage.setItem("cookieszulassenabi24bws", "true");
+}
+
+async function cookiepopupablehnen() {
+  localStorage.setItem("cookieszulassenabi24bws", "false");
+}
+
 async function cookieverarbeiter()
 {
   switch (localStorage.getItem("designmode")) {
@@ -220,6 +241,30 @@ async function cookieverarbeiter()
       
     break;
   }
+  switch (localStorage.getItem("cookieszulassenabi24bws")) {
+    case null:
+      document.getElementById('popupfenster').style.visibility = "visible";
+      document.getElementById('popupfenster').innerHTML = '<font color="black"><font size="5"><B>Cookie-Einverständniserklärung</B></font><br /><br /><br />'
+      'Diese Website verwendet Cookies, um Ihnen ein optimales Online-Erlebnis zu bieten. <br />'
+      'Indem Sie die Seite nutzen, erklären Sie sich mit der Verwendung von notwendigen, <br />'
+      'analytischen und funktionalen Cookies einverstanden. Sie können Ihre Einwilligung <br />'
+      'jederzeit widerrufen, indem Sie die Einstellungen Ihres Browsers anpassen. Beachten <br />'
+      'Sie, dass das Deaktivieren von Cookies die Funktionalität der Website <br />'
+      'beeinträchtigen kann.<br /><br />Kontakt:<br />'
+      'Für Fragen erreichen Sie uns unter <a href="mailto:support@abi24bws.de">support@abi24bws.de</a>.<br /></font>'
+      '<button type="button" id="registrierenButtonid" class="registrierenButton" onclick="cookiepopupakzeptieren()">Cookies akzeptieren</button>'
+      '<br><button type="button" id="registrierenButtonid" class="registrierenButton" onclick="cookiepopupablehnen()">Cookies ablehnen</button><br>';
+      break;
+    case "false":
+      document.getElementById('popupfenster').style.display = "none";
+      break;
+    case "true":
+      document.getElementById('popupfenster').style.display = "none";
+      break;
+    default:
+      localStorage.setItem("cookieszulassenabi24bws", "false");
+      break;
+  }
   console.log(document.cookie);
   if (document.cookie.length>3) {
     var hatcookie = true;
@@ -227,6 +272,7 @@ async function cookieverarbeiter()
   else {
     var hatcookie = false;
   }
+  console.log("Cookie erlaubt? " + localStorage.getItem("cookieszulassenabi24bws"));
   console.log("Hat Cookie? " + hatcookie);
   console.log(wo);
   if (hatcookie == true){
@@ -244,6 +290,9 @@ async function cookieverarbeiter()
       case "tickets":
         document.getElementById('ticketsNichtangemeldetNachricht').style.display = 'none';
         document.getElementById('inhaltTickets').style.visibility = "visible";
+      break;
+      case "einstellungen":
+        document.getElementById('datenloeschenid').innerHTML = '<button type="button" id="datenloeschenbutton" class="registrierenButton" onclick="datenloeschen()">pers&oumlnliche Daten l&oumleschen</button>'
       break;
       default:
         console.log("Wie?");
@@ -265,6 +314,9 @@ async function cookieverarbeiter()
       case "tickets":
         document.getElementById('ticketsNichtangemeldetNachricht').style.visibility = 'visible';
         document.getElementById('inhaltTickets').style.display = "none";
+      break;
+      case "einstellungen":
+        document.getElementById('datenloeschenid').innerHTML = 'Sie m&uumlssen angemldet sein, damit Sie verifiziert Daten l&oumlschen k&oumlnnen'
       break;
       default:
         console.log("Wie?");

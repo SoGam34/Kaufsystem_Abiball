@@ -28,6 +28,7 @@ h1 {
   line-height: 30px;
   background-color: hsla(4, 100%, 56%, 0.897);
   visibility: hidden;
+  font-family: Calibri, sans-serif;
 }
 
 .gutbox{
@@ -46,6 +47,7 @@ h1 {
   line-height: 30px;
   background-color: hsla(106, 100%, 56%, 0.897);
   visibility: show;
+  font-family: Calibri, sans-serif;
 }
 
 .registrierenButton{
@@ -56,6 +58,7 @@ h1 {
   border-radius: 7px;
   border-color: rgba(23, 91, 219, 0.753);
   background-color: rgb(140, 234, 247);
+  font-family: Calibri, sans-serif;
 }
 
 .registrierenButton:hover{
@@ -66,6 +69,7 @@ h1 {
   border-radius: 7px;
   border-color: rgba(15, 60, 143, 0.753);
   background-color: rgb(111, 175, 184);
+  font-family: Calibri, sans-serif;
 }
 
 .logoutButton{
@@ -76,11 +80,13 @@ h1 {
   background: linear-gradient(to top, rgba(255, 255, 255, 0),rgb(112, 226, 226));
   border: none;
   font-size: 15px;
+  font-family: Calibri, sans-serif;
 }
 
 .logoutButton:hover{
 	background: linear-gradient(to top, rgba(255, 255, 255, 0),rgb(15, 97, 97));
   font-weight: 900;
+  font-family: Calibri, sans-serif;
 }
 
 .loginregisterstyle { /*id="loginregisterstyleid" oder id="textfeld"*/
@@ -96,6 +102,7 @@ h1 {
   line-height: 30px;
   background-color: rgb(188, 245, 245,0.25);
   min-width: 300px;
+  font-family: Calibri, sans-serif;
 }
 
 .navbar {
@@ -109,19 +116,21 @@ h1 {
   width: 100%;
   overflow: hidden;
   color: rgb(51,0,153);
+  font-family: Calibri, sans-serif;
 }
 
 .navbarunterLoginRegister{
   display: flex;
   flex-wrap: nowrap;
   line-height: 30px;
+  font-family: Calibri, sans-serif;
 }
 
 .navbarunterHomepage{
-  margin-left: -4%;
   display: flex;
   flex-wrap: nowrap;
   line-height: 30px;
+  font-family: Calibri, sans-serif;
 }
 .navbar a {
   float: right;
@@ -133,11 +142,31 @@ h1 {
   line-height: 20px;
   text-decoration: none;
   font-size: 17px;
+  font-family: Calibri, sans-serif;
 }
 
 .navbar a:hover {
   background: linear-gradient(to top, rgba(255, 255, 255, 0),rgb(15, 97, 97));
   font-weight: 900;
+  font-family: Calibri, sans-serif;
+}
+
+.popupstyle {
+  visibility: hidden;
+  z-index: 1;
+  transform: translateX(-50%) translateY(-50%);
+  top: 500px;
+  left: 50%;
+  position: absolute;
+  padding: 1%;
+  border: 3px solid rgb(23, 91, 219);
+  border-radius: 10px;
+  border-style: outset;
+  width: 38%;
+  line-height: 30px;
+  background-color: rgb(188, 245, 245);
+  min-width: 300px;
+  font-family: Calibri, sans-serif;
 }
 
 /*----------------Darkmodebeginn----------------*/
@@ -145,6 +174,7 @@ h1 {
   background: radial-gradient(rgb(78, 158, 223),rgb(69, 12, 160));
   margin: 0%;
   min-height: 1080px;
+  font-family: Calibri, sans-serif;
 }
 
 .fehlerboxdark{
@@ -163,6 +193,7 @@ h1 {
   line-height: 30px;
   background-color: hsla(4, 100%, 56%, 0.897);
   visibility: hidden;
+  font-family: Calibri, sans-serif;
 }
 
 .gutboxdark{
@@ -181,6 +212,7 @@ h1 {
   line-height: 30px;
   background-color: hsla(106, 100%, 56%, 0.897);
   visibility: show;
+  font-family: Calibri, sans-serif;
 }
 
 .registrierenButtondark{
@@ -191,6 +223,7 @@ h1 {
   border-radius: 7px;
   border-color: rgba(23, 91, 219, 0.753);
   background-color: rgb(27, 154, 185);
+  font-family: Calibri, sans-serif;
 }
 
 .registrierenButtondark:hover{
@@ -201,6 +234,7 @@ h1 {
   border-radius: 7px;
   border-color: rgba(15, 60, 143, 0.753);
   background-color: rgb(96, 170, 255);
+  font-family: Calibri, sans-serif;
 }
 
 .logoutButtondark{
@@ -211,11 +245,13 @@ h1 {
   background: linear-gradient(to top, rgba(255, 255, 255, 0),rgb(112, 226, 226));
   border: none;
   font-size: 15px;
+  font-family: Calibri, sans-serif;
 }
 
 .logoutButtondark:hover{
 	background: linear-gradient(to top, rgba(0, 0, 0, 0),rgb(125, 225, 255));
   font-weight: 900;
+  font-family: Calibri, sans-serif;
 }
 
 .loginregisterstyledark { /*id="loginregisterstyleid" oder id="textfeld"*/
@@ -231,6 +267,7 @@ h1 {
   line-height: 30px;
   background-color: rgb(188, 245, 245,0.25);
   min-width: 300px;
+  font-family: Calibri, sans-serif;
 }
 
 .navbardark {
@@ -244,12 +281,14 @@ h1 {
   width: 100%;
   overflow: hidden;
   color: rgb(51,0,153);
+  font-family: Calibri, sans-serif;
 }
 
 .navbarunterLoginRegisterdark{
   display: flex;
   flex-wrap: nowrap;
   line-height: 30px;
+  font-family: Calibri, sans-serif;
 }
 
 .navbarunterHomepagedark{
@@ -257,6 +296,7 @@ h1 {
   display: flex;
   flex-wrap: nowrap;
   line-height: 30px;
+  font-family: Calibri, sans-serif;
 }
 .navbardark a {
   float: right;
@@ -268,11 +308,13 @@ h1 {
   line-height: 20px;
   text-decoration: none;
   font-size: 17px;
+  font-family: Calibri, sans-serif;
 }
 
 .navbardark a:hover {
   background: linear-gradient(to top, rgba(0, 0, 0, 0),rgb(125, 225, 255));
   font-weight: 900;
+  font-family: Calibri, sans-serif;
 }
 
 /*-----------------BeginnCreamy---------------*/
@@ -281,6 +323,7 @@ h1 {
   background: radial-gradient(rgb(255, 251, 219),rgb(255, 249, 224));
   margin: 0%;
   min-height: 1080px;
+  font-family: Calibri, sans-serif;
 }
 
 .fehlerboxcreamy{
@@ -299,6 +342,7 @@ h1 {
   line-height: 30px;
   background-color: hsla(4, 100%, 56%, 0.897);
   visibility: hidden;
+  font-family: Calibri, sans-serif;
 }
 
 .gutboxcreamy{
@@ -317,6 +361,7 @@ h1 {
   line-height: 30px;
   background-color: hsla(106, 100%, 56%, 0.897);
   visibility: show;
+  font-family: Calibri, sans-serif;
 }
 
 .registrierenButtoncreamy{
@@ -327,6 +372,7 @@ h1 {
   border-radius: 7px;
   border-color: rgba(23, 91, 219, 0.753);
   background-color: rgb(140, 234, 247);
+  font-family: Calibri, sans-serif;
 }
 
 .registrierenButtoncreamy:hover{
@@ -337,6 +383,7 @@ h1 {
   border-radius: 7px;
   border-color: rgba(15, 60, 143, 0.753);
   background-color: rgb(111, 175, 184);
+  font-family: Calibri, sans-serif;
 }
 
 .logoutButtoncreamy{
@@ -347,11 +394,13 @@ h1 {
   background: linear-gradient(to top, rgba(255, 255, 255, 0),rgb(112, 226, 226));
   border: none;
   font-size: 15px;
+  font-family: Calibri, sans-serif;
 }
 
 .logoutButtoncreamy:hover{
 	background: linear-gradient(to top, rgba(255, 255, 255, 0),rgb(15, 97, 97));
   font-weight: 900;
+  font-family: Calibri, sans-serif;
 }
 
 .loginregisterstylecreamy { /*id="loginregisterstyleid" oder id="textfeld"*/
@@ -367,6 +416,7 @@ h1 {
   line-height: 30px;
   background-color: rgb(188, 245, 245,0.25);
   min-width: 300px;
+  font-family: Calibri, sans-serif;
 }
 
 .navbarcreamy {
@@ -380,12 +430,14 @@ h1 {
   width: 100%;
   overflow: hidden;
   color: rgb(51,0,153);
+  font-family: Calibri, sans-serif;
 }
 
 .navbarunterLoginRegistercreamy{
   display: flex;
   flex-wrap: nowrap;
   line-height: 30px;
+  font-family: Calibri, sans-serif;
 }
 
 .navbarunterHomepagecreamy{
@@ -393,6 +445,7 @@ h1 {
   display: flex;
   flex-wrap: nowrap;
   line-height: 30px;
+  font-family: Calibri, sans-serif;
 }
 .navbarcreamy a {
   float: right;
@@ -404,9 +457,11 @@ h1 {
   line-height: 20px;
   text-decoration: none;
   font-size: 17px;
+  font-family: Calibri, sans-serif;
 }
 
 .navbarcreamy a:hover {
   background: linear-gradient(to top, rgba(255, 255, 255, 0),rgb(15, 97, 97));
   font-weight: 900;
+  font-family: Calibri, sans-serif;
 }
