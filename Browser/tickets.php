@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="de">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta NAME="Author" CONTENT="Johannes Hoffmann">
-    <title>Tickets kaufen</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="icon" type="image/x-icon" href="bws.png">
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <meta NAME="Author" CONTENT="Yannick Leitzbach">
+   <title>Homepage</title>
+   <link rel="stylesheet" media="screen and (min-width: 900px)" href="styles.css">
+   <link rel="stylesheet" media="screen and (max-width: 899px)" href="stylesHandy.css">
+   <link rel="icon" type="image/x-icon" href="bws.png">
+   <script src="LoginRegistrierenSachen.js"></script>
     <script src='https://www.paypal.com/sdk/js?client-id=AWGRHS9BmRSS27GZY1mwIywoVoKeC3XSmhCyYtaL1VTHf0SUItDcIXdAj281tsrbr5Tlg0wiznVi9UgS&currency=EUR'></script>
     <script>
         function TicketAnzahl() {
@@ -17,22 +18,22 @@
     </script>
 </head>
 
-<body>
-    <div class="navbar">
-        <div class="navbarunterLoginRegister" id="navbarLRAlternative">
-            <a href="login.html">Login</a>
-            <a href="registrieren.html">Registrieren</a>
-        </div>
-        <div class="navbarunterHomepage">
-            <a href="bilder.html">Bilder</a>
-            <a href="homepage.html">Homepage</a>
-            <a href="tickets.html">Tickets</a>
-            <a href="program.html">Programm</a>
-        </div>
-        <a href="support.html">Support</a>
-    </div>
-    <h1 style="text-align:center;margin-top: 55px;position: relative">Tickets</h1>
-    <section class="loginregisterstyle">
+<body id="torso" class="bodydesign" onload="cookieverarbeiter()">
+   <div id="navbarid" class="navbar">
+      <div class="navbarunterLoginRegister" id="navbarLRAlternative">
+         <a href="login.html">Login</a>
+         <a href="registrieren.html">Registrieren</a>
+      </div>
+      <div class="navbarunterHomepage" id="navbarunterHomepageid">
+         <a href="bilder.html">Bilder</a>
+         <a href="homepage.html">Homepage</a>
+         <a href="tickets.html">Tickets</a>
+         <a href="program.html">Programm</a>
+         </div>
+      <a href="support.html">Support</a>
+   </div>
+   <h1 style="text-align:center;margin-top: 55px;position: relative">Tickets</h1>
+   <section id="loginregisterstyleid" class="loginregisterstyle">
         <?php
         if (!isset($_COOKIE["UId"])) {
 
@@ -156,10 +157,7 @@
             </div>';
         } ?>
 
-    </section>
-    <script>
-        const wo = "tickets";
-    </script>
+</section>
+   <script> const wo = "homepage";</script>
 </body>
-
 </html>

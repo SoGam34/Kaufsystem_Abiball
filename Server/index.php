@@ -307,6 +307,8 @@ else
         case "Freigeschaltet":
             $UserHandling->UserFreischalten($input);
             break;
+        case "Ablehnen": 
+            $UserHandling->Ablehnen($input);
         default:
             //Da keine bekannte aktion getetigt werden soll
             http_response_code(404);

@@ -208,6 +208,7 @@ class UserHandling
             <td>" . $this->sicher->decrypt($value["klasse"]) . "</td>
             <td>" . $value["email"] . "</td>
             <td>" . '<input type="button" value="Identitaet Bestaetigen" onclick="Identitaet_bestaetigt(' . $value["registrierungs_id"] . ')"></td>
+            <td>' . '<input type="button" value="Identitaet Ablehnen" onclick="Identitaet_Ablehnen(' . $value["email"] . ')"></td>
             </tr>';
         }
 
@@ -216,6 +217,57 @@ class UserHandling
         unset($value); 
             
         return $tabelle;
+    }
+
+    public function Ablehnen($input)
+    {
+        $users = $this->database->getReName($input["registrierungs_id"]);
+
+        if($users == "")
+        {
+            return false;
+        }
+
+        $header = "MIME-Version: 1.0\r\n";
+        $header .= "Content-type: text/html; charset=utf-8\r\n";
+        $header .= "From: noreply@abi24bws.de";
+
+        mail($users["registrierungs_id"], "Du wurdest abgelehnt!",
+        "<html>
+         <html lang'en'>
+        <head>
+	    <meta charset='UTF-8'>
+	    <title>MailAbgelehnt</title>
+	    <meta name='description' content='Kurzbeschreibung'>
+	    <link href='design.css' rel='sytlesheet'>
+        
+	    <body bgcolor='FFFFFF'></body>
+
+	    		Hallo " . $this->sicher->decrypt($users["vorname"]) . " "  . $this->sicher->decrypt($users["nachname"]) . ",<br />
+	    		<br />
+	    		es tut uns leid dir mitteilen zu müssen, dass deine <br />
+	    		Registrierung abgelehnt wurde.<br />
+	    		<br />
+	    		Gründe dafür können sein:<br />
+	    		<li>nicht authentischer Name</li>
+	    		<li>dein Name taucht nicht in den Kurslisten auf</li><br />
+	    	<br />
+	    		Falls du das Gefühl hast, zu Unrecht abgelehnt<br />
+	    		worden zu sein, melde dich unter folgender<br /> 
+	    		Mail-Adresse bei uns: support@abi24bws.de<br />
+	    	<br />
+	    		Mit freundlichen Grüßen<br />
+	    	<br />
+	    		Dein Abi24bwsTeam<br />
+	    		</font>
+	    </body>
+	    </html>",
+        $header);
+
+        $this->database->deleteRegistrierung($input["registrierungs_id"]);
+
+        echo json_encode(["Status" => "OK"]);
+        return true;
     }
          
 
@@ -263,6 +315,7 @@ class UserHandling
             </body>
         </html>",
         $header);
+
 
         //Bestätigen das alles erfolgreich war 
         echo json_encode(["Status" => "OK"]);
@@ -385,6 +438,47 @@ class UserHandling
 	        	</body>
 	        	</html>",
             $header);
+
+
+
+            $verification_code;
+
+            for ($i=0; $i < 9; $i++) { 
+                $verification_code += rand(0, 9);
+            }
+
+            if($this->database->save2FA($verification_code) == false)
+            {
+                echo json_encode([])
+            }
+
+        //$key = $this->sicher->encrypt($data["email"]);
+        $header = "MIME-Version: 1.0\r\n";
+        $header .= "Content-type: text/html; charset=utf-8\r\n";
+        $header .= "From: noreply@abi24bws.de";
+        mail($data["email"], "2 Faktor Authentifizierung",
+        
+        "<html>
+        <html lang'en'>
+        <head>
+	    <meta charset='UTF-8'>
+	    <title></title>
+	    <meta name='description' content='Kurzbeschreibung'>
+	    <link href='design.css' rel='sytlesheet'>
+        
+	    <body bgcolor='FFFFFF'></body>
+	    		Hallo " . $this->sicher->decrypt($name["vorname"]) . " " . $this->sicher->decrypt($name["nachname"]) . ",<br />
+	    		<br />
+	    		dein Verifizierungscode für unsere <br />
+	    		Abi-Website lautet: <b>{$verification_code}</b><br />
+	    	<br />
+	    		Mit freundlichen Grüßen<br />
+	    	<br />
+	    		Dein Abi24bwsTeam<br />
+	    		</font>
+	    </body>
+	    </html>",
+        $header);
 
         return $data["email"];
         }

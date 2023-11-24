@@ -100,8 +100,25 @@ class DatabaseUsers
     public function getName(string $email)
     {
         $stmt = $this->dbreade->prepare(
-            "SELECT vorname, nachname
+            "SELECT vorname, nachname, 2FA
              FROM teilnehmer
+             WHERE email = :email;"
+        );
+
+        $stmt->bindValue(":email",  $email, PDO::PARAM_STR);
+
+        $stmt->execute();
+
+        $data = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $data;
+    }
+
+    public function getReName(string $email)
+    {
+        $stmt = $this->dbreade->prepare(
+            "SELECT vorname, nachname
+             FROM registrierung
              WHERE email = :email;"
         );
 

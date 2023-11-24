@@ -40,3 +40,19 @@ async function Identitaet_bestaetigt(registrierungs_id) {
 
     window.location.reload();
 }
+
+
+async function Identitaet_Ablehnen(registrierungs_id) {
+    const response = await fetch("https://abi24bws.de/Ablehnen", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ "registrierungs_id": registrierungs_id })
+    }).then((response) => response.json())
+    .then((data) => {
+        return data;
+    });
+
+    window.location.reload();
+}
