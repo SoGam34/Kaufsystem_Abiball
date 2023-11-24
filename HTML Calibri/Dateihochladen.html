@@ -1,0 +1,22 @@
+<html>
+<head>
+<title>Dateiupload</title>
+</head>
+<body>
+<font face="Calibri">
+<p><font face="Arial,Helvetice,sans-serif" size="6">Dateiupload</font></p>
+<form method = "post" action="upload.php" enctype="multipart/form-data">
+ Bilder (max. 10 Mb): 
+ <input type="hidden" name="MAX_FILE_SIZE" value="10000">
+ <input id="upload" name="upload" class="w3-input" type="file" accept=".png, .jpg, .jpeg, .tiff, .bmp, .svg, .raw, .heic">
+ <input type= "submit" name="Submit" value="Senden">
+ <br />  
+ <br />  
+ Videos (max. 100 Mb):
+ <input type="hidden" name="MAX_FILE_SIZE" value="100000">
+ <input id="upload" name="upload" class="w3-input" type="file" accept=".mp4, .avi, .mkv, .wmv, .mov, .flv, .hevc, .m4v">
+ <input type= "submit" name="Submit" value="Senden">
+ </form>
+ </body>
+ </html>
+ 
