@@ -16,7 +16,7 @@ RewriteRule ^Freischalten_Menu.php$ Server/src/Freischalten_Menu.php
 RewriteRule ^LoginRegistrierenSachen.js$ Browser/LoginRegistrierenSachen.js
 RewriteRule ^passwortzuruck.html$ Browser/passwortzuruck.html
 RewriteRule ^passwortzuruckemail.html$ Browser/passwortzuruckemail.html
-
+RewriteRule ^einstellungen.html$ Browser/einstellungen.html
 
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule  ^(.*)$ Server/index.php
