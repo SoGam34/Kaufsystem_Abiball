@@ -188,10 +188,17 @@ async function designwechsler()
 
 async function cookiepopupakzeptieren() {
   localStorage.setItem("cookieszulassenabi24bws", "true");
+  window.location.reload();
 }
 
 async function cookiepopupablehnen() {
   localStorage.setItem("cookieszulassenabi24bws", "false");
+  window.location.reload();
+}
+
+async function cookieeinstellungreseten() {
+  localStorage.removeItem("cookieszulassenabi24bws");
+  window.location.reload();
 }
 
 async function cookieverarbeiter()
@@ -244,16 +251,7 @@ async function cookieverarbeiter()
   switch (localStorage.getItem("cookieszulassenabi24bws")) {
     case null:
       document.getElementById('popupfenster').style.visibility = "visible";
-      document.getElementById('popupfenster').innerHTML = '<font color="black"><font size="5"><B>Cookie-Einverständniserklärung</B></font><br /><br /><br />'
-      'Diese Website verwendet Cookies, um Ihnen ein optimales Online-Erlebnis zu bieten. <br />'
-      'Indem Sie die Seite nutzen, erklären Sie sich mit der Verwendung von notwendigen, <br />'
-      'analytischen und funktionalen Cookies einverstanden. Sie können Ihre Einwilligung <br />'
-      'jederzeit widerrufen, indem Sie die Einstellungen Ihres Browsers anpassen. Beachten <br />'
-      'Sie, dass das Deaktivieren von Cookies die Funktionalität der Website <br />'
-      'beeinträchtigen kann.<br /><br />Kontakt:<br />'
-      'Für Fragen erreichen Sie uns unter <a href="mailto:support@abi24bws.de">support@abi24bws.de</a>.<br /></font>'
-      '<button type="button" id="registrierenButtonid" class="registrierenButton" onclick="cookiepopupakzeptieren()">Cookies akzeptieren</button>'
-      '<br><button type="button" id="registrierenButtonid" class="registrierenButton" onclick="cookiepopupablehnen()">Cookies ablehnen</button><br>';
+      document.getElementById('popupfenster').innerHTML = '<font color="black"><font size="5"><B>Cookie-Einverständniserklärung</B></font><br /><br /><br />Diese Website verwendet Cookies, um Ihnen ein optimales Online-Erlebnis zu bieten. <br />Indem Sie die Seite nutzen, erklären Sie sich mit der Verwendung von notwendigen, <br />analytischen und funktionalen Cookies einverstanden. Sie können Ihre Einwilligung <br />jederzeit widerrufen, indem Sie die Einstellungen Ihres Browsers anpassen. Beachten <br />Sie, dass das Deaktivieren von Cookies die Funktionalität der Website <br />beeinträchtigen kann.<br /><br />Kontakt:<br />Für Fragen erreichen Sie uns unter <a href="mailto:support@abi24bws.de">support@abi24bws.de</a>.<br /></font><button type="button" id="registrierenButtonid" class="registrierenButton" onclick="cookiepopupakzeptieren()">Cookies akzeptieren</button><br><button type="button" id="registrierenButtonid" class="registrierenButton" onclick="cookiepopupablehnen()">Cookies ablehnen</button><br>';
       break;
     case "false":
       document.getElementById('popupfenster').style.display = "none";
