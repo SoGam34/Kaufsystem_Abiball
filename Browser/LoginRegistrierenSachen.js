@@ -48,12 +48,12 @@ async function UeberpruefenPasswortUndEmailBestaetigen()
     }
     else{
       document.getElementById('textfeld').style.visibility = "visible";
-      document.getElementById('textfeld').innerHTML = "Passw&oumlrter &uumlbereinstimmen nicht";
+      document.getElementById('textfeld').innerHTML = "Beide eingegebenen Passw&oumlrter &uumlbereinstimmen nicht";
     }
   }
   else{
     document.getElementById('textfeld').style.visibility = "visible";
-    document.getElementById('textfeld').innerHTML = "E-Mails &uumlbereinstimmen nicht";
+    document.getElementById('textfeld').innerHTML = "Beide eingegebenen E-Mails &uumlbereinstimmen nicht";
   }
 }
 
@@ -86,13 +86,13 @@ async function loginanfrage()
     }
     else if (response.Erfolgreich==false){
       document.getElementById('textfeld').style.visibility = "visible";
-      document.getElementById('textfeld').innerHTML = "Anmeldung fehlgeschlagen, bitte &uuml;berpr&uuml;fen Sie ihre Email oder Passwort";
+      document.getElementById('textfeld').innerHTML = "Die Anmeldung ist fehlgeschlagen, bitte &uuml;berpr&uuml;fen Sie ihre Email oder Passwort";
     }
     else{
       document.getElementById('textfeld').style.visibility = "visible";
       document.getElementById('textfeld').style.backgroundColor = "green";
       document.getElementById('textfeld').style.borderColor = "green";
-      document.getElementById('textfeld').innerHTML = "Sie sind Angemeldet";
+      document.getElementById('textfeld').innerHTML = "Sie sind jetzt Angemeldet";
       document.getElementById('navbarLRAlternative').innerHTML = '<button type="button" id="logoutButtonid" class="logoutButton" onclick="Ausloggen()">Logout</button>';
     }
 }
@@ -209,43 +209,45 @@ async function cookieverarbeiter()
       document.getElementById('navbarid').className = 'navbardark';
       document.getElementById('navbarLRAlternative').className = 'navbarunterLoginRegisterdark';
       document.getElementById('navbarunterHomepageid').className = 'navbarunterHomepagedark';
-      try {
+      if (document.getElementById('loginregisterstyleid') == true) {
         document.getElementById('loginregisterstyleid').className = 'loginregisterstyledark';
-      } catch (nichts) {
+      }
+      if (document.getElementById('textfeld') == true) {
         document.getElementById('textfeld').className = 'loginregisterstyledark';
       }
-      try {
+      if (document.getElementById('registrierenButtonid') == true) {
         document.getElementById('registrierenButtonid').className = 'registrierenButtondark';
-      } catch (nichts) {}
+      }
     break;
     case "creamy":
       document.getElementById('torso').className = 'bodydesigncreamy';
       document.getElementById('navbarid').className = 'navbarcreamy';
       document.getElementById('navbarLRAlternative').className = 'navbarunterLoginRegistercreamy';
       document.getElementById('navbarunterHomepageid').className = 'navbarunterHomepagecreamy';
-      try {
+      if (document.getElementById('loginregisterstyleid') == true) {
         document.getElementById('loginregisterstyleid').className = 'loginregisterstylecreamy';
-      } catch (nichts) {
+      }
+      if (document.getElementById('textfeld') == true) {
         document.getElementById('textfeld').className = 'loginregisterstylecreamy';
       }
-      try {
+      if (document.getElementById('registrierenButtonid') == true) {
         document.getElementById('registrierenButtonid').className = 'registrierenButtoncreamy';
-      } catch (nichts) {}
+      }
     break;
     default:
       document.getElementById('torso').className = 'bodydesign';
       document.getElementById('navbarid').className = 'navbar';
       document.getElementById('navbarLRAlternative').className = 'navbarunterLoginRegister';
       document.getElementById('navbarunterHomepageid').className = 'navbarunterHomepage';
-      try {
+      if (document.getElementById('loginregisterstyleid') == true) {
         document.getElementById('loginregisterstyleid').className = 'loginregisterstyle';
-      } catch (nichts) {
+      }
+      if (document.getElementById('textfeld') == true) {
         document.getElementById('textfeld').className = 'loginregisterstyle';
       }
-      try {
+      if (document.getElementById('registrierenButtonid') == true) {
         document.getElementById('registrierenButtonid').className = 'registrierenButton';
-      } catch (nichts) {}
-      
+      }
     break;
   }
   switch (localStorage.getItem("cookieszulassenabi24bws")) {
@@ -263,7 +265,7 @@ async function cookieverarbeiter()
       localStorage.setItem("cookieszulassenabi24bws", "false");
       break;
   }
-  console.log(document.cookie);
+  console.log("cookie = " + document.cookie);
   if (document.cookie.length>3) {
     var hatcookie = true;
   }
