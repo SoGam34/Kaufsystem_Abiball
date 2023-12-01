@@ -1,0 +1,5 @@
+Access to fetch at 'https://abi24bws.de/Login' from origin 'https://www.abi24bws.de' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: The 'Access-Control-Allow-Origin' header has a value 'https://abi24bws.de' that is not equal to the supplied origin. Have the server send the header with a valid value, or, if an opaque response serves your needs, set the request's mode to 'no-cors' to fetch the resource with CORS disabled.
+LoginRegistrierenSachen.js:65 
+        
+        
+        POST https://abi24bws.de/Login net::ERR_FAILED
