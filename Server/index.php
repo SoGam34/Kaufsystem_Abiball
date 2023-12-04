@@ -315,11 +315,6 @@ else
         case "Ablehnen": 
             $UserHandling->Ablehnen($input);
             break;
-            case "init":
-                echo "Hallo:";
-                echo $this->sicher->decrypt(AdminID);
-                echo $this->sicher->decrypt(AdminID) . "     PSW:" . $this->sicher->decrypt(AdminPSW);
-            break;
         default:
             //Da keine bekannte aktion getetigt werden soll
             http_response_code(404);
