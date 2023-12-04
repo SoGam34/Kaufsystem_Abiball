@@ -1,4 +1,5 @@
 <?php
+
 class UserHandling
 {
     public function __construct(private DatabaseUsers $database, private Security $sicher)
@@ -168,7 +169,7 @@ class UserHandling
             </form> ";
         }
 
-        if($_POST["Admin"]==$this->sicher->decrypt(AdminID) && $_POST["AdminPSW"]==$this->sicher->decrypt(AdminPSW))
+        if($_POST["Admin"]!=$this->sicher->decrypt(AdminID) && $_POST["AdminPSW"]!=$this->sicher->decrypt(AdminPSW))
         {
             return "Wrong Input";
         }
@@ -176,7 +177,7 @@ class UserHandling
         $data=$this->database->getFreischaltungsUebersicht();
 
         //echo $data;
-        if($data!="")
+        if($data=="")
         {
             return "0 rows affected";
         }
@@ -390,7 +391,7 @@ class UserHandling
         $passVerfy = password_verify($this->sicher->decrypt(Pfeffer) . $data["passwort"] . $salt["salt"],  $user["passwort"]);
 
         //Ausgeben des Überprüfungsergebnisses 
-        if (!$passVerfy)
+        if ($passVerfy==false)
         {
             header("Access-Control-Allow-Origin: https://abi24bws.de");
             header("Access-Control-Allow-Methods: POST, GET");
@@ -398,7 +399,7 @@ class UserHandling
             return false;
         } 
 
-        else if($passVerfy)
+        else if($passVerfy==true)
         {
             $name = $this->database->getName($data["email"]);
             $id = $this->database->getID($data["email"]);
@@ -438,47 +439,6 @@ class UserHandling
 	        	</body>
 	        	</html>",
             $header);
-
-
-
-            $verification_code;
-
-            for ($i=0; $i < 9; $i++) { 
-                $verification_code += rand(0, 9);
-            }
-
-            if($this->database->save2FA($verification_code) == false)
-            {
-                echo json_encode([])
-            }
-
-        //$key = $this->sicher->encrypt($data["email"]);
-        $header = "MIME-Version: 1.0\r\n";
-        $header .= "Content-type: text/html; charset=utf-8\r\n";
-        $header .= "From: noreply@abi24bws.de";
-        mail($data["email"], "2 Faktor Authentifizierung",
-        
-        "<html>
-        <html lang'en'>
-        <head>
-	    <meta charset='UTF-8'>
-	    <title></title>
-	    <meta name='description' content='Kurzbeschreibung'>
-	    <link href='design.css' rel='sytlesheet'>
-        
-	    <body bgcolor='FFFFFF'></body>
-	    		Hallo " . $this->sicher->decrypt($name["vorname"]) . " " . $this->sicher->decrypt($name["nachname"]) . ",<br />
-	    		<br />
-	    		dein Verifizierungscode für unsere <br />
-	    		Abi-Website lautet: <b>{$verification_code}</b><br />
-	    	<br />
-	    		Mit freundlichen Grüßen<br />
-	    	<br />
-	    		Dein Abi24bwsTeam<br />
-	    		</font>
-	    </body>
-	    </html>",
-        $header);
 
         return $data["email"];
         }

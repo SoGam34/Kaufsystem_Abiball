@@ -54,6 +54,9 @@ class Security
       settype($zahl, "bool");
       settype($buchstabe, "bool");
 
+      $zahl = false;
+      $buchstabe = false;
+
       for($i=0; $i<strlen($data); $i++)
       {
          switch($data[$i])
@@ -138,7 +141,7 @@ class Security
          }
       }
 
-      if($buchstabe&&$zahl)
+      if(($buchstabe==true)&&($zahl==true))
       {
          return true;
       }

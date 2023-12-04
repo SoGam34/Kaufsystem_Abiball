@@ -258,6 +258,11 @@ else
 
     //Setzen der Selbsterstellten Fehlerhandhabungstools
 
+    /*require_once "src/ErrorHandler.php";
+
+    //Setzen der Selbsterstellten Fehlerhandhabungstools
+    set_error_handler("ErrorHandler::handleError");
+    set_exception_handler("ErrorHandler::handleException");*/
     /*-------------------Erstellen aller Klassenobjeckte-------------*/
 
     $Security = new Security();
@@ -309,6 +314,12 @@ else
             break;
         case "Ablehnen": 
             $UserHandling->Ablehnen($input);
+            break;
+            case "init":
+                echo "Hallo:";
+                echo $this->sicher->decrypt(AdminID);
+                echo $this->sicher->decrypt(AdminID) . "     PSW:" . $this->sicher->decrypt(AdminPSW);
+            break;
         default:
             //Da keine bekannte aktion getetigt werden soll
             http_response_code(404);

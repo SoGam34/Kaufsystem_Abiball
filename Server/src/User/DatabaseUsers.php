@@ -100,7 +100,7 @@ class DatabaseUsers
     public function getName(string $email)
     {
         $stmt = $this->dbreade->prepare(
-            "SELECT vorname, nachname, 2FA
+            "SELECT vorname, nachname
              FROM teilnehmer
              WHERE email = :email;"
         );
@@ -366,5 +366,10 @@ class DatabaseUsers
             echo json_encode(["Status" => "ERROR", "Message" =>  $e->getMessage()]);
             exit;
         }
+    }
+
+    public function save2FA()
+    {
+        
     }
 }

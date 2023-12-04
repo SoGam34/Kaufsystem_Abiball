@@ -8,7 +8,7 @@ RewriteRule ^styles.css$ Browser/styles.css
 RewriteRule ^stylesHandy.css$ Browser/stylesHandy.css
 RewriteRule ^bws.png$ Bilder/bws.png
 RewriteRule ^support.html$ Browser/support.html 
-RewriteRule ^tickets.html$ Browser/tickets.html
+RewriteRule ^tickets.html$ Browser/tickets.php
 RewriteRule ^bilder.html$ Browser/bilder.html 
 RewriteRule ^program.html$ Browser/program.html
 RewriteRule ^Bestaetigung.html$ Browser/Bestaetigung.html
@@ -17,6 +17,7 @@ RewriteRule ^LoginRegistrierenSachen.js$ Browser/LoginRegistrierenSachen.js
 RewriteRule ^passwortzuruck.html$ Browser/passwortzuruck.html
 RewriteRule ^passwortzuruckemail.html$ Browser/passwortzuruckemail.html
 RewriteRule ^einstellungen.html$ Browser/einstellungen.html
+
 
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule  ^(.*)$ Server/index.php
