@@ -9,11 +9,43 @@
    <link rel="stylesheet" media="screen and (max-width: 899px)" href="stylesHandy.css">
    <link rel="icon" type="image/x-icon" href="bws.png">
    <script src="LoginRegistrierenSachen.js"></script>
-   <script src='https://www.paypal.com/sdk/js?client-id=AWGRHS9BmRSS27GZY1mwIywoVoKeC3XSmhCyYtaL1VTHf0SUItDcIXdAj281tsrbr5Tlg0wiznVi9UgS&currency=EUR'></script>
+   <script src='https://www.paypal.com/sdk/js?client-id=AaX7ISvTjcoW_PSreD9axXIUdZ2svAxrCkNydBwGN2oOGaPL1o7k1ffCwN3LoDqFz38vFt1HuR51hrH8&currency=EUR'></script>
     <script>
         function TicketAnzahl() {
-            document.getElementById("PAY").style.visibility = "visible";
+
+            for(var i=0; i<document.getElementById("ticket").value;i++)
+            {
+                var label = document.createElement("label");
+                label.htmlFor = i;
+                const count = i +1 ;
+                label.textContent = "Name der " + count + " Person: ";
+
+                var input = document.createElement("input");
+                input.name = i;
+
+                const div = document.getElementById("auswahl_Person");
+                div.appendChild(label);
+                div.appendChild(input);
+            }
+
+            var button = document.createElement("button");
+            button.value = "Best&aumltigen";
+            button.onclick = bezahlen;
+            button.textContent = "Best&aumltigen";
+
+            const div = document.getElementById("auswahl_Person");
+            div.appendChild(button);
+
+            
+            document.getElementById("auswahl_Person").style.visibility = "visible";
             document.getElementById("auswahl").style.visibility = "hidden";
+
+        }
+
+        function bezahlen()
+        {
+            document.getElementById("PAY").style.visibility = "visible";
+            document.getElementById("auswahl_Person").style.visibility = "hidden";
         }
     </script>
 </head>
@@ -60,7 +92,9 @@
 				</select>
                 <button onclick="TicketAnzahl()">Besteatigen</button>
             </div>
-        
+    
+            <div id="auswahl_Person">
+            </div>
             
             <div class="panel" id="PAY" style="visibility: hidden;">
 
@@ -116,10 +150,14 @@
                             return actions.order.capture().then(function(orderData) {
                                 
                                 var postData = {
-                                    paypal_order_check: 1,
-                                    order_id: orderData.id,
                                     amount: document.getElementById("ticket").value
                                 };
+
+                                for(var i=0;i<document.getElementById("ticket"); i++)
+                                {
+                                    postData[i] = document.getElementById(i).value;
+                                }
+
                                 fetch("KaufTicket", {
                                         method: "POST",
                                         headers: {
@@ -133,6 +171,8 @@
                                             const messageContainer = document.querySelector("#paymentResponse");
                                             messageContainer.classList.remove("hidden");
                                             messageContainer.textContent = result.msg;
+
+                                            document.getElementById("paypal-button-container").style.visibility = "hidden";
 
                                         } else {
                                             const messageContainer = document.querySelector("#paymentResponse");
