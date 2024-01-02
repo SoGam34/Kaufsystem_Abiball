@@ -150,12 +150,21 @@ if ((isset($_COOKIE["UId"])) || ($parts[1] == "Login"))
             break;
 
         case  "KaufTicket":
+
+            require_once "src/config.php";
             require_once "src/User/DatabaseUsers.php";
             require_once "src/Security.php";
-            require_once "src/config.php";
             require_once "src/Tickets/DatabaseTickets.php";
             require_once "src/Tickets/Tickets.php";
-            require_once "src/Tickets/PaypalCheckout.class.php";
+
+            
+            require_once "src/ErrorHandler.php";
+
+            //Setzen der Selbsterstellten Fehlerhandhabungstools
+            set_error_handler("ErrorHandler::handleError");
+            set_exception_handler("ErrorHandler::handleException");
+
+            require_once "src/Tickets/PaypalCheckoutclass.php";
 
             $Security = new Security();
 
@@ -183,32 +192,46 @@ if ((isset($_COOKIE["UId"])) || ($parts[1] == "Login"))
 
             $dbTickets = new DatabaseTickets($Security, $dbwrite, $dbreade);
 
-            $paypal = new PaypalCheckout($Security);
+            /*$paypal = new PaypalCheckout("https://api-m.sandbox.paypal.com/v1/oauth2/token", "https://api-m.sandbox.paypal.com/v2/checkout/orders/", Client_ID, Client_secret);
 
-            $response = array('status' => 0, 'msg' => 'Transaction Failed!');
-
-            if (!empty($_POST['paypal_order_check']) && !empty($_POST['order_id'])) {
+            if (!empty($_POST['paypal_order_check']) && !empty($_POST['order_id'])) 
+            {
                 // Validate and get order details with PayPal API 
-                try {
+                try 
+                {
                     $order = $paypal->validate($_POST['order_id']);
-                } catch (Exception $e) {
-                    $api_error = $e->getMessage();
-                }
 
-                if ((!empty($order)) && ($order != false)) {
-                    $order_id = $order['id'];
-                    $order_status = $order['status'];
+                    echo json_encode(["order in" => $order]);
+                    if ((!empty($order)) && ($order != false)) {
+                        $order_id = $order['id'];
+                        $order_status = $order['status'];
 
-                    if (!empty($order_id) && $order_status == 'COMPLETED') {
+                        if (!empty($order_id) && $order_status == 'COMPLETED') {
+*/
+                            $dbTickets->setTicket($teilnehmer["Temail"], $_POST["amount"]);
 
-                        $dbTickets->setTicket($teilnehmer["Temail"], $_POST["amount"]);
-                        $response = array('status' => 1, 'msg' => 'Transaction completed!');
+                            $amount = $_POST["amount"];
+
+                            settype($test, "string");
+
+                           /* for($i=0; $i<$amount; $i++)
+                            {
+                                $test = $test + $_POST[$i];
+                            }
+*/
+                            echo json_encode(['status' => 1, 'msg' => 'Die Bezahlung war erfolgreich! In den nächsten Minuten erhalten Sie eine E-Mail mit dem Ticket. Wir freuen uns schon dich auf dem Abiball zu treffen.', 'anzahl' => $amount, 'test' => $test]);
+/*                        }
+                    } else {
+                        echo json_encode(["order declined" => $order]);
+                        exit;
                     }
-                } else {
-                    $response['msg'] = $api_error;
                 }
-            }
-            echo json_encode($response);
+                catch (Exception $e)
+                {
+                    echo json_encode(["Status" => "ERROR_1", "Message" =>  $e->getMessage()]); 
+                    exit;
+                }
+            }*/
             break;
 
         case "Abstimmung":
