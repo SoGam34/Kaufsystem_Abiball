@@ -35,12 +35,7 @@ if ((isset($_COOKIE["UId"])) || ($parts[1] == "Login"))
 
             $input = (array)json_decode(file_get_contents("php://input"),true);
 
-            $state = $UserHandling->checkLogin($input);
-
-            if ($state == false) 
-            {
-                exit;
-            }
+            $UserHandling->checkLogin($input);
 
             $session = session_start([
                 'name' => "UId",
@@ -48,9 +43,6 @@ if ((isset($_COOKIE["UId"])) || ($parts[1] == "Login"))
                 'cookie_httponly' => "false",
                 'cookie_samesite' => "Strict"
             ]);
-
-            header("Access-Control-Allow-Origin: https://abi24bws.de");
-            header("Access-Control-Allow-Methods: POST, GET");
 
             if ($session == false) {
                 echo json_encode(["Status" => "ERROR", "Message" => "Schwerwiegender interner Systemfehler, bitte kontaktieren Sie den Support mit dem Fehlercode 006."]);
@@ -105,48 +97,6 @@ if ((isset($_COOKIE["UId"])) || ($parts[1] == "Login"))
             echo json_encode(["Status" => "OK"]);
             exit;
 
-            break;
-
-        case  "Tickets":
-            require_once "src/User/DatabaseUsers.php";
-            require_once "src/Security.php";
-            require_once "src/config.php";
-            require_once "src/Tickets/DatabaseTickets.php";
-            require_once "src/Tickets/Tickets.php";
-
-            require_once "src/ErrorHandler.php";
-
-            //Setzen der Selbsterstellten Fehlerhandhabungstools
-            set_error_handler("ErrorHandler::handleError");
-            set_exception_handler("ErrorHandler::handleException");
-
-            $Security = new Security();
-
-            $dsnW = "mysql:host=" . $Security->decrypt(SQL_SERVER_NAME_W) . ";dbname=" . $Security->decrypt(SQL_DB_NAME_W) . ";charset=utf8";
-            $dbwrite = new PDO($dsnW, $Security->decrypt(SQL_DB_USER_W), $Security->decrypt(SQL_DB_PSW_W), [
-                PDO::ATTR_EMULATE_PREPARES => false,
-                PDO::ATTR_STRINGIFY_FETCHES => false
-            ]);
-
-
-            $dsnR = "mysql:host=" . $Security->decrypt(SQL_SERVER_NAME_R) . ";dbname=" . $Security->decrypt(SQL_DB_NAME_R) . ";charset=utf8";
-            $dbreade = new PDO($dsnR, $Security->decrypt(SQL_DB_USER_R), $Security->decrypt(SQL_DB_PSW_R), [
-                PDO::ATTR_EMULATE_PREPARES => false,
-                PDO::ATTR_STRINGIFY_FETCHES => false
-            ]);
-
-            $dbUsers = new DatabaseUsers($Security, $dbwrite, $dbreade);
-
-            $teilnehmer = $dbUsers->verifysession($_COOKIE["UId"]);
-
-            if ($teilnehmer == false) {
-                echo json_encode(["Status" => "ERROR", "Message" => "Sie sind nicht angemeldet, daher wird diese anfrage nicht bearbeitet."]);
-                exit;
-            }
-
-            $dbTickets = new DatabaseTickets($Security, $dbwrite, $dbreade);
-
-            $SitzHandling->AlleTickets();
             break;
 
         case  "KaufTicket":

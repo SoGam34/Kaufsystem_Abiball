@@ -43,12 +43,9 @@ class Security
       settype($data, "string");
       
       if(strlen($data)<10)
-      {
-         header("Access-Control-Allow-Origin: https://abi24bws.de");
-         header("Access-Control-Allow-Methods: POST, GET");
-         
+      {         
          echo json_encode(["Status"=>"ERROR", "Message"=>"Das Passwort muss mindestens 10 Zeichen lang sein."]);
-         return false;
+         exit;
       }
 
       settype($zahl, "bool");
@@ -148,16 +145,12 @@ class Security
 
       else if($buchstabe)
       {
-         header("Access-Control-Allow-Origin: https://abi24bws.de");
-         header("Access-Control-Allow-Methods: POST, GET");
          echo json_encode(["Status" => "ERROR", "Message"=>"Es muss mindestens eine Zahl im Passwort enthalten sein."]);
-         return false;
+         exit;
       }
 
-      header("Access-Control-Allow-Origin: https://abi24bws.de");
-      header("Access-Control-Allow-Methods: POST, GET");
       echo json_encode(["Status" => "ERROR", "Message"=>"Es muss mindestens ein Buchstabe im Passwort sein."]);
-      return false;
+      exit;
           
    }
 
@@ -169,11 +162,8 @@ class Security
          return true;
       }
 
-      header("Access-Control-Allow-Origin: https://abi24bws.de");
-      header("Access-Control-Allow-Methods: POST, GET");
-
       echo json_encode(["Status" => "ERROR", "Message"=>"Die Email ist ungültig, bitte verwenden Sie gueltige Email-Adressen"]);
-      return false;
+      exit;
    }
 
    public function check_id($data) : bool

@@ -358,34 +358,21 @@ class UserHandling
         return true;
     }
 
-    public function checkLogin($input)
+    public function checkLogin($data)
     {
-        //Ziehn aller benötigten daten 
-        $data = $input;
-        
-        if($this->sicher->PSW_is_safe($data["passwort"]) == false)
-        {
-            return false;
-        }
-        
-        if($this->sicher->EMail_is_safe($data["email"]) == false)
-        {
-            return false;
-        }
+        $this->sicher->PSW_is_safe($data["passwort"]);
+
+        $this->sicher->EMail_is_safe($data["email"]);
         
         $user = $this->database->getUser($data["email"]);
 
         if($user=="")
         {
-            header("Access-Control-Allow-Origin: https://abi24bws.de");
-            header("Access-Control-Allow-Methods: POST, GET");
-
             echo json_encode(["Status" => "OK", "Erfolgreich"=>false]);
-            return false;
+            exit;
         }
-
         
-        $salt=$this->database->getSalt($user["salt_id"]);
+        $salt = $this->database->getSalt($user["salt_id"]);
     
         //Überprüfen des passwords 
         $passVerfy = password_verify($this->sicher->decrypt(Pfeffer) . $data["passwort"] . $salt["salt"],  $user["passwort"]);
@@ -393,13 +380,11 @@ class UserHandling
         //Ausgeben des Überprüfungsergebnisses 
         if ($passVerfy==false)
         {
-            header("Access-Control-Allow-Origin: https://abi24bws.de");
-            header("Access-Control-Allow-Methods: POST, GET");
             echo json_encode(["Status" => "OK", "Erfolgreich"=>false]);
-            return false;
+            exit;
         } 
 
-        else if($passVerfy==true)
+        else if($passVerfy == true)
         {
             $name = $this->database->getName($data["email"]);
             $id = $this->database->getID($data["email"]);
@@ -442,11 +427,8 @@ class UserHandling
 
         return $data["email"];
         }
-            
-        header("Access-Control-Allow-Origin: https://abi24bws.de");
-        header("Access-Control-Allow-Methods: POST, GET");
-            
+
         echo json_encode(["Status" => "ERROR", "Message" => "004"]);
-        return false;
+        exit;
     }
 }
