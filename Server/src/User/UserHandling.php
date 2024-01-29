@@ -69,7 +69,7 @@ class UserHandling
         $header);
         //Bestätigen das alles erfolgreich war 
         echo json_encode(["Status" => "OK"]);
-        return true;
+        exit;
     }
 
 
@@ -78,7 +78,7 @@ class UserHandling
         if($this->sicher->check_id($data["registrierungs_id"]) == false)
         {
             echo json_encode(["Status" => "ERROR", "Message"=>"Ungultige Eingabe, bitte kontaktieren Sie den Supprt"]);
-            return false;
+            exit;
         }
        
         $users = $this->database->getFreischalten($data["registrierungs_id"]);
@@ -86,7 +86,7 @@ class UserHandling
         if($users==false)
         {
             echo json_encode(["Status"=> "ERROR", "Message"=>"Schwerwiegender interner System fehler, bitte kontaktieren Sie den Support mit dem Fehlercode 005."]);
-            return false;
+            exit;
         }
 
         $this->database->insertTeilnehmer($users["vorname"], $users["nachname"], $users["email"], $users["passwort"], $data["registrierungs_id"]);
@@ -133,7 +133,7 @@ class UserHandling
         $header);
 
         echo json_encode(["Status" => "OK"]);
-        return true;
+        exit;
     }
 
     public function FreischaltenTabelle()
@@ -215,7 +215,7 @@ class UserHandling
 
         if($users == "")
         {
-            return false;
+            exit;
         }
 
         $header = "MIME-Version: 1.0\r\n";
@@ -257,7 +257,7 @@ class UserHandling
         $this->database->deleteRegistrierung($input["registrierungs_id"]);
 
         echo json_encode(["Status" => "OK"]);
-        return true;
+        exit;
     }
          
 
@@ -303,7 +303,7 @@ class UserHandling
 
         //Bestätigen das alles erfolgreich war 
         echo json_encode(["Status" => "OK"]);
-        return true;
+        exit;
     }
 
     public function resetPSW($data)
@@ -319,7 +319,7 @@ class UserHandling
         if($user=="")
         {
             echo json_encode(["Status" => "OK", "Erfolgreich"=>false]);
-            return false;
+            exit;
         }
         
         $salt = $this->database->getSalt($user["salt_id"]);
@@ -329,7 +329,7 @@ class UserHandling
         
         //Bestätigen das alles erfolgreich war 
         echo json_encode(["Status" => "OK", "Erfolgreich"=>true]);
-        return true;
+        exit;
     }
 
     public function checkLogin($data)

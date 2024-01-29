@@ -233,36 +233,11 @@ class DatabaseUsers
 
         $stmt->execute();
     }
-    public function verifysession2222(string $ID)
-    {
-        try {
-            $stmt = $this->dbreade->prepare(
-                "SELECT session_id
-             FROM loginsession
-             WHERE Temail = :Temail;"
-            );
-
-            $stmt->bindValue(":Temail", $ID, PDO::PARAM_STR);
-
-            $stmt->execute();
-
-            if ($stmt->rowCount() == 1) {
-                return true;
-            } else if ($stmt->rowCount() == 0) {
-                return false;
-            } else if ($stmt->rowCount() > 1) {
-                echo json_encode(["Status" => "ERROR", "Message" => "011"]);
-                exit;
-            } 
-        } catch (PDOException $e) {
-            echo json_encode(["Status" => "ERROR", "Message" =>  $e->getMessage()]);
-            exit;
-        }
-    }
+    
 
     public function addsession(string $ID, string $temail)
     {
-        if($this->verifysession2222($temail)==false)
+        if($this->verifysession($ID)==false)
         {
         try {
             $stmt = $this->dbwrite->prepare(
@@ -295,9 +270,36 @@ class DatabaseUsers
     
                 $stmt->execute();
             } catch (PDOException $e) {
-                echo json_encode(["Status" => "ERROR", "Message" =>  $e->getMessage()]);
+                echo json_encode(["Status" => "ERROR", "Message" => $e->getMessage()]);
                 exit;
             }
+        }
+    }
+
+    public function verifysession(string $ID)
+    {
+        try {
+            $stmt = $this->dbreade->prepare(
+                "SELECT Temail
+             FROM loginsession
+             WHERE session_id = :session_id;"
+            );
+
+            $stmt->bindValue(":session_id", $ID, PDO::PARAM_STR);
+
+            $stmt->execute();
+
+            if ($stmt->rowCount() == 1) {
+                return $stmt->fetch(PDO::FETCH_ASSOC);
+            } else if ($stmt->rowCount() > 1) {
+                echo json_encode(["Status" => "ERROR", "Message" => "011"]);
+                exit;
+            } else if ($stmt->rowCount() == 0) {
+                return false;
+            }
+        } catch (PDOException $e) {
+            echo json_encode(["Status" => "ERROR", "Message" =>  $e->getMessage()]);
+            exit;
         }
     }
 
@@ -316,29 +318,5 @@ class DatabaseUsers
             echo json_encode(["Status" => "ERROR", "Message" =>  $e->getMessage()]);
             exit;
         }
-    }
-
-    public function setAbstimmung($email, $location)
-    {
-        try {
-            $stmt = $this->dbwrite->prepare(
-                "UPDATE teilnehmer
-                 SET abstimung = :abstimung
-                 WHERE email = :email;"
-            );
-
-            $stmt->bindValue(":email", $email, PDO::PARAM_STR);
-            $stmt->bindValue(":abstimung", $location, PDO::PARAM_STR);
-
-            $stmt->execute();
-        } catch (PDOException $e) {
-            echo json_encode(["Status" => "ERROR", "Message" =>  $e->getMessage()]);
-            exit;
-        }
-    }
-
-    public function save2FA()
-    {
-        
     }
 }

@@ -35,7 +35,7 @@ if ((isset($_COOKIE["UId"])) || ($parts[1] == "Login"))
 
             $input = (array)json_decode(file_get_contents("php://input"),true);
 
-            $UserHandling->checkLogin($input);
+            $email = $UserHandling->checkLogin($input);
 
             $session = session_start([
                 'name' => "UId",
@@ -43,6 +43,12 @@ if ((isset($_COOKIE["UId"])) || ($parts[1] == "Login"))
                 'cookie_httponly' => "false",
                 'cookie_samesite' => "Strict"
             ]);
+
+            require_once "src/ErrorHandler.php";
+
+//Setzen der Selbsterstellten Fehlerhandhabungstools
+set_error_handler("ErrorHandler::handleError");
+set_exception_handler("ErrorHandler::handleException");
 
             if ($session == false) {
                 echo json_encode(["Status" => "ERROR", "Message" => "Schwerwiegender interner Systemfehler, bitte kontaktieren Sie den Support mit dem Fehlercode 006."]);
@@ -56,7 +62,7 @@ if ((isset($_COOKIE["UId"])) || ($parts[1] == "Login"))
                 exit;
             }
 
-            $dbUsers->addsession($UId, $state);
+            $dbUsers->addsession($UId, $email);
 
             echo json_encode(["Status" => "OK", "Erfolgreich" => true]);
             exit;
@@ -114,8 +120,6 @@ if ((isset($_COOKIE["UId"])) || ($parts[1] == "Login"))
             set_error_handler("ErrorHandler::handleError");
             set_exception_handler("ErrorHandler::handleException");
 
-            require_once "src/Tickets/PaypalCheckoutclass.php";
-
             $Security = new Security();
 
             $dsnW = "mysql:host=" . $Security->decrypt(SQL_SERVER_NAME_W) . ";dbname=" . $Security->decrypt(SQL_DB_NAME_W) . ";charset=utf8";
@@ -149,6 +153,7 @@ if ((isset($_COOKIE["UId"])) || ($parts[1] == "Login"))
             settype($test, "string");
 
             echo json_encode(['status' => 1, 'msg' => 'Die Bezahlung war erfolgreich! In den nächsten Minuten erhalten Sie eine E-Mail mit dem Ticket. Wir freuen uns schon dich auf dem Abiball zu treffen.', 'anzahl' => $amount, 'test' => $test]);
+            exit;
 
             break;
     }
@@ -156,6 +161,14 @@ if ((isset($_COOKIE["UId"])) || ($parts[1] == "Login"))
 
 else 
 {
+
+    require_once "src/ErrorHandler.php";
+
+//Setzen der Selbsterstellten Fehlerhandhabungstools
+set_error_handler("ErrorHandler::handleError");
+set_exception_handler("ErrorHandler::handleException");
+
+
     require_once "src/User/DatabaseUsers.php";
     require_once "src/User/UserHandling.php";
     require_once "src/Security.php";

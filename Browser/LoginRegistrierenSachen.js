@@ -13,13 +13,8 @@ async function dieFuenfPersoenlicheDatenAnRegister(vorname, nachname, klasse, em
     .then((data) => {
       return data;
     });
-  }
-  if (localStorage.getItem("cookieszulassenabi24bws")=="false") {
-      document.getElementById('textfeld').style.visibility = "visible";
-      document.getElementById('textfeld').style.backgroundColor = "orange";
-      document.getElementById('textfeld').style.borderColor = "red";
-      document.getElementById('textfeld').innerHTML = "Sie m&uumlssen unsere Cookies akzeptieren, um ein Account erstellen zu können und zu verwenden.";
-  }
+  
+  
     if(response.Status=="ERROR"){            
       document.getElementById('textfeld').style.visibility = "visible";
       document.getElementById('textfeld').innerHTML = response.Message;
@@ -31,6 +26,14 @@ async function dieFuenfPersoenlicheDatenAnRegister(vorname, nachname, klasse, em
       document.getElementById('textfeld').style.borderColor = "green";
       document.getElementById('textfeld').innerHTML = "Sie erhalten in den n&auml;chsten Minuten eine Best&auml;tingsemail an die angegebene Adresse.";
     }
+
+    if (localStorage.getItem("cookieszulassenabi24bws")=="false") {
+      document.getElementById('textfeld').style.visibility = "visible";
+      document.getElementById('textfeld').style.backgroundColor = "orange";
+      document.getElementById('textfeld').style.borderColor = "red";
+      document.getElementById('textfeld').innerHTML = "Sie m&uumlssen unsere Cookies akzeptieren, um ein Account erstellen zu können und zu verwenden.";
+  }
+}
 }
 async function UeberpruefenPasswortUndEmailBestaetigen()
 {
@@ -73,13 +76,8 @@ async function loginanfrage()
     .then((data) => {
       return data;
     });
-  }
-    if (localStorage.getItem("cookieszulassenabi24bws")=="false") {
-      document.getElementById('textfeld').style.visibility = "visible";
-      document.getElementById('textfeld').style.backgroundColor = "orange";
-      document.getElementById('textfeld').style.borderColor = "red";
-      document.getElementById('textfeld').innerHTML = "Sie m&uumlssen unsere Cookies akzeptieren, um ein Account erstellen zu können und zu verwenden";
-  }
+  
+    
     if(response.Status=="ERROR"){            
       document.getElementById('textfeld').style.visibility = "visible";
       document.getElementById('textfeld').innerHTML = response.Message;
@@ -95,6 +93,14 @@ async function loginanfrage()
       document.getElementById('textfeld').innerHTML = "Sie sind jetzt Angemeldet";
       document.getElementById('navbarLRAlternative').innerHTML = '<button type="button" id="logoutButtonid" class="logoutButton" onclick="Ausloggen()">Logout</button>';
     }
+
+    if (localStorage.getItem("cookieszulassenabi24bws")=="false") {
+      document.getElementById('textfeld').style.visibility = "visible";
+      document.getElementById('textfeld').style.backgroundColor = "orange";
+      document.getElementById('textfeld').style.borderColor = "red";
+      document.getElementById('textfeld').innerHTML = "Sie m&uumlssen unsere Cookies akzeptieren, um ein Account erstellen zu können und zu verwenden";
+  }
+}
 }
 
 async function emailfuerzuruck()
