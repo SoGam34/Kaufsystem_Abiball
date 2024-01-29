@@ -6,20 +6,11 @@ class UserHandling
     {
     }
 
-    public function createAcc($input)
-    {
-        //Ziehn aller benötigten daten 
-        $data = $input; 
-        
-        if($this->sicher->PSW_is_safe($data["passwort"]) == false)
-        {
-            return false;
-        }
-        
-        if($this->sicher->EMail_is_safe($data["email"]) == false)
-        {
-            return false;
-        }
+    public function createAcc($data)
+    {        
+        $this->sicher->PSW_is_safe($data["passwort"]);
+
+        $this->sicher->EMail_is_safe($data["email"]);
         
         //Erstellen aller benötigten Variablen für das generieren des Salts
         $salt = "";
@@ -82,10 +73,8 @@ class UserHandling
     }
 
 
-    public function UserFreischalten($input) 
+    public function UserFreischalten($data) 
     {
-        $data = $input;
-
         if($this->sicher->check_id($data["registrierungs_id"]) == false)
         {
             echo json_encode(["Status" => "ERROR", "Message"=>"Ungultige Eingabe, bitte kontaktieren Sie den Supprt"]);
@@ -272,15 +261,9 @@ class UserHandling
     }
          
 
-    public function resetingEmail($input) 
-    {
-        //Ziehn aller benötigten daten 
-        $data = $input;
+    public function resetingEmail($data) {
 
-        if($this->sicher->EMail_is_safe($data["email"]) == false)
-        {
-            return false;
-        }
+        $this->sicher->EMail_is_safe($data["email"]);
 
         $name = $this->database->getName($data["email"]);
 
@@ -323,22 +306,13 @@ class UserHandling
         return true;
     }
 
-    public function resetPSW($input)
+    public function resetPSW($data)
     {   
-        //Ziehn aller benötigten daten 
-        $data = $input;
-        
-        if($this->sicher->PSW_is_safe($data["passwort"]) == false)
-        {
-            return false;
-        }
-        
+        $this->sicher->PSW_is_safe($data["passwort"]);
+
         $email = $this->sicher->decrypt($data["email"]);
 
-        if($this->sicher->EMail_is_safe($email) == false)
-        {
-            return false;
-        }
+        $this->sicher->EMail_is_safe($email);
        
         $user = $this->database->getUser($email);
 
