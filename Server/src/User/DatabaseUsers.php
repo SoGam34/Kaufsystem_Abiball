@@ -247,15 +247,13 @@ class DatabaseUsers
             $stmt->execute();
 
             if ($stmt->rowCount() == 1) {
-                $row = $stmt->fetch(PDO::FETCH_ASSOC);
-
-                return $row;
+                return true;
+            } else if ($stmt->rowCount() == 0) {
+                return false;
             } else if ($stmt->rowCount() > 1) {
                 echo json_encode(["Status" => "ERROR", "Message" => "011"]);
                 exit;
-            } else if ($stmt->rowCount() == 0) {
-                return false;
-            }
+            } 
         } catch (PDOException $e) {
             echo json_encode(["Status" => "ERROR", "Message" =>  $e->getMessage()]);
             exit;
@@ -300,35 +298,6 @@ class DatabaseUsers
                 echo json_encode(["Status" => "ERROR", "Message" =>  $e->getMessage()]);
                 exit;
             }
-        }
-    }
-
-    public function verifysession(string $ID)
-    {
-        try {
-            $stmt = $this->dbreade->prepare(
-                "SELECT Temail
-             FROM loginsession
-             WHERE session_id = :session_id;"
-            );
-
-            $stmt->bindValue(":session_id", $ID, PDO::PARAM_STR);
-
-            $stmt->execute();
-
-            if ($stmt->rowCount() == 1) {
-                $row = $stmt->fetch(PDO::FETCH_ASSOC);
-
-                return $row;
-            } else if ($stmt->rowCount() > 1) {
-                echo json_encode(["Status" => "ERROR", "Message" => "011"]);
-                exit;
-            } else if ($stmt->rowCount() == 0) {
-                return false;
-            }
-        } catch (PDOException $e) {
-            echo json_encode(["Status" => "ERROR", "Message" =>  $e->getMessage()]);
-            exit;
         }
     }
 
