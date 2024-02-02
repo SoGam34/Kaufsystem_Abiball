@@ -151,7 +151,7 @@ if ((isset($_COOKIE["UId"])) || ($parts[1] == "Login"))
             set_error_handler("ErrorHandler::handleError");
             set_exception_handler("ErrorHandler::handleException");
 
-            
+
             require_once "src/config.php";
             require_once "src/User/DatabaseUsers.php";
             require_once "src/Security.php";
@@ -180,7 +180,7 @@ if ((isset($_COOKIE["UId"])) || ($parts[1] == "Login"))
                 exit;
             }
 
-            $dbUsers->deleteUser($teilnehmer);
+            $dbUsers->deleteUser($teilnehmer["Temail"]);
 
             $dbUsers->EndSession($_COOKIE["UId"]);
 

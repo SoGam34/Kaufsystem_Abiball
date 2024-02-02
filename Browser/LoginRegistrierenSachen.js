@@ -343,6 +343,26 @@ async function datenloeschen()
     .then((data) => {
       return data;
     });
+
+
+    if(response.Status=="ERROR"){            
+      document.getElementById('textfeld').style.visibility = "visible";
+      document.getElementById('textfeld').innerHTML = response.Message;
+    }
+
+    else{
+      document.getElementById('textfeld').style.visibility = "visible";
+      document.getElementById('textfeld').style.backgroundColor = "green";
+      document.getElementById('textfeld').style.borderColor = "green";
+      document.getElementById('textfeld').innerHTML = "Sie erhalten in den n&auml;chsten Minuten eine Best&auml;tingsemail an die angegebene Adresse.";
+    }
+
+    if (localStorage.getItem("cookieszulassenabi24bws")=="false") {
+      document.getElementById('textfeld').style.visibility = "visible";
+      document.getElementById('textfeld').style.backgroundColor = "orange";
+      document.getElementById('textfeld').style.borderColor = "red";
+      document.getElementById('textfeld').innerHTML = "Sie m&uumlssen unsere Cookies akzeptieren, um ein Account erstellen zu können und zu verwenden.";
+  }
 }
 
 async function Ausloggen()
