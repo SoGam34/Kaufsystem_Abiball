@@ -21,8 +21,13 @@ class UserHandling
         {
             $salt .= $abc[rand(0, strlen($abc)-1)];
         }
-        
-        $id=$this->database->insertRegister($this->sicher->encrypt($data["vorname"]), $this->sicher->encrypt($data["nachname"]), $this->sicher->encrypt($data["klasse"]), $data["email"], password_hash($this->sicher->decrypt(Pfeffer) . $data["passwort"] . $salt, PASSWORD_DEFAULT), $salt);
+
+	$options = [ 
+    	    'cost' => 15, 
+	]; 
+    
+	    
+        $id=$this->database->insertRegister($this->sicher->encrypt($data["vorname"]), $this->sicher->encrypt($data["nachname"]), $this->sicher->encrypt($data["klasse"]), $data["email"], password_hash($this->sicher->decrypt(Pfeffer) . $data["passwort"] . $salt, PASSWORD_BCRYPT, $options), $salt);
         
 
         $header = "MIME-Version: 1.0\r\n";
