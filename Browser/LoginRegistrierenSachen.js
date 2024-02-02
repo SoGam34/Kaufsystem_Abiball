@@ -343,7 +343,6 @@ async function datenloeschen()
     .then((data) => {
       return data;
     });
-    window.location.reload();
 }
 
 async function Ausloggen()
@@ -359,6 +358,20 @@ async function Ausloggen()
       return data;
     });
     window.location.reload();
+}
+
+async function passwortSichtbar()
+{
+  const statusCheckbox = document.getElementById('checkboxPasswortsichtbar').checked;
+  console.log(statusCheckbox);
+  if(statusCheckbox == true){
+    document.getElementById('passwort').setAttribute("type", "text");
+    document.getElementById('passwortpruefen').setAttribute("type", "text");
+  }
+  if(statusCheckbox == false){
+    document.getElementById('passwort').setAttribute("type", "password");
+    document.getElementById('passwortpruefen').setAttribute("type", "password");
+  }
 }
 
 async function abiballAbstimmung()
