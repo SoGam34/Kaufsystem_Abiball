@@ -336,7 +336,7 @@ class UserHandling
 
         $this->database->ResetPasswort($email, password_hash($this->sicher->decrypt(Pfeffer) . $data["passwort"] . $salt["salt"],PASSWORD_BCRYPT, $options));
 
-        
+        $this->database->DeleteSessionID($email);
         
         //Bestätigen das alles erfolgreich war 
         echo json_encode(["Status" => "OK", "Erfolgreich"=>true]);

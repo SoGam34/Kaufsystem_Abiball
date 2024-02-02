@@ -336,4 +336,20 @@ class DatabaseUsers
             exit;
         }
     }
+
+    public function DeleteSessionID(string $email) {
+        try {
+            $stmt = $this->dbwrite->prepare(
+                "DELETE FROM loginsession
+             WHERE Temail = :Temail;"
+            );
+
+            $stmt->bindValue(":Temail", $email, PDO::PARAM_STR);
+
+            $stmt->execute();
+        } catch (PDOException $e) {
+            echo json_encode(["Status" => "ERROR", "Message" =>  $e->getMessage()]);
+            exit;
+        }
+    }
 }
