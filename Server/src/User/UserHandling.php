@@ -22,9 +22,9 @@ class UserHandling
             $salt .= $abc[rand(0, strlen($abc)-1)];
         }
 
-	$options = [ 
+	    $options = [ 
     	    'cost' => 15, 
-	]; 
+	    ]; 
     
 	    
         $id=$this->database->insertRegister($this->sicher->encrypt($data["vorname"]), $this->sicher->encrypt($data["nachname"]), $this->sicher->encrypt($data["klasse"]), $data["email"], password_hash($this->sicher->decrypt(Pfeffer) . $data["passwort"] . $salt, PASSWORD_BCRYPT, $options), $salt);
@@ -330,7 +330,13 @@ class UserHandling
         $salt = $this->database->getSalt($user["salt_id"]);
         
         //Das eigentliche zurücksetzen
-        $this->database->ResetPasswort($email, password_hash($this->sicher->decrypt(Pfeffer) . $data["passwort"] . $salt["salt"], PASSWORD_DEFAULT));
+        $options = [ 
+    	    'cost' => 15, 
+	    ]; 
+
+        $this->database->ResetPasswort($email, password_hash($this->sicher->decrypt(Pfeffer) . $data["passwort"] . $salt["salt"],PASSWORD_BCRYPT, $options));
+
+        
         
         //Bestätigen das alles erfolgreich war 
         echo json_encode(["Status" => "OK", "Erfolgreich"=>true]);
