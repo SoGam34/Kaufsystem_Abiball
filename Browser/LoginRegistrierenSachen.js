@@ -331,6 +331,21 @@ async function cookieverarbeiter()
   }
 }
 
+async function datenloeschen()
+{
+  const response = await fetch("https://abi24bws.de/Datenloeschen", {
+      method: "POST", // or 'PUT'
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "text/html,application/js"
+      },
+    }).then((response) => response.json())
+    .then((data) => {
+      return data;
+    });
+    window.location.reload();
+}
+
 async function Ausloggen()
 {
   const response = await fetch("https://abi24bws.de/Logout", {
