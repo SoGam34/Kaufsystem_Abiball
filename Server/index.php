@@ -44,12 +44,6 @@ if ((isset($_COOKIE["UId"])) || ($parts[1] == "Login"))
                 'cookie_samesite' => "Strict"
             ]);
 
-            require_once "src/ErrorHandler.php";
-
-//Setzen der Selbsterstellten Fehlerhandhabungstools
-set_error_handler("ErrorHandler::handleError");
-set_exception_handler("ErrorHandler::handleException");
-
             if ($session == false) {
                 echo json_encode(["Status" => "ERROR", "Message" => "Schwerwiegender interner Systemfehler, bitte kontaktieren Sie den Support mit dem Fehlercode 006."]);
                 exit;
@@ -113,13 +107,6 @@ set_exception_handler("ErrorHandler::handleException");
             require_once "src/Tickets/DatabaseTickets.php";
             require_once "src/Tickets/Tickets.php";
 
-            
-            require_once "src/ErrorHandler.php";
-
-            //Setzen der Selbsterstellten Fehlerhandhabungstools
-            set_error_handler("ErrorHandler::handleError");
-            set_exception_handler("ErrorHandler::handleException");
-
             $Security = new Security();
 
             $dsnW = "mysql:host=" . $Security->decrypt(SQL_SERVER_NAME_W) . ";dbname=" . $Security->decrypt(SQL_DB_NAME_W) . ";charset=utf8";
@@ -156,19 +143,53 @@ set_exception_handler("ErrorHandler::handleException");
             exit;
 
             break;
+        case "Datenloeschen":
+            require_once "src/config.php";
+            require_once "src/User/DatabaseUsers.php";
+            require_once "src/Security.php";
+
+            $Security = new Security();
+
+            $dsnW = "mysql:host=" . $Security->decrypt(SQL_SERVER_NAME_W) . ";dbname=" . $Security->decrypt(SQL_DB_NAME_W) . ";charset=utf8";
+            $dbwrite = new PDO($dsnW, $Security->decrypt(SQL_DB_USER_W), $Security->decrypt(SQL_DB_PSW_W), [
+                PDO::ATTR_EMULATE_PREPARES => false,
+                PDO::ATTR_STRINGIFY_FETCHES => false
+            ]);
+
+
+            $dsnR = "mysql:host=" . $Security->decrypt(SQL_SERVER_NAME_R) . ";dbname=" . $Security->decrypt(SQL_DB_NAME_R) . ";charset=utf8";
+            $dbreade = new PDO($dsnR, $Security->decrypt(SQL_DB_USER_R), $Security->decrypt(SQL_DB_PSW_R), [
+                PDO::ATTR_EMULATE_PREPARES => false,
+                PDO::ATTR_STRINGIFY_FETCHES => false
+            ]);
+
+            $dbUsers = new DatabaseUsers($Security, $dbwrite, $dbreade);
+
+            $teilnehmer = $dbUsers->verifysession($_COOKIE["UId"]);
+
+            if ($teilnehmer == false) {
+                echo json_encode(["Status" => "ERROR", "Message" => "Sie sind nicht angemeldet, daher wird diese anfrage nicht bearbeitet."]);
+                exit;
+            }
+
+            $dbUsers->deleteUser($teilnehmer);
+
+            $dbUsers->EndSession($_COOKIE["UId"]);
+
+            $state = setcookie("UId");
+
+            if ($state == false) {
+                echo json_encode(["Status" => "ERROR", "Message" => "Schwerwiegender interner Systemfehler, bitte kontaktieren Sie den Support mit dem Fehlercode 020."]);
+                exit;
+            }
+
+            echo json_encode(["Status" => "OK", "Message" => "Die Löschung der Daten war erfolgreich"]);
+            exit;
     }
 } 
 
 else 
 {
-
-    require_once "src/ErrorHandler.php";
-
-//Setzen der Selbsterstellten Fehlerhandhabungstools
-set_error_handler("ErrorHandler::handleError");
-set_exception_handler("ErrorHandler::handleException");
-
-
     require_once "src/User/DatabaseUsers.php";
     require_once "src/User/UserHandling.php";
     require_once "src/Security.php";

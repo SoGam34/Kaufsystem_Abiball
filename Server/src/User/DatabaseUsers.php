@@ -234,6 +234,23 @@ class DatabaseUsers
         $stmt->execute();
     }
     
+    public function deleteUser(string $email)
+    {
+        try {
+            
+        $stmt = $this->dbwrite->prepare(
+            "DELETE FROM teilnehmer
+             WHERE email = :email;"
+        );
+
+        $stmt->bindValue(":email", $email, PDO::PARAM_STR);
+
+        $stmt->execute();
+        } catch (PDOException $e) {
+            echo json_encode(["Status" => "ERROR", "Message" =>  $e->getMessage()]);
+            exit;
+        }
+    }
 
     public function addsession(string $ID, string $temail)
     {
