@@ -144,14 +144,6 @@ if ((isset($_COOKIE["UId"])) || ($parts[1] == "Login"))
 
             break;
         case "Datenloeschen":
-
-            require_once "src/ErrorHandler.php";
-
-            //Setzen der Selbsterstellten Fehlerhandhabungstools
-            set_error_handler("ErrorHandler::handleError");
-            set_exception_handler("ErrorHandler::handleException");
-
-
             require_once "src/config.php";
             require_once "src/User/DatabaseUsers.php";
             require_once "src/Security.php";

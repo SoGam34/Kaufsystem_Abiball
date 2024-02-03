@@ -133,7 +133,7 @@ async function emailfuerzuruck()
 
 async function Passwortzurucksetzen()
 {
-  const emailvar = window.location.href.slice(28);
+  const emailvar = window.location.href.slice(40);
   const passwortvar = document.getElementById('passwort').value;
   const passwortuberprufen = document.getElementById('passwortuberprufen').value;
 
@@ -354,7 +354,7 @@ async function datenloeschen()
       document.getElementById('textfeld').style.visibility = "visible";
       document.getElementById('textfeld').style.backgroundColor = "green";
       document.getElementById('textfeld').style.borderColor = "green";
-      document.getElementById('textfeld').innerHTML = "Sie erhalten in den n&auml;chsten Minuten eine Best&auml;tingsemail an die angegebene Adresse.";
+      document.getElementById('textfeld').innerHTML = response.Message;
     }
 
     if (localStorage.getItem("cookieszulassenabi24bws")=="false") {
