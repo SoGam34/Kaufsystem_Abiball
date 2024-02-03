@@ -23,7 +23,7 @@ class UserHandling
         }
 
 	    $options = [ 
-    	    'cost' => 15, 
+    	    'cost' => 14, 
 	    ]; 
     
 	    
@@ -331,7 +331,7 @@ class UserHandling
         
         //Das eigentliche zurücksetzen
         $options = [ 
-    	    'cost' => 15, 
+    	    'cost' => 14, 
 	    ]; 
 
         $this->database->ResetPasswort($email, password_hash($this->sicher->decrypt(Pfeffer) . $data["passwort"] . $salt["salt"],PASSWORD_BCRYPT, $options));
@@ -372,7 +372,7 @@ class UserHandling
         else if($passVerfy == true)
         {
             $name = $this->database->getName($data["email"]);
-            $id = $this->database->getID($data["email"]);
+            //$id = $this->database->getID($data["email"]);
             
             $header = "MIME-Version: 1.0\r\n";
             $header .= "Content-type: text/html; charset=utf-8\r\n";
@@ -398,7 +398,7 @@ class UserHandling
 	        		Abi24bws Konto angemeldet.
 	        	<br />	
 	        		Wenn du dich nicht eingeloggt hast,<br />
-	        		kannst du dein Passwort <a href='https://abi24bws.de/passwortzuruckemail.html?id=" . $this->sicher->encrypt($id["teilnehmer_id"]) . "' >hier zurücksetzen</a>.<br />
+	        		kannst du dein Passwort <a href='https://abi24bws.de/passwortzuruck.html?" . $this->sicher->encrypt($data["email"]) . "' >hier zurücksetzen</a>.<br />
 	        		Dabei werden alle aktuell angemeldeten<br />
 	        		Geräte automatisch ausgeloggt.<br />	
 	        	<br />
