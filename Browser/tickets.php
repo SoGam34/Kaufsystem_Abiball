@@ -22,6 +22,7 @@
 
                 var input = document.createElement("input");
                 input.name = i;
+                input.id = i; 
 
                 const div = document.getElementById("auswahl_Person");
                 div.appendChild(label);
@@ -29,9 +30,9 @@
             }
 
             var button = document.createElement("button");
-            button.value = "Best&aumltigen";
+            button.value = "Bestätigen";
             button.onclick = bezahlen;
-            button.textContent = "Best&aumltigen";
+            button.textContent = "Bestätigen";
 
             const div = document.getElementById("auswahl_Person");
             div.appendChild(button);
@@ -153,7 +154,7 @@
                                     amount: document.getElementById("ticket").value
                                 };
 
-                                for(var i=0;i<document.getElementById("ticket"); i++)
+                                for(var i=0;i<document.getElementById("ticket").value; i++)
                                 {
                                     postData[i] = document.getElementById(i).value;
                                 }
