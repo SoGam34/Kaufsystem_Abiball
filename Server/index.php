@@ -105,7 +105,6 @@ if ((isset($_COOKIE["UId"])) || ($parts[1] == "Login"))
             require_once "src/User/DatabaseUsers.php";
             require_once "src/Security.php";
             require_once "src/Tickets/DatabaseTickets.php";
-            require_once "src/Tickets/Tickets.php";
 
             $Security = new Security();
 
@@ -133,13 +132,69 @@ if ((isset($_COOKIE["UId"])) || ($parts[1] == "Login"))
 
             $dbTickets = new DatabaseTickets($Security, $dbwrite, $dbreade);
 
-            $dbTickets->setTicket($teilnehmer["Temail"], $_POST["amount"]);
+            settype($begleitung, "string");
 
-            $amount = $_POST["amount"];
+            settype($begleitung_mail, "string");
 
-            settype($test, "string");
+            $begleitung_mail = "<br>";
 
-            echo json_encode(['status' => 1, 'msg' => 'Die Bezahlung war erfolgreich! In den nächsten Minuten erhalten Sie eine E-Mail mit dem Ticket. Wir freuen uns schon dich auf dem Abiball zu treffen.', 'anzahl' => $amount, 'test' => $test]);
+            for($i=0; $i<$_POST["amount"]; $i = $i + 1)
+            {
+                if(isset($_POST[$i]))
+                {
+                    $begleitung = $begleitung . $_POST[$i] . ", ";
+
+                    $begleitung_mail =  $begleitung_mail . "- " . $_POST[$i] . "<br>";
+                }
+            }
+
+            $dbTickets->setTicket($teilnehmer["Temail"], $_POST["amount"], $Security->encrypt($begleitung));
+
+
+            $users = $dbUsers->getName($teilnehmer["Temail"]);
+
+            $header = "MIME-Version: 1.0\r\n";
+            $header .= "Content-type: text/html; charset=utf-8\r\n";
+            $header .= "From: noreply@abi24bws.de";
+    
+            mail($teilnehmer["Temail"], "Kaufbestätigung der Abiball Tickets",
+            "<html>
+                <html lang'de'>
+                <head>
+	            <meta charset='UTF-8'>
+	            <title>Kaufbestätigung</title>
+
+	            <body bgcolor='FFFFFF'></body>
+
+	            <body>    
+                    Hallo " . $Security->decrypt($users["vorname"]) . " "  . $Security->decrypt($users["nachname"]) . ",<br />
+                    <br />
+                    vielen Dank für deine Bestellung.<br />
+                    Wir haben deine Bestellung erfolgreich bearbeitet.<br />
+                    <br />
+                    Du hast gekauft: <b>" . $_POST["amount"] . "</b><br />
+                    Du hast bezahlt: <b>" . $_POST["amount"] * 50 . "€</b><br />
+                    Datum: <b>" . date("H:i:s d-m-Y") . "</b><br />
+                    Transaktions ID: <b>" . $_COOKIE["UId"] . "</b><br />
+
+                    <br>Die Einlass berechtigten Personen: 
+
+                    " . $begleitung_mail ." <br>
+
+                    <font color='red'><b>Jede</b>, auf dem Ticket genannte Person, muss<br />
+                    für den Einlass einen gültigen Lichtbildausweis<br />
+                    mitnehmen.<br /></font>
+                <br />
+                    Mit freundlichen Grüßen<br />
+                <br />
+                    Dein Abi24bwsTeam<br />
+                    </font>
+                </body>
+                </html>",
+            $header);
+    
+
+            echo json_encode(['status' => 1, 'msg' => 'Die Bezahlung war erfolgreich! In den nächsten Minuten erhalten Sie eine E-Mail mit dem Ticket. Wir freuen uns schon dich auf dem Abiball zu treffen.']);
             exit;
 
             break;
