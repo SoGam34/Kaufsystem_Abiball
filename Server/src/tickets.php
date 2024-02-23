@@ -9,8 +9,14 @@
    <link rel="stylesheet" media="screen and (max-width: 899px)" href="stylesHandy.css">
    <link rel="icon" type="image/x-icon" href="bws.png">
    <script src="LoginRegistrierenSachen.js"></script>
-   <script src='https://www.paypal.com/sdk/js?client-id=AaX7ISvTjcoW_PSreD9axXIUdZ2svAxrCkNydBwGN2oOGaPL1o7k1ffCwN3LoDqFz38vFt1HuR51hrH8&currency=EUR'></script>
-    <script>
+
+   <?php 
+   if (isset($_COOKIE["UId"]))
+    {
+        echo "<script src='https://www.paypal.com/sdk/js?client-id=AaX7ISvTjcoW_PSreD9axXIUdZ2svAxrCkNydBwGN2oOGaPL1o7k1ffCwN3LoDqFz38vFt1HuR51hrH8&currency=EUR'></script>";
+    }
+    ?>
+     <script>
         function TicketAnzahl() {
 
             for(var i=0; i<document.getElementById("ticket").value;i++)
